@@ -1,0 +1,75 @@
+import { z } from "zod";
+
+function getMissingEnvNames(names: string[]) {
+  return names.filter((name) => !process.env[name]?.trim());
+}
+
+function buildMissingEnvMessage(label: string, names: string[]) {
+  return `${label}の設定が不足しています。${names.join(" / ")} を確認してください。`;
+}
+
+export function getAppSettings() {
+  const parsed = z
+    .object({
+      APP_TIMEZONE: z.string().trim().default("Asia/Tokyo"),
+      MAX_UPLOAD_SIZE_MB: z.coerce.number().int().positive().default(5),
+      GEMINI_MODEL: z.string().trim().default("gemini-2.5-flash"),
+    })
+    .parse(process.env);
+
+  return {
+    appTimeZone: parsed.APP_TIMEZONE,
+    maxUploadSizeMb: parsed.MAX_UPLOAD_SIZE_MB,
+    maxUploadSizeBytes: parsed.MAX_UPLOAD_SIZE_MB * 1024 * 1024,
+    geminiModel: parsed.GEMINI_MODEL,
+  };
+}
+
+export function getGeminiConfig() {
+  const missingNames = getMissingEnvNames(["GEMINI_API_KEY"]);
+
+  if (missingNames.length > 0) {
+    throw new Error(buildMissingEnvMessage("Gemini", missingNames));
+  }
+
+  return {
+    apiKey: process.env.GEMINI_API_KEY!.trim(),
+    model: process.env.GEMINI_MODEL?.trim() || getAppSettings().geminiModel,
+  };
+}
+
+export function getLineMessagingConfig() {
+  const missingNames = getMissingEnvNames(["LINE_CHANNEL_ACCESS_TOKEN"]);
+
+  if (missingNames.length > 0) {
+    throw new Error(buildMissingEnvMessage("LINE返信/送信", missingNames));
+  }
+
+  return {
+    channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN!.trim(),
+  };
+}
+
+export function getLineWebhookSecret() {
+  const missingNames = getMissingEnvNames(["LINE_CHANNEL_SECRET"]);
+
+  if (missingNames.length > 0) {
+    throw new Error(buildMissingEnvMessage("LINE webhook", missingNames));
+  }
+
+  return process.env.LINE_CHANNEL_SECRET!.trim();
+}
+
+export function getDefaultLineUserId() {
+  return process.env.LINE_DEFAULT_USER_ID?.trim() || null;
+}
+
+export function getCronSecret() {
+  const secret = process.env.CRON_SECRET?.trim();
+
+  if (!secret) {
+    throw new Error("CRON_SECRET が設定されていません。");
+  }
+
+  return secret;
+}
