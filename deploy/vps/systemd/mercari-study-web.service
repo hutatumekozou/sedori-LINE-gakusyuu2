@@ -1,0 +1,20 @@
+[Unit]
+Description=Mercari Study Next.js app
+After=network.target
+
+[Service]
+Type=simple
+User=mercari-study
+Group=mercari-study
+Environment=APP_ROOT=/opt/mercari-study/current
+Environment=ENV_FILE=/etc/mercari-study/mercari-study.env
+Environment=PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+WorkingDirectory=/opt/mercari-study/current
+ExecStart=/opt/mercari-study/current/deploy/vps/scripts/run-web.sh
+Restart=always
+RestartSec=5
+StandardOutput=append:/var/log/mercari-study/web.log
+StandardError=append:/var/log/mercari-study/web.error.log
+
+[Install]
+WantedBy=multi-user.target

@@ -14,6 +14,7 @@ export const emptyStudyItemFormState: StudyItemFormState = {
 };
 
 export type StudyItemFormDefaults = {
+  autoSendEnabled?: boolean;
   productName?: string | null;
   brandName?: string | null;
   note?: string | null;

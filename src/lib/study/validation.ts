@@ -10,6 +10,7 @@ import type { StudyItemFormState } from "@/lib/study/types";
 type ValidationMode = "create" | "update";
 
 type ValidatedStudyItemInput = {
+  autoSendEnabled: boolean;
   productName?: string;
   brandName?: string;
   note: string;
@@ -149,6 +150,7 @@ export function validateStudyItemForm(
   return {
     success: true,
     data: {
+      autoSendEnabled: formData.get("autoSendEnabled") === "1",
       productName: toOptionalString(parsed.data.productName),
       brandName: toOptionalString(parsed.data.brandName),
       note: parsed.data.note.trim(),

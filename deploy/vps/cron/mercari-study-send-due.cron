@@ -1,0 +1,2 @@
+CRON_TZ=Asia/Tokyo
+0 12 * * * mercari-study APP_ROOT=/opt/mercari-study/current ENV_FILE=/etc/mercari-study/mercari-study.env /opt/mercari-study/current/deploy/vps/scripts/run-send-due.sh >> /var/log/mercari-study/send-due.log 2>> /var/log/mercari-study/send-due.error.log

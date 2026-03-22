@@ -7,9 +7,13 @@ import {
   getDefaultLineUserId,
   getLineMessagingConfig,
   getLineWebhookSecret,
+  getPublicAppUrl,
 } from "@/lib/env";
+import { assertReachableImageMessages } from "@/lib/line/message-delivery";
+import { buildQuestionPushMessages } from "@/lib/line/message-builder";
 import { prisma } from "@/lib/prisma";
 import {
+  buildDispatchDecisionDebugInfo,
   getDispatchDecision,
   getDispatchSkipMessage,
   resolveLineTargetUserId,
@@ -79,16 +83,16 @@ async function replyText(replyToken: string, text: string) {
   });
 }
 
-async function pushText(to: string, text: string) {
+async function pushMessages(
+  to: string,
+  messages: Array<
+    { type: "text"; text: string } | { type: "image"; originalContentUrl: string; previewImageUrl: string }
+  >,
+) {
   const client = getLineClient();
   await client.pushMessage({
     to,
-    messages: [
-      {
-        type: "text",
-        text,
-      },
-    ],
+    messages,
   });
 }
 
@@ -349,7 +353,8 @@ export async function dispatchStudyItems(itemIds?: number[], force = false) {
 
   for (const item of items) {
     const lineUserId = resolveLineTargetUserId(item.user.lineUserId, defaultLineUserId);
-    const latestSentLog = item.reviewLogs[0];
+    const latestSentLog =
+      item.reviewLogs.find((log) => log.actionType === ReviewActionType.SENT) || null;
 
     if (!lineUserId) {
       results.push({
@@ -367,6 +372,18 @@ export async function dispatchStudyItems(itemIds?: number[], force = false) {
       force,
     });
 
+    console.info(
+      "Dispatch decision debug",
+      buildDispatchDecisionDebugInfo({
+        itemId: item.id,
+        questionNumber: item.questionNumber,
+        autoSendEnabled: item.autoSendEnabled,
+        status: item.status,
+        nextScheduledAt: item.nextScheduledAt,
+        latestSentAt: latestSentLog?.actionAt,
+      }),
+    );
+
     if (!dispatchDecision.shouldSend) {
       results.push({
         itemId: item.id,
@@ -377,7 +394,18 @@ export async function dispatchStudyItems(itemIds?: number[], force = false) {
     }
 
     try {
-      await pushText(lineUserId, buildQuestionMessage(item));
+      const messages =
+        item.images.length > 0
+          ? buildQuestionPushMessages(item, getPublicAppUrl())
+          : [
+              {
+                type: "text" as const,
+                text: buildQuestionMessage(item),
+              },
+            ];
+
+      await assertReachableImageMessages(messages);
+      await pushMessages(lineUserId, messages);
 
       await prisma.$transaction(async (tx) => {
         await tx.productStudyItem.update({

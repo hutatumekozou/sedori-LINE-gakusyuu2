@@ -42,6 +42,8 @@ export type ProductStudyItemMinAggregateOutputType = {
   id: number | null
   userId: number | null
   questionNumber: number | null
+  autoSendEnabled: boolean | null
+  deletedAt: Date | null
   productName: string | null
   brandName: string | null
   category: string | null
@@ -63,6 +65,8 @@ export type ProductStudyItemMaxAggregateOutputType = {
   id: number | null
   userId: number | null
   questionNumber: number | null
+  autoSendEnabled: boolean | null
+  deletedAt: Date | null
   productName: string | null
   brandName: string | null
   category: string | null
@@ -84,6 +88,8 @@ export type ProductStudyItemCountAggregateOutputType = {
   id: number
   userId: number
   questionNumber: number
+  autoSendEnabled: number
+  deletedAt: number
   productName: number
   brandName: number
   category: number
@@ -121,6 +127,8 @@ export type ProductStudyItemMinAggregateInputType = {
   id?: true
   userId?: true
   questionNumber?: true
+  autoSendEnabled?: true
+  deletedAt?: true
   productName?: true
   brandName?: true
   category?: true
@@ -142,6 +150,8 @@ export type ProductStudyItemMaxAggregateInputType = {
   id?: true
   userId?: true
   questionNumber?: true
+  autoSendEnabled?: true
+  deletedAt?: true
   productName?: true
   brandName?: true
   category?: true
@@ -163,6 +173,8 @@ export type ProductStudyItemCountAggregateInputType = {
   id?: true
   userId?: true
   questionNumber?: true
+  autoSendEnabled?: true
+  deletedAt?: true
   productName?: true
   brandName?: true
   category?: true
@@ -273,6 +285,8 @@ export type ProductStudyItemGroupByOutputType = {
   id: number
   userId: number
   questionNumber: number
+  autoSendEnabled: boolean
+  deletedAt: Date | null
   productName: string | null
   brandName: string | null
   category: string | null
@@ -319,6 +333,8 @@ export type ProductStudyItemWhereInput = {
   id?: Prisma.IntFilter<"ProductStudyItem"> | number
   userId?: Prisma.IntFilter<"ProductStudyItem"> | number
   questionNumber?: Prisma.IntFilter<"ProductStudyItem"> | number
+  autoSendEnabled?: Prisma.BoolFilter<"ProductStudyItem"> | boolean
+  deletedAt?: Prisma.DateTimeNullableFilter<"ProductStudyItem"> | Date | string | null
   productName?: Prisma.StringNullableFilter<"ProductStudyItem"> | string | null
   brandName?: Prisma.StringNullableFilter<"ProductStudyItem"> | string | null
   category?: Prisma.StringNullableFilter<"ProductStudyItem"> | string | null
@@ -346,6 +362,8 @@ export type ProductStudyItemOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   questionNumber?: Prisma.SortOrder
+  autoSendEnabled?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   productName?: Prisma.SortOrderInput | Prisma.SortOrder
   brandName?: Prisma.SortOrderInput | Prisma.SortOrder
   category?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -376,6 +394,8 @@ export type ProductStudyItemWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.ProductStudyItemWhereInput[]
   NOT?: Prisma.ProductStudyItemWhereInput | Prisma.ProductStudyItemWhereInput[]
   userId?: Prisma.IntFilter<"ProductStudyItem"> | number
+  autoSendEnabled?: Prisma.BoolFilter<"ProductStudyItem"> | boolean
+  deletedAt?: Prisma.DateTimeNullableFilter<"ProductStudyItem"> | Date | string | null
   productName?: Prisma.StringNullableFilter<"ProductStudyItem"> | string | null
   brandName?: Prisma.StringNullableFilter<"ProductStudyItem"> | string | null
   category?: Prisma.StringNullableFilter<"ProductStudyItem"> | string | null
@@ -403,6 +423,8 @@ export type ProductStudyItemOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   questionNumber?: Prisma.SortOrder
+  autoSendEnabled?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   productName?: Prisma.SortOrderInput | Prisma.SortOrder
   brandName?: Prisma.SortOrderInput | Prisma.SortOrder
   category?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -434,6 +456,8 @@ export type ProductStudyItemScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"ProductStudyItem"> | number
   userId?: Prisma.IntWithAggregatesFilter<"ProductStudyItem"> | number
   questionNumber?: Prisma.IntWithAggregatesFilter<"ProductStudyItem"> | number
+  autoSendEnabled?: Prisma.BoolWithAggregatesFilter<"ProductStudyItem"> | boolean
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ProductStudyItem"> | Date | string | null
   productName?: Prisma.StringNullableWithAggregatesFilter<"ProductStudyItem"> | string | null
   brandName?: Prisma.StringNullableWithAggregatesFilter<"ProductStudyItem"> | string | null
   category?: Prisma.StringNullableWithAggregatesFilter<"ProductStudyItem"> | string | null
@@ -455,6 +479,8 @@ export type ProductStudyItemScalarWhereWithAggregatesInput = {
 
 export type ProductStudyItemCreateInput = {
   questionNumber: number
+  autoSendEnabled?: boolean
+  deletedAt?: Date | string | null
   productName?: string | null
   brandName?: string | null
   category?: string | null
@@ -482,6 +508,8 @@ export type ProductStudyItemUncheckedCreateInput = {
   id?: number
   userId: number
   questionNumber: number
+  autoSendEnabled?: boolean
+  deletedAt?: Date | string | null
   productName?: string | null
   brandName?: string | null
   category?: string | null
@@ -506,6 +534,8 @@ export type ProductStudyItemUncheckedCreateInput = {
 
 export type ProductStudyItemUpdateInput = {
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -533,6 +563,8 @@ export type ProductStudyItemUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -559,6 +591,8 @@ export type ProductStudyItemCreateManyInput = {
   id?: number
   userId: number
   questionNumber: number
+  autoSendEnabled?: boolean
+  deletedAt?: Date | string | null
   productName?: string | null
   brandName?: string | null
   category?: string | null
@@ -580,6 +614,8 @@ export type ProductStudyItemCreateManyInput = {
 
 export type ProductStudyItemUpdateManyMutationInput = {
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -603,6 +639,8 @@ export type ProductStudyItemUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -636,6 +674,8 @@ export type ProductStudyItemCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   questionNumber?: Prisma.SortOrder
+  autoSendEnabled?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   productName?: Prisma.SortOrder
   brandName?: Prisma.SortOrder
   category?: Prisma.SortOrder
@@ -665,6 +705,8 @@ export type ProductStudyItemMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   questionNumber?: Prisma.SortOrder
+  autoSendEnabled?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   productName?: Prisma.SortOrder
   brandName?: Prisma.SortOrder
   category?: Prisma.SortOrder
@@ -686,6 +728,8 @@ export type ProductStudyItemMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   questionNumber?: Prisma.SortOrder
+  autoSendEnabled?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   productName?: Prisma.SortOrder
   brandName?: Prisma.SortOrder
   category?: Prisma.SortOrder
@@ -756,6 +800,14 @@ export type ProductStudyItemUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.ProductStudyItemScalarWhereInput | Prisma.ProductStudyItemScalarWhereInput[]
 }
 
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
@@ -808,6 +860,8 @@ export type ProductStudyItemUpdateOneRequiredWithoutActiveConversationsNestedInp
 
 export type ProductStudyItemCreateWithoutUserInput = {
   questionNumber: number
+  autoSendEnabled?: boolean
+  deletedAt?: Date | string | null
   productName?: string | null
   brandName?: string | null
   category?: string | null
@@ -833,6 +887,8 @@ export type ProductStudyItemCreateWithoutUserInput = {
 export type ProductStudyItemUncheckedCreateWithoutUserInput = {
   id?: number
   questionNumber: number
+  autoSendEnabled?: boolean
+  deletedAt?: Date | string | null
   productName?: string | null
   brandName?: string | null
   category?: string | null
@@ -887,6 +943,8 @@ export type ProductStudyItemScalarWhereInput = {
   id?: Prisma.IntFilter<"ProductStudyItem"> | number
   userId?: Prisma.IntFilter<"ProductStudyItem"> | number
   questionNumber?: Prisma.IntFilter<"ProductStudyItem"> | number
+  autoSendEnabled?: Prisma.BoolFilter<"ProductStudyItem"> | boolean
+  deletedAt?: Prisma.DateTimeNullableFilter<"ProductStudyItem"> | Date | string | null
   productName?: Prisma.StringNullableFilter<"ProductStudyItem"> | string | null
   brandName?: Prisma.StringNullableFilter<"ProductStudyItem"> | string | null
   category?: Prisma.StringNullableFilter<"ProductStudyItem"> | string | null
@@ -908,6 +966,8 @@ export type ProductStudyItemScalarWhereInput = {
 
 export type ProductStudyItemCreateWithoutImagesInput = {
   questionNumber: number
+  autoSendEnabled?: boolean
+  deletedAt?: Date | string | null
   productName?: string | null
   brandName?: string | null
   category?: string | null
@@ -934,6 +994,8 @@ export type ProductStudyItemUncheckedCreateWithoutImagesInput = {
   id?: number
   userId: number
   questionNumber: number
+  autoSendEnabled?: boolean
+  deletedAt?: Date | string | null
   productName?: string | null
   brandName?: string | null
   category?: string | null
@@ -973,6 +1035,8 @@ export type ProductStudyItemUpdateToOneWithWhereWithoutImagesInput = {
 
 export type ProductStudyItemUpdateWithoutImagesInput = {
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -999,6 +1063,8 @@ export type ProductStudyItemUncheckedUpdateWithoutImagesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1022,6 +1088,8 @@ export type ProductStudyItemUncheckedUpdateWithoutImagesInput = {
 
 export type ProductStudyItemCreateWithoutReviewLogsInput = {
   questionNumber: number
+  autoSendEnabled?: boolean
+  deletedAt?: Date | string | null
   productName?: string | null
   brandName?: string | null
   category?: string | null
@@ -1048,6 +1116,8 @@ export type ProductStudyItemUncheckedCreateWithoutReviewLogsInput = {
   id?: number
   userId: number
   questionNumber: number
+  autoSendEnabled?: boolean
+  deletedAt?: Date | string | null
   productName?: string | null
   brandName?: string | null
   category?: string | null
@@ -1087,6 +1157,8 @@ export type ProductStudyItemUpdateToOneWithWhereWithoutReviewLogsInput = {
 
 export type ProductStudyItemUpdateWithoutReviewLogsInput = {
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1113,6 +1185,8 @@ export type ProductStudyItemUncheckedUpdateWithoutReviewLogsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1136,6 +1210,8 @@ export type ProductStudyItemUncheckedUpdateWithoutReviewLogsInput = {
 
 export type ProductStudyItemCreateWithoutActiveConversationsInput = {
   questionNumber: number
+  autoSendEnabled?: boolean
+  deletedAt?: Date | string | null
   productName?: string | null
   brandName?: string | null
   category?: string | null
@@ -1162,6 +1238,8 @@ export type ProductStudyItemUncheckedCreateWithoutActiveConversationsInput = {
   id?: number
   userId: number
   questionNumber: number
+  autoSendEnabled?: boolean
+  deletedAt?: Date | string | null
   productName?: string | null
   brandName?: string | null
   category?: string | null
@@ -1201,6 +1279,8 @@ export type ProductStudyItemUpdateToOneWithWhereWithoutActiveConversationsInput 
 
 export type ProductStudyItemUpdateWithoutActiveConversationsInput = {
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1227,6 +1307,8 @@ export type ProductStudyItemUncheckedUpdateWithoutActiveConversationsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1251,6 +1333,8 @@ export type ProductStudyItemUncheckedUpdateWithoutActiveConversationsInput = {
 export type ProductStudyItemCreateManyUserInput = {
   id?: number
   questionNumber: number
+  autoSendEnabled?: boolean
+  deletedAt?: Date | string | null
   productName?: string | null
   brandName?: string | null
   category?: string | null
@@ -1272,6 +1356,8 @@ export type ProductStudyItemCreateManyUserInput = {
 
 export type ProductStudyItemUpdateWithoutUserInput = {
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1297,6 +1383,8 @@ export type ProductStudyItemUpdateWithoutUserInput = {
 export type ProductStudyItemUncheckedUpdateWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1322,6 +1410,8 @@ export type ProductStudyItemUncheckedUpdateWithoutUserInput = {
 export type ProductStudyItemUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1394,6 +1484,8 @@ export type ProductStudyItemSelect<ExtArgs extends runtime.Types.Extensions.Inte
   id?: boolean
   userId?: boolean
   questionNumber?: boolean
+  autoSendEnabled?: boolean
+  deletedAt?: boolean
   productName?: boolean
   brandName?: boolean
   category?: boolean
@@ -1422,6 +1514,8 @@ export type ProductStudyItemSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   id?: boolean
   userId?: boolean
   questionNumber?: boolean
+  autoSendEnabled?: boolean
+  deletedAt?: boolean
   productName?: boolean
   brandName?: boolean
   category?: boolean
@@ -1446,6 +1540,8 @@ export type ProductStudyItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   id?: boolean
   userId?: boolean
   questionNumber?: boolean
+  autoSendEnabled?: boolean
+  deletedAt?: boolean
   productName?: boolean
   brandName?: boolean
   category?: boolean
@@ -1470,6 +1566,8 @@ export type ProductStudyItemSelectScalar = {
   id?: boolean
   userId?: boolean
   questionNumber?: boolean
+  autoSendEnabled?: boolean
+  deletedAt?: boolean
   productName?: boolean
   brandName?: boolean
   category?: boolean
@@ -1489,7 +1587,7 @@ export type ProductStudyItemSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ProductStudyItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "questionNumber" | "productName" | "brandName" | "category" | "note" | "memo" | "firstScheduledAt" | "nextScheduledAt" | "status" | "summary" | "question" | "answer" | "explanation" | "difficulty" | "tags" | "keyPoints" | "createdAt" | "updatedAt", ExtArgs["result"]["productStudyItem"]>
+export type ProductStudyItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "questionNumber" | "autoSendEnabled" | "deletedAt" | "productName" | "brandName" | "category" | "note" | "memo" | "firstScheduledAt" | "nextScheduledAt" | "status" | "summary" | "question" | "answer" | "explanation" | "difficulty" | "tags" | "keyPoints" | "createdAt" | "updatedAt", ExtArgs["result"]["productStudyItem"]>
 export type ProductStudyItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   images?: boolean | Prisma.ProductStudyItem$imagesArgs<ExtArgs>
@@ -1516,6 +1614,8 @@ export type $ProductStudyItemPayload<ExtArgs extends runtime.Types.Extensions.In
     id: number
     userId: number
     questionNumber: number
+    autoSendEnabled: boolean
+    deletedAt: Date | null
     productName: string | null
     brandName: string | null
     category: string | null
@@ -1963,6 +2063,8 @@ export interface ProductStudyItemFieldRefs {
   readonly id: Prisma.FieldRef<"ProductStudyItem", 'Int'>
   readonly userId: Prisma.FieldRef<"ProductStudyItem", 'Int'>
   readonly questionNumber: Prisma.FieldRef<"ProductStudyItem", 'Int'>
+  readonly autoSendEnabled: Prisma.FieldRef<"ProductStudyItem", 'Boolean'>
+  readonly deletedAt: Prisma.FieldRef<"ProductStudyItem", 'DateTime'>
   readonly productName: Prisma.FieldRef<"ProductStudyItem", 'String'>
   readonly brandName: Prisma.FieldRef<"ProductStudyItem", 'String'>
   readonly category: Prisma.FieldRef<"ProductStudyItem", 'String'>

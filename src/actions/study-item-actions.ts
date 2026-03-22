@@ -7,7 +7,10 @@ import { parseDateInput } from "@/lib/date";
 import { dispatchStudyItems } from "@/lib/line/service";
 import {
   createStudyItem,
+  deleteStudyItem,
   regenerateStudyItem,
+  restoreStudyItem,
+  updateAutoSendEnabled,
   updateManualSchedule,
   updateStudyItem,
 } from "@/lib/study/service";
@@ -18,6 +21,7 @@ import { buildRedirectUrl } from "@/lib/utils";
 function revalidateAll(itemId?: number) {
   revalidatePath("/");
   revalidatePath("/items");
+  revalidatePath("/items/deleted");
 
   if (itemId) {
     revalidatePath(`/items/${itemId}`);
@@ -136,6 +140,70 @@ export async function updateScheduleAction(formData: FormData) {
         redirectTo,
         "error",
         error instanceof Error ? error.message : "次回送信日の更新に失敗しました。",
+      ),
+    );
+  }
+}
+
+export async function deleteStudyItemAction(formData: FormData) {
+  const itemId = Number(formData.get("itemId"));
+  const redirectTo = String(formData.get("redirectTo") || "/items");
+
+  try {
+    await deleteStudyItem(itemId);
+    revalidateAll(itemId);
+    redirect(buildRedirectUrl(redirectTo, "message", "問題を削除しました。削除済み一覧から戻せます。"));
+  } catch (error) {
+    redirect(
+      buildRedirectUrl(
+        redirectTo,
+        "error",
+        error instanceof Error ? error.message : "問題の削除に失敗しました。",
+      ),
+    );
+  }
+}
+
+export async function restoreStudyItemAction(formData: FormData) {
+  const itemId = Number(formData.get("itemId"));
+  const redirectTo = String(formData.get("redirectTo") || "/items/deleted");
+
+  try {
+    await restoreStudyItem(itemId);
+    revalidateAll(itemId);
+    redirect(buildRedirectUrl(redirectTo, "message", "問題一覧に戻しました。"));
+  } catch (error) {
+    redirect(
+      buildRedirectUrl(
+        redirectTo,
+        "error",
+        error instanceof Error ? error.message : "問題の復元に失敗しました。",
+      ),
+    );
+  }
+}
+
+export async function updateAutoSendEnabledAction(formData: FormData) {
+  const itemId = Number(formData.get("itemId"));
+  const redirectTo = String(formData.get("redirectTo") || "/items");
+  const autoSendEnabled = String(formData.get("autoSendEnabled")) === "1";
+
+  try {
+    await updateAutoSendEnabled(itemId, autoSendEnabled);
+    revalidateAll(itemId);
+    redirect(
+      buildRedirectUrl(
+        redirectTo,
+        "message",
+        autoSendEnabled ? "自動送信を有効にしました。" : "自動送信を無効にしました。",
+      ),
+    );
+  } catch (error) {
+    redirect(
+      buildRedirectUrl(
+        redirectTo,
+        "error",
+        error instanceof Error ? error.message : "自動送信設定の更新に失敗しました。",
       ),
     );
   }

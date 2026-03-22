@@ -1,13 +1,20 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
+
+import { getAppSettings } from "@/lib/env";
 
 export type SavedImage = {
   imagePath: string;
   sortOrder: number;
 };
 
-const uploadRoot = path.join(process.cwd(), "storage", "uploads");
+function getUploadRoot() {
+  const configuredPath = getAppSettings().uploadStorageDir;
+  return configuredPath
+    ? path.resolve(configuredPath)
+    : path.join(process.cwd(), "storage", "uploads");
+}
 
 function normalizeRelativePath(relativePath: string) {
   return relativePath.replaceAll("\\", "/");
@@ -22,6 +29,7 @@ export function getUploadPublicUrl(imagePath: string) {
 }
 
 export function resolveUploadPath(imagePath: string) {
+  const uploadRoot = getUploadRoot();
   const resolvedPath = path.resolve(uploadRoot, imagePath);
 
   if (!resolvedPath.startsWith(uploadRoot)) {
@@ -53,6 +61,7 @@ export function getMimeTypeFromPath(imagePath: string) {
 }
 
 export async function saveUploadedImages(files: File[]): Promise<SavedImage[]> {
+  const uploadRoot = getUploadRoot();
   const now = new Date();
   const folder = path.join(
     uploadRoot,
@@ -81,6 +90,16 @@ export async function saveUploadedImages(files: File[]): Promise<SavedImage[]> {
 
 export async function readStoredImage(imagePath: string) {
   return readFile(resolveUploadPath(imagePath));
+}
+
+export async function deleteStoredImage(imagePath: string) {
+  try {
+    await unlink(resolveUploadPath(imagePath));
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
+      throw error;
+    }
+  }
 }
 
 export async function fileToDataUrl(file: File) {

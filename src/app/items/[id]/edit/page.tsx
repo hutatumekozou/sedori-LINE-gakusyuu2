@@ -30,6 +30,7 @@ export default async function EditItemPage({ params }: EditItemPageProps) {
         <ItemForm
           action={updateStudyItemAction.bind(null, item.id)}
           defaults={{
+            autoSendEnabled: item.autoSendEnabled,
             productName: item.productName,
             brandName: item.brandName,
             note: item.note,

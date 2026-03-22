@@ -2,8 +2,9 @@ import Link from "next/link";
 import type { ItemStatus } from "@/generated/prisma/client";
 
 import {
-  regenerateStudyItemAction,
+  deleteStudyItemAction,
   sendNowAction,
+  updateAutoSendEnabledAction,
 } from "@/actions/study-item-actions";
 import { Badge } from "@/components/badge";
 import { FlashMessage } from "@/components/flash-message";
@@ -60,7 +61,7 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
     <div className="space-y-6">
       <PageHeader
         title="問題一覧"
-        description="検索、絞り込み、今すぐ送信、再生成、詳細確認をまとめて行えます。"
+        description="検索、絞り込み、手動送信、詳細確認をまとめて行えます。"
         action={
           <Link
             href="/items/new"
@@ -117,6 +118,7 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
                 <th className="px-4 py-4 font-semibold">問題番号</th>
                 <th className="px-4 py-4 font-semibold">商品名</th>
                 <th className="px-4 py-4 font-semibold">ブランド名</th>
+                <th className="px-4 py-4 font-semibold">自動送信</th>
                 <th className="px-4 py-4 font-semibold">次回送信日</th>
                 <th className="px-4 py-4 font-semibold">状態</th>
                 <th className="px-4 py-4 font-semibold">難易度</th>
@@ -128,7 +130,7 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
             <tbody>
               {items.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="px-4 py-10 text-center text-slate-500">
+                  <td colSpan={10} className="px-4 py-10 text-center text-slate-500">
                     条件に一致する問題はありません。
                   </td>
                 </tr>
@@ -138,6 +140,33 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
                     <td className="px-4 py-4 font-semibold text-slate-900">{item.questionNumber}</td>
                     <td className="px-4 py-4 text-slate-700">{item.productName || "未設定"}</td>
                     <td className="px-4 py-4 text-slate-700">{item.brandName || "未設定"}</td>
+                    <td className="px-4 py-4">
+                      <div className="flex min-w-28 flex-col gap-2">
+                        <Badge
+                          label={item.autoSendEnabled ? "ON" : "OFF"}
+                          className={
+                            item.autoSendEnabled
+                              ? "bg-emerald-100 text-emerald-800"
+                              : "bg-slate-100 text-slate-600"
+                          }
+                        />
+                        <form action={updateAutoSendEnabledAction}>
+                          <input type="hidden" name="itemId" value={item.id} />
+                          <input type="hidden" name="redirectTo" value={redirectTo} />
+                          <input
+                            type="hidden"
+                            name="autoSendEnabled"
+                            value={item.autoSendEnabled ? "0" : "1"}
+                          />
+                          <SubmitButton
+                            label={item.autoSendEnabled ? "無効にする" : "有効にする"}
+                            pendingLabel="更新中..."
+                            variant="secondary"
+                            className="w-full text-xs"
+                          />
+                        </form>
+                      </div>
+                    </td>
                     <td className="px-4 py-4 text-slate-700">{formatDate(item.nextScheduledAt)}</td>
                     <td className="px-4 py-4">
                       <Badge label={STATUS_LABELS[item.status]} className={STATUS_STYLES[item.status]} />
@@ -162,7 +191,7 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
                     </td>
                     <td className="px-4 py-4 text-slate-700">{formatDate(item.createdAt)}</td>
                     <td className="px-4 py-4">
-                      <div className="flex flex-col gap-2">
+                      <div className="grid min-w-56 grid-cols-2 gap-2">
                         <Link
                           href={`/items/${item.id}`}
                           className="rounded-xl border border-slate-300 px-3 py-2 text-center text-xs font-semibold text-slate-700 transition hover:bg-slate-50"
@@ -179,21 +208,21 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
                           <input type="hidden" name="itemId" value={item.id} />
                           <input type="hidden" name="redirectTo" value={redirectTo} />
                           <SubmitButton
-                            label="今すぐ送信"
+                            label="手動送信"
                             pendingLabel="送信中..."
                             variant="secondary"
-                            className="w-full text-xs"
+                            className="w-full whitespace-nowrap px-3 py-2 text-xs"
                           />
                         </form>
-                        <form action={regenerateStudyItemAction}>
+                        <form action={deleteStudyItemAction}>
                           <input type="hidden" name="itemId" value={item.id} />
                           <input type="hidden" name="redirectTo" value={redirectTo} />
-                          <SubmitButton
-                            label="問題再生成"
-                            pendingLabel="再生成中..."
-                            variant="secondary"
-                            className="w-full text-xs"
-                          />
+                          <button
+                            type="submit"
+                            className="w-full rounded-xl border border-rose-200 px-3 py-2 text-center text-xs font-semibold text-rose-700 transition hover:bg-rose-50"
+                          >
+                            削除
+                          </button>
                         </form>
                       </div>
                     </td>

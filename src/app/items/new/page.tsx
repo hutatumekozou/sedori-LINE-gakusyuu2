@@ -1,7 +1,7 @@
 import { createStudyItemAction } from "@/actions/study-item-actions";
 import { ItemForm } from "@/components/item-form";
 import { PageHeader } from "@/components/page-header";
-import { formatDateInputValue } from "@/lib/date";
+import { formatDateInputValue, scheduleNextReview } from "@/lib/date";
 import { getAppSettings } from "@/lib/env";
 
 export default function NewItemPage() {
@@ -16,7 +16,8 @@ export default function NewItemPage() {
         <ItemForm
           action={createStudyItemAction}
           defaults={{
-            firstScheduledAt: formatDateInputValue(new Date()),
+            autoSendEnabled: true,
+            firstScheduledAt: formatDateInputValue(scheduleNextReview(1)),
           }}
           submitLabel="保存して問題生成"
           pendingLabel="保存中..."

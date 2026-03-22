@@ -86,6 +86,8 @@ export const ProductStudyItemScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   questionNumber: 'questionNumber',
+  autoSendEnabled: 'autoSendEnabled',
+  deletedAt: 'deletedAt',
   productName: 'productName',
   brandName: 'brandName',
   category: 'category',

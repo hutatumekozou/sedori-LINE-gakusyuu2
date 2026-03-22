@@ -73,6 +73,8 @@ npm run dev
 | `DATABASE_URL` | 必須 | SQLite 接続文字列 |
 | `BASIC_AUTH_USER` | 推奨 | 管理画面の Basic 認証ユーザー名 |
 | `BASIC_AUTH_PASSWORD` | 推奨 | 管理画面の Basic 認証パスワード |
+| `APP_BASE_URL` | LINE画像送信時に必須 | 現在有効な HTTPS 公開URL |
+| `UPLOAD_STORAGE_DIR` | VPS運用時に推奨 | アップロード画像の保存先絶対パス |
 | `GEMINI_API_KEY` | 問題生成時に必須 | Gemini Developer API キー |
 | `GEMINI_MODEL` | 任意 | 既定は `gemini-2.5-flash` |
 | `LINE_CHANNEL_ACCESS_TOKEN` | LINE返信/送信時に必須 | Messaging API のチャネルアクセストークン |
@@ -116,6 +118,7 @@ https://<公開URL>/api/line/webhook
 ## ローカルでの Webhook 確認方法
 
 ローカルの `localhost` は LINE から直接叩けないため、公開トンネルを使います。
+この手順は開発確認用です。本番運用は後述の VPS 構成を推奨します。
 
 例: Cloudflare Tunnel
 
@@ -130,6 +133,7 @@ ngrok http 3000
 ```
 
 発行された HTTPS URL を LINE Developers の Webhook URL に設定してください。
+問題文と一緒に画像も LINE へ送る場合は、同じ HTTPS URL を `.env` の `APP_BASE_URL` に設定してください。
 
 ## 毎日送信処理の実行方法
 
@@ -155,7 +159,34 @@ curl -X POST \
   "http://localhost:3000/api/internal/send-due?force=1"
 ```
 
-本番では cron などから `npm run send:due` または内部 API を呼ぶ想定です。
+本番では cron などから `npm run send:due` または内部 API を呼びます。
+
+## VPS 本番運用
+
+安定運用する場合は、`localhost + ngrok` ではなく 1 台の VPS に常駐させてください。
+
+- Web アプリ: `systemd`
+- 毎日 12:00 JST の自動送信: `cron`
+- 公開HTTPS: `nginx`
+- DB: SQLite を永続ディスクへ配置
+- 画像: `UPLOAD_STORAGE_DIR` を永続ディスクへ配置
+
+このリポジトリには VPS 用のテンプレートを同梱しています。
+
+- ひな形 env: [deploy/vps/env.production.example](/Users/kukkiiboy/Desktop/Codex/★260318★物販LINE学習/deploy/vps/env.production.example)
+- セットアップ手順: [deploy/vps/README.md](/Users/kukkiiboy/Desktop/Codex/★260318★物販LINE学習/deploy/vps/README.md)
+- `systemd` service: [deploy/vps/systemd/mercari-study-web.service](/Users/kukkiiboy/Desktop/Codex/★260318★物販LINE学習/deploy/vps/systemd/mercari-study-web.service)
+- 送信 service: [deploy/vps/systemd/mercari-study-send-due.service](/Users/kukkiiboy/Desktop/Codex/★260318★物販LINE学習/deploy/vps/systemd/mercari-study-send-due.service)
+- `cron` 設定例: [deploy/vps/cron/mercari-study-send-due.cron](/Users/kukkiiboy/Desktop/Codex/★260318★物販LINE学習/deploy/vps/cron/mercari-study-send-due.cron)
+- `nginx` 設定例: [deploy/vps/nginx/mercari-study.conf](/Users/kukkiiboy/Desktop/Codex/★260318★物販LINE学習/deploy/vps/nginx/mercari-study.conf)
+
+本番で使う代表的な環境変数例:
+
+```env
+DATABASE_URL="file:/var/lib/mercari-study/prisma/dev.db"
+UPLOAD_STORAGE_DIR="/var/lib/mercari-study/uploads"
+APP_BASE_URL="https://study.example.com"
+```
 
 ## 主な npm scripts
 
@@ -177,6 +208,11 @@ npm run send:due    # 本日送信対象をまとめてLINEへ送信
 - SQLite: `prisma/dev.db`
 - アップロード画像: `storage/uploads`
 - ローカル画像表示: `/api/uploads/[...path]`
+
+VPS 本番では以下を推奨します。
+
+- SQLite: `/var/lib/mercari-study/prisma/dev.db`
+- アップロード画像: `/var/lib/mercari-study/uploads`
 
 ## よくあるエラー
 
@@ -218,6 +254,18 @@ npm run send:due    # 本日送信対象をまとめてLINEへ送信
 
 - `.env` の `LINE_DEFAULT_USER_ID` を設定する
 - もしくは対象ユーザーの `lineUserId` をDBへ登録する
+
+### `公開URLが未設定です`
+
+- `.env` の `APP_BASE_URL` に現在有効な HTTPS URL を設定してください
+- 例: `APP_BASE_URL="https://study.example.com"`
+
+### LINEで画像が空白になる
+
+- `APP_BASE_URL` の公開URLが失効していると、LINEは画像を取得できません
+- 開発時は `ngrok http 3000` を起動したままにしてください
+- 本番時は nginx 配下の実ドメインを `.env` の `APP_BASE_URL` に設定してください
+- ブラウザで `APP_BASE_URL/api/uploads/...?...` を開いて画像が見える状態で送信してください
 
 ## テスト
 

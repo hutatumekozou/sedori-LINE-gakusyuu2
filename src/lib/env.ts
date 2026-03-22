@@ -12,6 +12,8 @@ export function getAppSettings() {
   const parsed = z
     .object({
       APP_TIMEZONE: z.string().trim().default("Asia/Tokyo"),
+      APP_BASE_URL: z.string().trim().optional(),
+      UPLOAD_STORAGE_DIR: z.string().trim().optional(),
       MAX_UPLOAD_SIZE_MB: z.coerce.number().int().positive().default(5),
       GEMINI_MODEL: z.string().trim().default("gemini-2.5-flash"),
     })
@@ -19,10 +21,36 @@ export function getAppSettings() {
 
   return {
     appTimeZone: parsed.APP_TIMEZONE,
+    appBaseUrl: parsed.APP_BASE_URL?.trim() || null,
+    uploadStorageDir: parsed.UPLOAD_STORAGE_DIR?.trim() || null,
     maxUploadSizeMb: parsed.MAX_UPLOAD_SIZE_MB,
     maxUploadSizeBytes: parsed.MAX_UPLOAD_SIZE_MB * 1024 * 1024,
     geminiModel: parsed.GEMINI_MODEL,
   };
+}
+
+export function getPublicAppUrl() {
+  const appBaseUrl = getAppSettings().appBaseUrl;
+
+  if (!appBaseUrl) {
+    throw new Error(
+      "公開URLが未設定です。APP_BASE_URL に現在有効な HTTPS 公開URL を設定してください。",
+    );
+  }
+
+  let parsed: URL;
+
+  try {
+    parsed = new URL(appBaseUrl);
+  } catch {
+    throw new Error("APP_BASE_URL の形式が不正です。https:// から始まるURLを設定してください。");
+  }
+
+  if (parsed.protocol !== "https:") {
+    throw new Error("APP_BASE_URL は https:// から始まる公開URLを設定してください。");
+  }
+
+  return parsed.toString().replace(/\/$/, "");
 }
 
 export function getGeminiConfig() {

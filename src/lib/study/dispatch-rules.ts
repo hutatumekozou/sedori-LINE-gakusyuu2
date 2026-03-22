@@ -1,9 +1,9 @@
-import { getAppDayEnd, getAppDayStart } from "@/lib/date";
+import { formatDebugDateTime, getAppDayStart, getLatestDispatchCheckpoint } from "@/lib/date";
 
 export type DispatchSkipReason = "not_due_today" | "already_sent_today";
 
 export function isDueForDispatch(nextScheduledAt: Date, now: Date = new Date()) {
-  return nextScheduledAt <= getAppDayEnd(now);
+  return nextScheduledAt <= getLatestDispatchCheckpoint(now);
 }
 
 export function wasSentToday(
@@ -53,6 +53,69 @@ export function getDispatchDecision({
   };
 }
 
+export function buildDispatchDecisionDebugInfo({
+  itemId,
+  questionNumber,
+  autoSendEnabled,
+  status,
+  nextScheduledAt,
+  latestSentAt,
+  now = new Date(),
+}: {
+  itemId: number;
+  questionNumber: number;
+  autoSendEnabled: boolean;
+  status: string;
+  nextScheduledAt: Date;
+  latestSentAt?: Date | null;
+  now?: Date;
+}) {
+  const todayStart = getAppDayStart(now);
+  const dispatchCheckpoint = getLatestDispatchCheckpoint(now);
+  const nextScheduledAtLteDispatchCheckpoint = nextScheduledAt <= dispatchCheckpoint;
+  const latestSentIsToday = latestSentAt ? latestSentAt >= todayStart : false;
+
+  return {
+    itemId,
+    questionNumber,
+    autoSendEnabled,
+    status,
+    now: {
+      utc: now.toISOString(),
+      jst: formatDebugDateTime(now),
+    },
+    todayStart: {
+      utc: todayStart.toISOString(),
+      jst: formatDebugDateTime(todayStart),
+    },
+    dispatchCheckpoint: {
+      utc: dispatchCheckpoint.toISOString(),
+      jst: formatDebugDateTime(dispatchCheckpoint),
+    },
+    nextScheduledAt: {
+      utc: nextScheduledAt.toISOString(),
+      jst: formatDebugDateTime(nextScheduledAt),
+    },
+    latestSentLog: latestSentAt
+      ? {
+          utc: latestSentAt.toISOString(),
+          jst: formatDebugDateTime(latestSentAt),
+        }
+      : null,
+    comparisons: {
+      nextScheduledAtLteDispatchCheckpoint,
+      latestSentIsToday,
+      jst: {
+        nextScheduledAtLteDispatchCheckpoint:
+          `${formatDebugDateTime(nextScheduledAt)} <= ${formatDebugDateTime(dispatchCheckpoint)} => ${nextScheduledAtLteDispatchCheckpoint}`,
+        latestSentIsToday: latestSentAt
+          ? `${formatDebugDateTime(latestSentAt)} >= ${formatDebugDateTime(todayStart)} => ${latestSentIsToday}`
+          : `latestSentLog is null >= ${formatDebugDateTime(todayStart)} => false`,
+      },
+    },
+  };
+}
+
 export function getDispatchSkipMessage(reason: DispatchSkipReason) {
   if (reason === "already_sent_today") {
     return "本日はすでに送信済みです。";
@@ -66,4 +129,27 @@ export function resolveLineTargetUserId(
   defaultLineUserId: string | null | undefined,
 ) {
   return itemLineUserId || defaultLineUserId || null;
+}
+
+export function sortDispatchCandidates<
+  T extends {
+    questionNumber: number;
+    nextScheduledAt: Date;
+    latestSolvedAt?: Date | null;
+  },
+>(items: T[]) {
+  return items.slice().sort((left, right) => {
+    const solvedLeft = left.latestSolvedAt?.getTime() ?? Number.NEGATIVE_INFINITY;
+    const solvedRight = right.latestSolvedAt?.getTime() ?? Number.NEGATIVE_INFINITY;
+
+    if (solvedLeft !== solvedRight) {
+      return solvedRight - solvedLeft;
+    }
+
+    if (left.nextScheduledAt.getTime() !== right.nextScheduledAt.getTime()) {
+      return left.nextScheduledAt.getTime() - right.nextScheduledAt.getTime();
+    }
+
+    return left.questionNumber - right.questionNumber;
+  });
 }

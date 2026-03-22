@@ -1,0 +1,15 @@
+[Unit]
+Description=Mercari Study send due items
+After=network.target mercari-study-web.service
+
+[Service]
+Type=oneshot
+User=mercari-study
+Group=mercari-study
+Environment=APP_ROOT=/opt/mercari-study/current
+Environment=ENV_FILE=/etc/mercari-study/mercari-study.env
+Environment=PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+WorkingDirectory=/opt/mercari-study/current
+ExecStart=/opt/mercari-study/current/deploy/vps/scripts/run-send-due.sh
+StandardOutput=append:/var/log/mercari-study/send-due.log
+StandardError=append:/var/log/mercari-study/send-due.error.log

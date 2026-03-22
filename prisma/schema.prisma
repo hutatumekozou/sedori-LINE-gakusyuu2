@@ -43,6 +43,8 @@ model ProductStudyItem {
   id                  Int                       @id @default(autoincrement())
   userId              Int
   questionNumber      Int                       @unique
+  autoSendEnabled     Boolean                   @default(true)
+  deletedAt           DateTime?
   productName         String?
   brandName           String?
   category            String?

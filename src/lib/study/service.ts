@@ -4,11 +4,17 @@ import {
 } from "@/generated/prisma/client";
 import type { Prisma } from "@/generated/prisma/client";
 
-import { getAppDayEnd, isDueToday } from "@/lib/date";
+import { getLatestDispatchCheckpoint, isDueToday } from "@/lib/date";
 import { getDefaultLineUserId } from "@/lib/env";
 import { generateStudyContent } from "@/lib/gemini/generate-study-content";
 import { prisma } from "@/lib/prisma";
-import { getUploadPublicUrl, saveUploadedImages, storedImageToDataUrl, fileToDataUrl } from "@/lib/storage/local";
+import {
+  fileToDataUrl,
+  getUploadPublicUrl,
+  saveUploadedImages,
+  storedImageToDataUrl,
+} from "@/lib/storage/local";
+import { sortDispatchCandidates } from "@/lib/study/dispatch-rules";
 import { getLastResultFromLogs } from "@/lib/study/review-state";
 import type { LastResult, StudyItemFilters } from "@/lib/study/types";
 
@@ -16,6 +22,7 @@ type JsonArray = Prisma.JsonValue | null;
 export type StudyListItem = {
   id: number;
   questionNumber: number;
+  autoSendEnabled: boolean;
   productName: string | null;
   brandName: string | null;
   summary: string;
@@ -25,6 +32,15 @@ export type StudyListItem = {
   lastResult: LastResult;
   createdAt: Date;
   isDueToday: boolean;
+};
+
+export type DeletedStudyListItem = {
+  id: number;
+  questionNumber: number;
+  productName: string | null;
+  brandName: string | null;
+  createdAt: Date;
+  deletedAt: Date;
 };
 
 function parseJsonStringArray(value: JsonArray) {
@@ -97,6 +113,9 @@ export async function getOrCreateDefaultUser() {
 export async function getDashboardData() {
   const [items, recentLogs, correctCount, incorrectCount] = await Promise.all([
     prisma.productStudyItem.findMany({
+      where: {
+        deletedAt: null,
+      },
       include: {
         reviewLogs: {
           orderBy: {
@@ -136,7 +155,7 @@ export async function getDashboardData() {
   ]);
 
   const dueTodayItems = items
-    .filter((item) => isDueToday(item.nextScheduledAt))
+    .filter((item) => item.autoSendEnabled && isDueToday(item.nextScheduledAt))
     .map((item) => ({
       id: item.id,
       questionNumber: item.questionNumber,
@@ -165,6 +184,9 @@ export async function getStudyItems(
   filters: StudyItemFilters = {},
 ): Promise<StudyListItem[]> {
   const items = await prisma.productStudyItem.findMany({
+    where: {
+      deletedAt: null,
+    },
     include: {
       reviewLogs: {
         orderBy: {
@@ -172,14 +194,9 @@ export async function getStudyItems(
         },
       },
     },
-    orderBy: [
-      {
-        nextScheduledAt: "asc",
-      },
-      {
-        createdAt: "desc",
-      },
-    ],
+    orderBy: {
+      questionNumber: "asc",
+    },
   });
 
   const normalizedQuery = filters.query?.trim().toLowerCase() || "";
@@ -191,6 +208,7 @@ export async function getStudyItems(
       return {
         id: item.id,
         questionNumber: item.questionNumber,
+        autoSendEnabled: item.autoSendEnabled,
         productName: item.productName,
         brandName: item.brandName,
         summary: item.summary,
@@ -222,6 +240,27 @@ export async function getStudyItems(
     });
 }
 
+export async function getDeletedStudyItems(): Promise<DeletedStudyListItem[]> {
+  return prisma.productStudyItem.findMany({
+    where: {
+      deletedAt: {
+        not: null,
+      },
+    },
+    select: {
+      id: true,
+      questionNumber: true,
+      productName: true,
+      brandName: true,
+      createdAt: true,
+      deletedAt: true,
+    },
+    orderBy: {
+      questionNumber: "asc",
+    },
+  }) as Promise<DeletedStudyListItem[]>;
+}
+
 export async function getStudyItemDetail(itemId: number) {
   const item = await prisma.productStudyItem.findUnique({
     where: {
@@ -250,6 +289,10 @@ export async function getStudyItemDetail(itemId: number) {
     return null;
   }
 
+  if (item.deletedAt) {
+    return null;
+  }
+
   return {
     ...item,
     tags: parseJsonStringArray(item.tags),
@@ -264,6 +307,7 @@ export async function getStudyItemDetail(itemId: number) {
 }
 
 type CreateStudyItemInput = {
+  autoSendEnabled: boolean;
   productName?: string;
   brandName?: string;
   note: string;
@@ -300,6 +344,7 @@ export async function createStudyItem(input: CreateStudyItemInput) {
       data: {
         userId: user.id,
         questionNumber: (latestItem?.questionNumber || 0) + 1,
+        autoSendEnabled: input.autoSendEnabled,
         productName: input.productName,
         brandName: input.brandName,
         category: null,
@@ -348,6 +393,7 @@ export async function updateStudyItem(itemId: number, input: UpdateStudyItemInpu
         id: itemId,
       },
       data: {
+        autoSendEnabled: input.autoSendEnabled,
         productName: input.productName,
         brandName: input.brandName,
         category: null,
@@ -444,6 +490,88 @@ export async function updateManualSchedule(itemId: number, nextScheduledAt: Date
   });
 }
 
+export async function updateAutoSendEnabled(itemId: number, autoSendEnabled: boolean) {
+  const item = await prisma.productStudyItem.findUnique({
+    where: {
+      id: itemId,
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  if (!item) {
+    throw new Error("対象の問題が見つかりませんでした。");
+  }
+
+  await prisma.productStudyItem.update({
+    where: {
+      id: itemId,
+    },
+    data: {
+      autoSendEnabled,
+    },
+  });
+}
+
+export async function deleteStudyItem(itemId: number) {
+  const item = await prisma.productStudyItem.findUnique({
+    where: {
+      id: itemId,
+    },
+  });
+
+  if (!item) {
+    throw new Error("対象の問題が見つかりませんでした。");
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.productStudyItem.update({
+      where: {
+        id: itemId,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+
+    await tx.activeConversationState.deleteMany({
+      where: {
+        itemId,
+      },
+    });
+  });
+}
+
+export async function restoreStudyItem(itemId: number) {
+  const item = await prisma.productStudyItem.findUnique({
+    where: {
+      id: itemId,
+    },
+    select: {
+      id: true,
+      deletedAt: true,
+    },
+  });
+
+  if (!item) {
+    throw new Error("対象の問題が見つかりませんでした。");
+  }
+
+  if (!item.deletedAt) {
+    return;
+  }
+
+  await prisma.productStudyItem.update({
+    where: {
+      id: itemId,
+    },
+    data: {
+      deletedAt: null,
+    },
+  });
+}
+
 export async function getLatestSentLog(itemId: number) {
   return prisma.reviewLog.findFirst({
     where: {
@@ -457,28 +585,49 @@ export async function getLatestSentLog(itemId: number) {
 }
 
 export async function getDueItemsForDispatch(itemIds?: number[]) {
-  const dueBoundary = getAppDayEnd();
-
-  return prisma.productStudyItem.findMany({
+  const dueBoundary = getLatestDispatchCheckpoint();
+  const items = await prisma.productStudyItem.findMany({
     where: {
-      ...(itemIds ? { id: { in: itemIds } } : { nextScheduledAt: { lte: dueBoundary } }),
+      ...(itemIds
+        ? { id: { in: itemIds } }
+        : { autoSendEnabled: true, deletedAt: null, nextScheduledAt: { lte: dueBoundary } }),
     },
     include: {
+      images: {
+        orderBy: {
+          sortOrder: "asc",
+        },
+      },
       user: true,
       reviewLogs: {
         where: {
-          actionType: ReviewActionType.SENT,
+          actionType: {
+            in: [ReviewActionType.SENT, ReviewActionType.CORRECT, ReviewActionType.INCORRECT],
+          },
         },
         orderBy: {
           actionAt: "desc",
         },
-        take: 1,
+        take: 10,
       },
     },
-    orderBy: {
-      nextScheduledAt: "asc",
-    },
   });
+
+  if (itemIds) {
+    return items;
+  }
+
+  return sortDispatchCandidates(
+    items.map((item) => ({
+      ...item,
+      latestSolvedAt:
+        item.reviewLogs.find(
+          (log) =>
+            log.actionType === ReviewActionType.CORRECT ||
+            log.actionType === ReviewActionType.INCORRECT,
+        )?.actionAt || null,
+    })),
+  ).slice(0, 10);
 }
 
 export type StudyDetailItem = NonNullable<Awaited<ReturnType<typeof getStudyItemDetail>>>;

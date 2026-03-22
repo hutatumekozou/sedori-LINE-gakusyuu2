@@ -65,6 +65,17 @@ export function ItemForm({
       ) : null}
 
       <div className="grid gap-6 lg:grid-cols-2">
+        <label className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 lg:col-span-2">
+          <input
+            type="checkbox"
+            name="autoSendEnabled"
+            value="1"
+            defaultChecked={defaults.autoSendEnabled ?? true}
+            className="size-4 rounded border-slate-300 text-emerald-600"
+          />
+          自動送信を有効にする
+        </label>
+
         <label className="space-y-2">
           <span className="text-sm font-semibold text-slate-700">商品名</span>
           <input

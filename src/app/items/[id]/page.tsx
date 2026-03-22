@@ -3,7 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 
 import {
-  regenerateStudyItemAction,
+  deleteStudyItemAction,
   sendNowAction,
   updateScheduleAction,
 } from "@/actions/study-item-actions";
@@ -164,6 +164,10 @@ export default async function ItemDetailPage({
                 <dd className="mt-1 whitespace-pre-wrap text-slate-700">{item.memo || "-"}</dd>
               </div>
               <div>
+                <dt className="font-semibold text-slate-500">自動送信</dt>
+                <dd className="mt-1 text-slate-700">{item.autoSendEnabled ? "ON" : "OFF"}</dd>
+              </div>
+              <div>
                 <dt className="font-semibold text-slate-500">初回送信予定日</dt>
                 <dd className="mt-1 text-slate-700">{formatDate(item.firstScheduledAt)}</dd>
               </div>
@@ -177,18 +181,22 @@ export default async function ItemDetailPage({
               <form action={sendNowAction}>
                 <input type="hidden" name="itemId" value={item.id} />
                 <input type="hidden" name="redirectTo" value={redirectTo} />
-                <SubmitButton label="今すぐ送信" pendingLabel="送信中..." className="w-full" />
-              </form>
-
-              <form action={regenerateStudyItemAction}>
-                <input type="hidden" name="itemId" value={item.id} />
-                <input type="hidden" name="redirectTo" value={redirectTo} />
                 <SubmitButton
-                  label="問題再生成"
-                  pendingLabel="再生成中..."
-                  variant="secondary"
+                  label="手動送信"
+                  pendingLabel="送信中..."
                   className="w-full"
                 />
+              </form>
+
+              <form action={deleteStudyItemAction}>
+                <input type="hidden" name="itemId" value={item.id} />
+                <input type="hidden" name="redirectTo" value="/items" />
+                <button
+                  type="submit"
+                  className="w-full rounded-xl border border-rose-200 px-4 py-2 text-sm font-semibold text-rose-700 transition hover:bg-rose-50"
+                >
+                  削除
+                </button>
               </form>
             </div>
 

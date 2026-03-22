@@ -18,6 +18,10 @@ const navItems = [
     href: "/items",
     label: "問題一覧",
   },
+  {
+    href: "/items/deleted",
+    label: "削除した問題",
+  },
 ];
 
 export function SidebarNav() {
@@ -27,7 +31,12 @@ export function SidebarNav() {
     <nav className="space-y-2">
       {navItems.map((item) => {
         const isActive =
-          item.href === "/" ? pathname === item.href : pathname.startsWith(item.href);
+          item.href === "/"
+            ? pathname === item.href
+            : item.href === "/items"
+              ? pathname === "/items" ||
+                (pathname.startsWith("/items/") && !pathname.startsWith("/items/deleted"))
+              : pathname === item.href || pathname.startsWith(`${item.href}/`);
 
         return (
           <Link

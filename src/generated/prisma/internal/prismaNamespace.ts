@@ -829,6 +829,8 @@ export const ProductStudyItemScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   questionNumber: 'questionNumber',
+  autoSendEnabled: 'autoSendEnabled',
+  deletedAt: 'deletedAt',
   productName: 'productName',
   brandName: 'brandName',
   category: 'category',
@@ -950,6 +952,13 @@ export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
  * Reference to a field of type 'DateTime'
  */
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
