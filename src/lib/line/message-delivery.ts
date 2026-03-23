@@ -1,4 +1,4 @@
-import type { LinePushMessage } from "@/lib/line/message-builder";
+import type { LineMessage } from "@/lib/line/message-builder";
 
 const IMAGE_FETCH_TIMEOUT_MS = 5000;
 
@@ -29,7 +29,7 @@ async function assertReachableImageUrl(url: string) {
   }
 }
 
-export async function assertReachableImageMessages(messages: LinePushMessage[]) {
+export async function assertReachableImageMessages(messages: LineMessage[]) {
   const urls = messages.flatMap((message) =>
     message.type === "image" ? [message.previewImageUrl, message.originalContentUrl] : [],
   );

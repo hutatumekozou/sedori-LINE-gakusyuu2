@@ -856,6 +856,7 @@ export type ProductStudyItemScalarFieldEnum = (typeof ProductStudyItemScalarFiel
 export const ProductStudyImageScalarFieldEnum = {
   id: 'id',
   itemId: 'itemId',
+  kind: 'kind',
   imagePath: 'imagePath',
   sortOrder: 'sortOrder',
   createdAt: 'createdAt'
@@ -980,6 +981,13 @@ export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'J
  * Reference to a field of type 'QueryMode'
  */
 export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'ProductStudyImageKind'
+ */
+export type EnumProductStudyImageKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductStudyImageKind'>
     
 
 

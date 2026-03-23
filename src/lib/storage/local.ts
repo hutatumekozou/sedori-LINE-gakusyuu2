@@ -2,18 +2,17 @@ import { mkdir, readFile, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 
-import { getAppSettings } from "@/lib/env";
+import type { ProductStudyImageKind } from "@/generated/prisma/client";
+import { getResolvedUploadStorageDir } from "@/lib/env";
 
 export type SavedImage = {
+  kind: ProductStudyImageKind;
   imagePath: string;
   sortOrder: number;
 };
 
 function getUploadRoot() {
-  const configuredPath = getAppSettings().uploadStorageDir;
-  return configuredPath
-    ? path.resolve(configuredPath)
-    : path.join(process.cwd(), "storage", "uploads");
+  return getResolvedUploadStorageDir();
 }
 
 function normalizeRelativePath(relativePath: string) {
@@ -60,7 +59,10 @@ export function getMimeTypeFromPath(imagePath: string) {
   }
 }
 
-export async function saveUploadedImages(files: File[]): Promise<SavedImage[]> {
+export async function saveUploadedImages(
+  files: File[],
+  kind: ProductStudyImageKind,
+): Promise<SavedImage[]> {
   const uploadRoot = getUploadRoot();
   const now = new Date();
   const folder = path.join(
@@ -81,6 +83,7 @@ export async function saveUploadedImages(files: File[]): Promise<SavedImage[]> {
       await writeFile(fullPath, buffer);
 
       return {
+        kind,
         imagePath: normalizeRelativePath(relativePath),
         sortOrder: index,
       };

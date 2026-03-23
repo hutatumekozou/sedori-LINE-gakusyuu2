@@ -6,6 +6,7 @@ import { useActionState } from "react";
 import { MAX_IMAGE_COUNT } from "@/lib/study/constants";
 import {
   emptyStudyItemFormState,
+  type StudyFormImagePreview,
   type StudyItemFormDefaults,
   type StudyItemFormState,
 } from "@/lib/study/types";
@@ -21,10 +22,8 @@ type ItemFormProps = {
   pendingLabel: string;
   maxUploadSizeMb: number;
   imageHelpText?: string;
-  currentImages?: Array<{
-    id: number;
-    url: string;
-  }>;
+  currentQuestionImages?: StudyFormImagePreview[];
+  currentAnswerImages?: StudyFormImagePreview[];
 };
 
 function FieldError({
@@ -46,12 +45,13 @@ export function ItemForm({
   pendingLabel,
   maxUploadSizeMb,
   imageHelpText,
-  currentImages = [],
+  currentQuestionImages = [],
+  currentAnswerImages = [],
 }: ItemFormProps) {
   const [state, formAction] = useActionState(action, emptyStudyItemFormState);
 
   return (
-    <form action={formAction} className="space-y-6" encType="multipart/form-data">
+    <form action={formAction} className="space-y-6">
       {state.message ? (
         <div
           className={`rounded-2xl border px-4 py-3 text-sm ${
@@ -111,53 +111,84 @@ export function ItemForm({
       </div>
 
       <label className="space-y-2">
-        <span className="text-sm font-semibold text-slate-700">補足情報（問題文に反映）</span>
+        <span className="text-sm font-semibold text-slate-700">問題文</span>
         <textarea
           name="note"
           defaultValue={defaults.note || ""}
           rows={6}
           className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-emerald-300"
-          placeholder="問題文にしっかり反映したい内容を入力してください。仕入れ時に見たポイント、なぜ売れたと思うか、付属品、状態、相場感など"
+          placeholder="LINEでそのまま送る問題文を入力してください"
         />
         <FieldError errors={state.fieldErrors.note} />
       </label>
 
       <label className="space-y-2">
-        <span className="text-sm font-semibold text-slate-700">自由メモ（解説に反映）</span>
+        <span className="text-sm font-semibold text-slate-700">解答</span>
         <textarea
           name="memo"
           defaultValue={defaults.memo || ""}
           rows={4}
           className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-emerald-300"
-          placeholder="解説に入れたい気づきや補足があれば入力してください"
+          placeholder="LINEでそのまま返す解答を入力してください"
         />
         <FieldError errors={state.fieldErrors.memo} />
       </label>
 
-      <div className="space-y-3">
+      <div className="space-y-6">
         <label className="space-y-2">
-          <span className="text-sm font-semibold text-slate-700">画像アップロード</span>
+          <span className="text-sm font-semibold text-slate-700">問題文の画像</span>
           <input
             type="file"
-            name="images"
+            name="questionImages"
             accept="image/jpeg,image/png,image/webp,image/gif,image/heic,image/heif"
             multiple
             className="block w-full rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-4 text-sm text-slate-600"
           />
           <p className="text-xs text-slate-500">
-            最大{MAX_IMAGE_COUNT}枚。1枚あたり{maxUploadSizeMb}MB以下。
+            任意。最大{MAX_IMAGE_COUNT}枚。1枚あたり{maxUploadSizeMb}MB以下。
             {imageHelpText ? ` ${imageHelpText}` : ""}
           </p>
-          <FieldError errors={state.fieldErrors.images} />
+          <FieldError errors={state.fieldErrors.questionImages} />
         </label>
 
-        {currentImages.length > 0 ? (
+        {currentQuestionImages.length > 0 ? (
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-            {currentImages.map((image) => (
+            {currentQuestionImages.map((image) => (
               <Image
                 key={image.id}
                 src={image.url}
-                alt="登録済み画像"
+                alt="登録済み問題文画像"
+                width={400}
+                height={400}
+                className="aspect-square rounded-2xl border border-slate-200 object-cover"
+              />
+            ))}
+          </div>
+        ) : null}
+
+        <label className="space-y-2">
+          <span className="text-sm font-semibold text-slate-700">解答の画像</span>
+          <input
+            type="file"
+            name="answerImages"
+            accept="image/jpeg,image/png,image/webp,image/gif,image/heic,image/heif"
+            multiple
+            className="block w-full rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-4 text-sm text-slate-600"
+          />
+          <p className="text-xs text-slate-500">
+            任意。最大{MAX_IMAGE_COUNT}枚。1枚あたり{maxUploadSizeMb}MB以下。
+            {imageHelpText ? ` ${imageHelpText}` : ""}
+          </p>
+          <FieldError errors={state.fieldErrors.answerImages} />
+        </label>
+
+        {currentAnswerImages.length > 0 ? (
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            {currentAnswerImages.map((image) => (
+              <Image
+                key={image.id}
+                src={image.url}
+                alt="登録済み解答画像"
                 width={400}
                 height={400}
                 className="aspect-square rounded-2xl border border-slate-200 object-cover"

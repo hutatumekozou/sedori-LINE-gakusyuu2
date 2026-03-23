@@ -41,6 +41,7 @@ export type ProductStudyImageSumAggregateOutputType = {
 export type ProductStudyImageMinAggregateOutputType = {
   id: number | null
   itemId: number | null
+  kind: $Enums.ProductStudyImageKind | null
   imagePath: string | null
   sortOrder: number | null
   createdAt: Date | null
@@ -49,6 +50,7 @@ export type ProductStudyImageMinAggregateOutputType = {
 export type ProductStudyImageMaxAggregateOutputType = {
   id: number | null
   itemId: number | null
+  kind: $Enums.ProductStudyImageKind | null
   imagePath: string | null
   sortOrder: number | null
   createdAt: Date | null
@@ -57,6 +59,7 @@ export type ProductStudyImageMaxAggregateOutputType = {
 export type ProductStudyImageCountAggregateOutputType = {
   id: number
   itemId: number
+  kind: number
   imagePath: number
   sortOrder: number
   createdAt: number
@@ -79,6 +82,7 @@ export type ProductStudyImageSumAggregateInputType = {
 export type ProductStudyImageMinAggregateInputType = {
   id?: true
   itemId?: true
+  kind?: true
   imagePath?: true
   sortOrder?: true
   createdAt?: true
@@ -87,6 +91,7 @@ export type ProductStudyImageMinAggregateInputType = {
 export type ProductStudyImageMaxAggregateInputType = {
   id?: true
   itemId?: true
+  kind?: true
   imagePath?: true
   sortOrder?: true
   createdAt?: true
@@ -95,6 +100,7 @@ export type ProductStudyImageMaxAggregateInputType = {
 export type ProductStudyImageCountAggregateInputType = {
   id?: true
   itemId?: true
+  kind?: true
   imagePath?: true
   sortOrder?: true
   createdAt?: true
@@ -190,6 +196,7 @@ export type ProductStudyImageGroupByArgs<ExtArgs extends runtime.Types.Extension
 export type ProductStudyImageGroupByOutputType = {
   id: number
   itemId: number
+  kind: $Enums.ProductStudyImageKind
   imagePath: string
   sortOrder: number
   createdAt: Date
@@ -221,6 +228,7 @@ export type ProductStudyImageWhereInput = {
   NOT?: Prisma.ProductStudyImageWhereInput | Prisma.ProductStudyImageWhereInput[]
   id?: Prisma.IntFilter<"ProductStudyImage"> | number
   itemId?: Prisma.IntFilter<"ProductStudyImage"> | number
+  kind?: Prisma.EnumProductStudyImageKindFilter<"ProductStudyImage"> | $Enums.ProductStudyImageKind
   imagePath?: Prisma.StringFilter<"ProductStudyImage"> | string
   sortOrder?: Prisma.IntFilter<"ProductStudyImage"> | number
   createdAt?: Prisma.DateTimeFilter<"ProductStudyImage"> | Date | string
@@ -230,6 +238,7 @@ export type ProductStudyImageWhereInput = {
 export type ProductStudyImageOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   itemId?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
   imagePath?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -242,6 +251,7 @@ export type ProductStudyImageWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.ProductStudyImageWhereInput[]
   NOT?: Prisma.ProductStudyImageWhereInput | Prisma.ProductStudyImageWhereInput[]
   itemId?: Prisma.IntFilter<"ProductStudyImage"> | number
+  kind?: Prisma.EnumProductStudyImageKindFilter<"ProductStudyImage"> | $Enums.ProductStudyImageKind
   imagePath?: Prisma.StringFilter<"ProductStudyImage"> | string
   sortOrder?: Prisma.IntFilter<"ProductStudyImage"> | number
   createdAt?: Prisma.DateTimeFilter<"ProductStudyImage"> | Date | string
@@ -251,6 +261,7 @@ export type ProductStudyImageWhereUniqueInput = Prisma.AtLeast<{
 export type ProductStudyImageOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   itemId?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
   imagePath?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -267,12 +278,14 @@ export type ProductStudyImageScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ProductStudyImageScalarWhereWithAggregatesInput | Prisma.ProductStudyImageScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"ProductStudyImage"> | number
   itemId?: Prisma.IntWithAggregatesFilter<"ProductStudyImage"> | number
+  kind?: Prisma.EnumProductStudyImageKindWithAggregatesFilter<"ProductStudyImage"> | $Enums.ProductStudyImageKind
   imagePath?: Prisma.StringWithAggregatesFilter<"ProductStudyImage"> | string
   sortOrder?: Prisma.IntWithAggregatesFilter<"ProductStudyImage"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ProductStudyImage"> | Date | string
 }
 
 export type ProductStudyImageCreateInput = {
+  kind?: $Enums.ProductStudyImageKind
   imagePath: string
   sortOrder: number
   createdAt?: Date | string
@@ -282,12 +295,14 @@ export type ProductStudyImageCreateInput = {
 export type ProductStudyImageUncheckedCreateInput = {
   id?: number
   itemId: number
+  kind?: $Enums.ProductStudyImageKind
   imagePath: string
   sortOrder: number
   createdAt?: Date | string
 }
 
 export type ProductStudyImageUpdateInput = {
+  kind?: Prisma.EnumProductStudyImageKindFieldUpdateOperationsInput | $Enums.ProductStudyImageKind
   imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -297,6 +312,7 @@ export type ProductStudyImageUpdateInput = {
 export type ProductStudyImageUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   itemId?: Prisma.IntFieldUpdateOperationsInput | number
+  kind?: Prisma.EnumProductStudyImageKindFieldUpdateOperationsInput | $Enums.ProductStudyImageKind
   imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -305,12 +321,14 @@ export type ProductStudyImageUncheckedUpdateInput = {
 export type ProductStudyImageCreateManyInput = {
   id?: number
   itemId: number
+  kind?: $Enums.ProductStudyImageKind
   imagePath: string
   sortOrder: number
   createdAt?: Date | string
 }
 
 export type ProductStudyImageUpdateManyMutationInput = {
+  kind?: Prisma.EnumProductStudyImageKindFieldUpdateOperationsInput | $Enums.ProductStudyImageKind
   imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -319,6 +337,7 @@ export type ProductStudyImageUpdateManyMutationInput = {
 export type ProductStudyImageUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   itemId?: Prisma.IntFieldUpdateOperationsInput | number
+  kind?: Prisma.EnumProductStudyImageKindFieldUpdateOperationsInput | $Enums.ProductStudyImageKind
   imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -337,6 +356,7 @@ export type ProductStudyImageOrderByRelationAggregateInput = {
 export type ProductStudyImageCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   itemId?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
   imagePath?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -351,6 +371,7 @@ export type ProductStudyImageAvgOrderByAggregateInput = {
 export type ProductStudyImageMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   itemId?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
   imagePath?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -359,6 +380,7 @@ export type ProductStudyImageMaxOrderByAggregateInput = {
 export type ProductStudyImageMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   itemId?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
   imagePath?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -412,7 +434,12 @@ export type ProductStudyImageUncheckedUpdateManyWithoutItemNestedInput = {
   deleteMany?: Prisma.ProductStudyImageScalarWhereInput | Prisma.ProductStudyImageScalarWhereInput[]
 }
 
+export type EnumProductStudyImageKindFieldUpdateOperationsInput = {
+  set?: $Enums.ProductStudyImageKind
+}
+
 export type ProductStudyImageCreateWithoutItemInput = {
+  kind?: $Enums.ProductStudyImageKind
   imagePath: string
   sortOrder: number
   createdAt?: Date | string
@@ -420,6 +447,7 @@ export type ProductStudyImageCreateWithoutItemInput = {
 
 export type ProductStudyImageUncheckedCreateWithoutItemInput = {
   id?: number
+  kind?: $Enums.ProductStudyImageKind
   imagePath: string
   sortOrder: number
   createdAt?: Date | string
@@ -456,6 +484,7 @@ export type ProductStudyImageScalarWhereInput = {
   NOT?: Prisma.ProductStudyImageScalarWhereInput | Prisma.ProductStudyImageScalarWhereInput[]
   id?: Prisma.IntFilter<"ProductStudyImage"> | number
   itemId?: Prisma.IntFilter<"ProductStudyImage"> | number
+  kind?: Prisma.EnumProductStudyImageKindFilter<"ProductStudyImage"> | $Enums.ProductStudyImageKind
   imagePath?: Prisma.StringFilter<"ProductStudyImage"> | string
   sortOrder?: Prisma.IntFilter<"ProductStudyImage"> | number
   createdAt?: Prisma.DateTimeFilter<"ProductStudyImage"> | Date | string
@@ -463,12 +492,14 @@ export type ProductStudyImageScalarWhereInput = {
 
 export type ProductStudyImageCreateManyItemInput = {
   id?: number
+  kind?: $Enums.ProductStudyImageKind
   imagePath: string
   sortOrder: number
   createdAt?: Date | string
 }
 
 export type ProductStudyImageUpdateWithoutItemInput = {
+  kind?: Prisma.EnumProductStudyImageKindFieldUpdateOperationsInput | $Enums.ProductStudyImageKind
   imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -476,6 +507,7 @@ export type ProductStudyImageUpdateWithoutItemInput = {
 
 export type ProductStudyImageUncheckedUpdateWithoutItemInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  kind?: Prisma.EnumProductStudyImageKindFieldUpdateOperationsInput | $Enums.ProductStudyImageKind
   imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -483,6 +515,7 @@ export type ProductStudyImageUncheckedUpdateWithoutItemInput = {
 
 export type ProductStudyImageUncheckedUpdateManyWithoutItemInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  kind?: Prisma.EnumProductStudyImageKindFieldUpdateOperationsInput | $Enums.ProductStudyImageKind
   imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -493,6 +526,7 @@ export type ProductStudyImageUncheckedUpdateManyWithoutItemInput = {
 export type ProductStudyImageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   itemId?: boolean
+  kind?: boolean
   imagePath?: boolean
   sortOrder?: boolean
   createdAt?: boolean
@@ -502,6 +536,7 @@ export type ProductStudyImageSelect<ExtArgs extends runtime.Types.Extensions.Int
 export type ProductStudyImageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   itemId?: boolean
+  kind?: boolean
   imagePath?: boolean
   sortOrder?: boolean
   createdAt?: boolean
@@ -511,6 +546,7 @@ export type ProductStudyImageSelectCreateManyAndReturn<ExtArgs extends runtime.T
 export type ProductStudyImageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   itemId?: boolean
+  kind?: boolean
   imagePath?: boolean
   sortOrder?: boolean
   createdAt?: boolean
@@ -520,12 +556,13 @@ export type ProductStudyImageSelectUpdateManyAndReturn<ExtArgs extends runtime.T
 export type ProductStudyImageSelectScalar = {
   id?: boolean
   itemId?: boolean
+  kind?: boolean
   imagePath?: boolean
   sortOrder?: boolean
   createdAt?: boolean
 }
 
-export type ProductStudyImageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "itemId" | "imagePath" | "sortOrder" | "createdAt", ExtArgs["result"]["productStudyImage"]>
+export type ProductStudyImageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "itemId" | "kind" | "imagePath" | "sortOrder" | "createdAt", ExtArgs["result"]["productStudyImage"]>
 export type ProductStudyImageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   item?: boolean | Prisma.ProductStudyItemDefaultArgs<ExtArgs>
 }
@@ -544,6 +581,7 @@ export type $ProductStudyImagePayload<ExtArgs extends runtime.Types.Extensions.I
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     itemId: number
+    kind: $Enums.ProductStudyImageKind
     imagePath: string
     sortOrder: number
     createdAt: Date
@@ -973,6 +1011,7 @@ export interface Prisma__ProductStudyImageClient<T, Null = never, ExtArgs extend
 export interface ProductStudyImageFieldRefs {
   readonly id: Prisma.FieldRef<"ProductStudyImage", 'Int'>
   readonly itemId: Prisma.FieldRef<"ProductStudyImage", 'Int'>
+  readonly kind: Prisma.FieldRef<"ProductStudyImage", 'ProductStudyImageKind'>
   readonly imagePath: Prisma.FieldRef<"ProductStudyImage", 'String'>
   readonly sortOrder: Prisma.FieldRef<"ProductStudyImage", 'Int'>
   readonly createdAt: Prisma.FieldRef<"ProductStudyImage", 'DateTime'>

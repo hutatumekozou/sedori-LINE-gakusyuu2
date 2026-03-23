@@ -1,24 +1,43 @@
 import {
   ItemStatus,
+  ProductStudyImageKind,
   ReviewActionType,
 } from "@/generated/prisma/client";
 import type { Prisma } from "@/generated/prisma/client";
 
 import { getLatestDispatchCheckpoint, isDueToday } from "@/lib/date";
 import { getDefaultLineUserId } from "@/lib/env";
-import { generateStudyContent } from "@/lib/gemini/generate-study-content";
 import { prisma } from "@/lib/prisma";
 import {
-  fileToDataUrl,
   getUploadPublicUrl,
   saveUploadedImages,
-  storedImageToDataUrl,
 } from "@/lib/storage/local";
 import { sortDispatchCandidates } from "@/lib/study/dispatch-rules";
 import { getLastResultFromLogs } from "@/lib/study/review-state";
 import type { LastResult, StudyItemFilters } from "@/lib/study/types";
 
 type JsonArray = Prisma.JsonValue | null;
+
+function buildStoredStudyContent(input: {
+  productName?: string | null;
+  brandName?: string | null;
+  note: string;
+  memo?: string | null;
+}) {
+  const titleParts = [input.brandName, input.productName].filter(Boolean);
+  const summaryBase = titleParts.length > 0 ? titleParts.join(" / ") : input.note;
+
+  return {
+    summary: summaryBase.slice(0, 300),
+    question: input.note,
+    answer: input.memo || "",
+    explanation: input.memo || "",
+    difficulty: "medium" as const,
+    tags: [],
+    keyPoints: [],
+  };
+}
+
 export type StudyListItem = {
   id: number;
   questionNumber: number;
@@ -298,6 +317,20 @@ export async function getStudyItemDetail(itemId: number) {
     tags: parseJsonStringArray(item.tags),
     keyPoints: parseJsonStringArray(item.keyPoints),
     lastResult: getLastResultFromLogs(item.reviewLogs),
+    questionImageUrls: item.images
+      .filter((image) => image.kind === ProductStudyImageKind.QUESTION)
+      .map((image) => ({
+        id: image.id,
+        imagePath: image.imagePath,
+        url: getUploadPublicUrl(image.imagePath),
+      })),
+    answerImageUrls: item.images
+      .filter((image) => image.kind === ProductStudyImageKind.ANSWER)
+      .map((image) => ({
+        id: image.id,
+        imagePath: image.imagePath,
+        url: getUploadPublicUrl(image.imagePath),
+      })),
     imageUrls: item.images.map((image) => ({
       id: image.id,
       imagePath: image.imagePath,
@@ -313,22 +346,18 @@ type CreateStudyItemInput = {
   note: string;
   memo?: string;
   firstScheduledAt: Date;
-  files: File[];
+  questionFiles: File[];
+  answerFiles: File[];
 };
 
 export async function createStudyItem(input: CreateStudyItemInput) {
   const user = await getOrCreateDefaultUser();
+  const content = buildStoredStudyContent(input);
 
-  const imageDataUrls = await Promise.all(input.files.map((file) => fileToDataUrl(file)));
-  const generated = await generateStudyContent({
-    productName: input.productName,
-    brandName: input.brandName,
-    note: input.note,
-    memo: input.memo,
-    imageDataUrls,
-  });
-
-  const savedImages = await saveUploadedImages(input.files);
+  const [savedQuestionImages, savedAnswerImages] = await Promise.all([
+    saveUploadedImages(input.questionFiles, ProductStudyImageKind.QUESTION),
+    saveUploadedImages(input.answerFiles, ProductStudyImageKind.ANSWER),
+  ]);
 
   return prisma.$transaction(async (tx) => {
     const latestItem = await tx.productStudyItem.findFirst({
@@ -353,15 +382,15 @@ export async function createStudyItem(input: CreateStudyItemInput) {
         firstScheduledAt: input.firstScheduledAt,
         nextScheduledAt: input.firstScheduledAt,
         status: ItemStatus.PENDING,
-        summary: generated.summary,
-        question: generated.question,
-        answer: generated.answer,
-        explanation: generated.explanation,
-        difficulty: generated.difficulty,
-        tags: generated.tags,
-        keyPoints: generated.keyPoints,
+        summary: content.summary,
+        question: content.question,
+        answer: content.answer,
+        explanation: content.explanation,
+        difficulty: content.difficulty,
+        tags: content.tags,
+        keyPoints: content.keyPoints,
         images: {
-          create: savedImages,
+          create: [...savedQuestionImages, ...savedAnswerImages],
         },
       },
     });
@@ -385,7 +414,17 @@ export async function updateStudyItem(itemId: number, input: UpdateStudyItemInpu
   }
 
   const sentCount = existingItem.reviewLogs.filter((log) => log.actionType === "SENT").length;
-  const savedImages = input.files.length > 0 ? await saveUploadedImages(input.files) : null;
+  const shouldReplaceQuestionImages = input.questionFiles.length > 0;
+  const shouldReplaceAnswerImages = input.answerFiles.length > 0;
+  const [savedQuestionImages, savedAnswerImages] = await Promise.all([
+    shouldReplaceQuestionImages
+      ? saveUploadedImages(input.questionFiles, ProductStudyImageKind.QUESTION)
+      : Promise.resolve(null),
+    shouldReplaceAnswerImages
+      ? saveUploadedImages(input.answerFiles, ProductStudyImageKind.ANSWER)
+      : Promise.resolve(null),
+  ]);
+  const content = buildStoredStudyContent(input);
 
   return prisma.$transaction(async (tx) => {
     await tx.productStudyItem.update({
@@ -402,20 +441,46 @@ export async function updateStudyItem(itemId: number, input: UpdateStudyItemInpu
         firstScheduledAt: input.firstScheduledAt,
         nextScheduledAt: sentCount === 0 ? input.firstScheduledAt : undefined,
         status: sentCount === 0 ? ItemStatus.PENDING : undefined,
-        tags: parseJsonStringArray(existingItem.tags),
+        summary: content.summary,
+        question: content.question,
+        answer: content.answer,
+        explanation: content.explanation,
+        difficulty: content.difficulty,
+        tags: content.tags,
+        keyPoints: content.keyPoints,
       },
     });
 
-    if (savedImages) {
+    if (savedQuestionImages) {
       await tx.productStudyImage.deleteMany({
         where: {
           itemId,
+          kind: ProductStudyImageKind.QUESTION,
         },
       });
 
       await tx.productStudyImage.createMany({
-        data: savedImages.map((image) => ({
+        data: savedQuestionImages.map((image) => ({
           itemId,
+          kind: image.kind,
+          imagePath: image.imagePath,
+          sortOrder: image.sortOrder,
+        })),
+      });
+    }
+
+    if (savedAnswerImages) {
+      await tx.productStudyImage.deleteMany({
+        where: {
+          itemId,
+          kind: ProductStudyImageKind.ANSWER,
+        },
+      });
+
+      await tx.productStudyImage.createMany({
+        data: savedAnswerImages.map((image) => ({
+          itemId,
+          kind: image.kind,
           imagePath: image.imagePath,
           sortOrder: image.sortOrder,
         })),
@@ -429,29 +494,17 @@ export async function regenerateStudyItem(itemId: number) {
     where: {
       id: itemId,
     },
-    include: {
-      images: {
-        orderBy: {
-          sortOrder: "asc",
-        },
-      },
-    },
   });
 
   if (!item) {
     throw new Error("対象の問題が見つかりませんでした。");
   }
 
-  const imageDataUrls = await Promise.all(
-    item.images.map((image) => storedImageToDataUrl(image.imagePath)),
-  );
-
-  const generated = await generateStudyContent({
+  const content = buildStoredStudyContent({
     productName: item.productName,
     brandName: item.brandName,
     note: item.note,
     memo: item.memo,
-    imageDataUrls,
   });
 
   await prisma.productStudyItem.update({
@@ -459,13 +512,13 @@ export async function regenerateStudyItem(itemId: number) {
       id: itemId,
     },
     data: {
-      summary: generated.summary,
-      question: generated.question,
-      answer: generated.answer,
-      explanation: generated.explanation,
-      difficulty: generated.difficulty,
-      tags: generated.tags,
-      keyPoints: generated.keyPoints,
+      summary: content.summary,
+      question: content.question,
+      answer: content.answer,
+      explanation: content.explanation,
+      difficulty: content.difficulty,
+      tags: content.tags,
+      keyPoints: content.keyPoints,
     },
   });
 }
@@ -614,12 +667,18 @@ export async function getDueItemsForDispatch(itemIds?: number[]) {
   });
 
   if (itemIds) {
-    return items;
+    return items.map((item) => ({
+      ...item,
+      images: item.images.filter((image) => image.kind === ProductStudyImageKind.QUESTION),
+      answerImages: item.images.filter((image) => image.kind === ProductStudyImageKind.ANSWER),
+    }));
   }
 
   return sortDispatchCandidates(
     items.map((item) => ({
       ...item,
+      images: item.images.filter((image) => image.kind === ProductStudyImageKind.QUESTION),
+      answerImages: item.images.filter((image) => image.kind === ProductStudyImageKind.ANSWER),
       latestSolvedAt:
         item.reviewLogs.find(
           (log) =>

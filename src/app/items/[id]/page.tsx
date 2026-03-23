@@ -48,7 +48,7 @@ export default async function ItemDetailPage({
     <div className="space-y-6">
       <PageHeader
         title={`問題詳細 #${item.questionNumber}`}
-        description="AI生成結果、画像、送信履歴、回答履歴、次回送信日を確認します。"
+        description="画像、問題文、解答、送信履歴、回答履歴、次回送信日を確認します。"
         action={
           <div className="flex flex-wrap gap-3">
             <Link
@@ -86,30 +86,57 @@ export default async function ItemDetailPage({
               ブランド: {item.brandName || "未設定"}
             </p>
 
-            <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-              {item.imageUrls.length === 0 ? (
-                <p className="rounded-2xl border border-dashed border-slate-200 px-4 py-8 text-sm text-slate-500">
-                  画像はありません。
-                </p>
-              ) : (
-                item.imageUrls.map((image) => (
-                  <Image
-                    key={image.id}
-                    src={image.url}
-                    alt="登録画像"
-                    width={400}
-                    height={400}
-                    className="aspect-square rounded-2xl border border-slate-200 object-cover"
-                  />
-                ))
-              )}
+            <div className="mt-6 space-y-5">
+              <div>
+                <p className="text-sm font-semibold text-slate-500">問題文の画像</p>
+                <div className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                  {item.questionImageUrls.length === 0 ? (
+                    <p className="rounded-2xl border border-dashed border-slate-200 px-4 py-8 text-sm text-slate-500">
+                      問題文の画像はありません。
+                    </p>
+                  ) : (
+                    item.questionImageUrls.map((image) => (
+                      <Image
+                        key={image.id}
+                        src={image.url}
+                        alt="問題文画像"
+                        width={400}
+                        height={400}
+                        className="aspect-square rounded-2xl border border-slate-200 object-cover"
+                      />
+                    ))
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <p className="text-sm font-semibold text-slate-500">解答の画像</p>
+                <div className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                  {item.answerImageUrls.length === 0 ? (
+                    <p className="rounded-2xl border border-dashed border-slate-200 px-4 py-8 text-sm text-slate-500">
+                      解答の画像はありません。
+                    </p>
+                  ) : (
+                    item.answerImageUrls.map((image) => (
+                      <Image
+                        key={image.id}
+                        src={image.url}
+                        alt="解答画像"
+                        width={400}
+                        height={400}
+                        className="aspect-square rounded-2xl border border-slate-200 object-cover"
+                      />
+                    ))
+                  )}
+                </div>
+              </div>
             </div>
           </div>
 
           <div className="rounded-[28px] border border-slate-200/70 bg-white/90 p-6 shadow-[0_20px_60px_-40px_rgba(15,23,42,0.35)]">
             <div className="space-y-6">
               <div>
-                <p className="text-sm font-semibold text-slate-500">AI生成の要約</p>
+                <p className="text-sm font-semibold text-slate-500">要約</p>
                 <p className="mt-2 text-base leading-7 text-slate-800">{item.summary}</p>
               </div>
 
@@ -121,32 +148,20 @@ export default async function ItemDetailPage({
               </div>
 
               <div>
-                <p className="text-sm font-semibold text-slate-500">模範解答</p>
+                <p className="text-sm font-semibold text-slate-500">解答</p>
                 <p className="mt-2 whitespace-pre-wrap text-base leading-7 text-slate-800">
                   {item.answer}
                 </p>
               </div>
 
-              <div>
-                <p className="text-sm font-semibold text-slate-500">解説</p>
-                <p className="mt-2 whitespace-pre-wrap text-base leading-7 text-slate-800">
-                  {item.explanation}
-                </p>
-              </div>
-
-              <div>
-                <p className="text-sm font-semibold text-slate-500">要点まとめ</p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {item.keyPoints.map((point) => (
-                    <span
-                      key={point}
-                      className="rounded-full bg-slate-100 px-3 py-1.5 text-sm text-slate-700"
-                    >
-                      {point}
-                    </span>
-                  ))}
+              {item.explanation && item.explanation !== item.answer ? (
+                <div>
+                  <p className="text-sm font-semibold text-slate-500">補足</p>
+                  <p className="mt-2 whitespace-pre-wrap text-base leading-7 text-slate-800">
+                    {item.explanation}
+                  </p>
                 </div>
-              </div>
+              ) : null}
             </div>
           </div>
         </div>
@@ -156,11 +171,11 @@ export default async function ItemDetailPage({
             <h2 className="text-lg font-semibold text-slate-950">商品情報</h2>
             <dl className="mt-4 space-y-4 text-sm">
               <div>
-                <dt className="font-semibold text-slate-500">補足情報</dt>
+                <dt className="font-semibold text-slate-500">問題文</dt>
                 <dd className="mt-1 whitespace-pre-wrap text-slate-700">{item.note || "-"}</dd>
               </div>
               <div>
-                <dt className="font-semibold text-slate-500">自由メモ</dt>
+                <dt className="font-semibold text-slate-500">解答</dt>
                 <dd className="mt-1 whitespace-pre-wrap text-slate-700">{item.memo || "-"}</dd>
               </div>
               <div>

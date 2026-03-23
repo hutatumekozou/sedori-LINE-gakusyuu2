@@ -2,7 +2,6 @@ type StudyMessageItem = {
   questionNumber: number;
   question: string;
   answer: string;
-  explanation: string;
 };
 
 export function buildQuestionMessage(item: Pick<StudyMessageItem, "questionNumber" | "question">) {
@@ -11,18 +10,15 @@ export function buildQuestionMessage(item: Pick<StudyMessageItem, "questionNumbe
 ${item.question}
 
 返信方法:
-- 「解答」→ 模範解答を表示
+- 「解答」→ 解答を表示
 - 「正解」→ 正解として記録
 - 「不正解」→ 明日もう一度出題`;
 }
 
-export function buildAnswerMessage(item: StudyMessageItem) {
+export function buildAnswerMessage(item: Pick<StudyMessageItem, "questionNumber" | "answer">) {
   return `問題番号: ${item.questionNumber}
-【模範解答】
+【解答】
 ${item.answer}
-
-【解説】
-${item.explanation}
 
 自己判定して返信してください。
 - 「正解」
@@ -42,7 +38,7 @@ export function buildNoActiveQuestionMessage() {
 }
 
 export function buildAnswerFirstMessage() {
-  return "先に「解答」と送って模範解答を確認してください。";
+  return "先に「解答」と送って解答を確認してください。";
 }
 
 export function buildLineHelpMessage() {

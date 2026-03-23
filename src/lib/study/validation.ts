@@ -7,8 +7,6 @@ import { parseDateInput } from "@/lib/date";
 import { MAX_IMAGE_COUNT } from "@/lib/study/constants";
 import type { StudyItemFormState } from "@/lib/study/types";
 
-type ValidationMode = "create" | "update";
-
 type ValidatedStudyItemInput = {
   autoSendEnabled: boolean;
   productName?: string;
@@ -16,31 +14,27 @@ type ValidatedStudyItemInput = {
   note: string;
   memo?: string;
   firstScheduledAt: Date;
-  files: File[];
+  questionFiles: File[];
+  answerFiles: File[];
 };
 
 const baseSchema = z
   .object({
     productName: z.string().max(120, "商品名は120文字以内で入力してください。").default(""),
     brandName: z.string().max(120, "ブランド名は120文字以内で入力してください。").default(""),
-    note: z.string().max(5000, "補足情報は5000文字以内で入力してください。").default(""),
-    memo: z.string().max(5000, "自由メモは5000文字以内で入力してください。").default(""),
+    note: z
+      .string()
+      .trim()
+      .min(1, "問題文を入力してください。")
+      .max(5000, "問題文は5000文字以内で入力してください。"),
+    memo: z
+      .string()
+      .trim()
+      .min(1, "解答を入力してください。")
+      .max(5000, "解答は5000文字以内で入力してください。"),
     firstScheduledAt: z
       .string()
       .regex(/^\d{4}-\d{2}-\d{2}$/, "初回送信予定日は必須です。"),
-  })
-  .superRefine((value, ctx) => {
-    const hasMinimumInfo = [value.productName, value.brandName, value.note].some(
-      (item) => item.trim().length > 0,
-    );
-
-    if (!hasMinimumInfo) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["note"],
-        message: "補足情報または商品情報を少なくとも1つ入力してください。",
-      });
-    }
   });
 
 function toOptionalString(value: string) {
@@ -94,7 +88,6 @@ export function validationSuccess(message: string): StudyItemFormState {
 
 export function validateStudyItemForm(
   formData: FormData,
-  mode: ValidationMode,
 ):
   | {
       success: true;
@@ -112,29 +105,43 @@ export function validateStudyItemForm(
     firstScheduledAt: String(formData.get("firstScheduledAt") || ""),
   });
 
-  const files = formData
-    .getAll("images")
+  const questionFiles = formData
+    .getAll("questionImages")
     .filter((entry): entry is File => entry instanceof File && entry.size > 0);
+
+  const answerFiles = formData
+    .getAll("answerImages")
+    .filter((entry): entry is File => entry instanceof File && entry.size > 0);
+
+  const allFiles = [...questionFiles, ...answerFiles];
 
   const fieldErrors: Record<string, string[]> = buildFieldErrors(parsed);
   const maxUploadSizeBytes = getAppSettings().maxUploadSizeBytes;
 
-  if (mode === "create" && files.length === 0) {
-    fieldErrors.images = ["画像を1〜4枚アップロードしてください。"];
+  if (questionFiles.length > MAX_IMAGE_COUNT) {
+    fieldErrors.questionImages = ["問題文の画像は最大4枚までです。"];
   }
 
-  if (files.length > MAX_IMAGE_COUNT) {
-    fieldErrors.images = ["画像は最大4枚までです。"];
+  if (answerFiles.length > MAX_IMAGE_COUNT) {
+    fieldErrors.answerImages = ["解答の画像は最大4枚までです。"];
   }
 
-  if (files.some((file) => file.size > maxUploadSizeBytes)) {
-    fieldErrors.images = [
+  if (allFiles.some((file) => file.size > maxUploadSizeBytes)) {
+    fieldErrors.questionImages = [
+      `画像サイズは1枚あたり${getAppSettings().maxUploadSizeMb}MB以下にしてください。`,
+    ];
+    fieldErrors.answerImages = [
       `画像サイズは1枚あたり${getAppSettings().maxUploadSizeMb}MB以下にしてください。`,
     ];
   }
 
-  if (files.some((file) => !isAllowedImageFile(file))) {
-    fieldErrors.images = ["画像形式は jpeg / png / webp / gif / heic / heif に対応しています。"];
+  if (allFiles.some((file) => !isAllowedImageFile(file))) {
+    fieldErrors.questionImages = [
+      "画像形式は jpeg / png / webp / gif / heic / heif に対応しています。",
+    ];
+    fieldErrors.answerImages = [
+      "画像形式は jpeg / png / webp / gif / heic / heif に対応しています。",
+    ];
   }
 
   if (!parsed.success || Object.keys(fieldErrors).length > 0) {
@@ -153,10 +160,11 @@ export function validateStudyItemForm(
       autoSendEnabled: formData.get("autoSendEnabled") === "1",
       productName: toOptionalString(parsed.data.productName),
       brandName: toOptionalString(parsed.data.brandName),
-      note: parsed.data.note.trim(),
-      memo: toOptionalString(parsed.data.memo),
+      note: parsed.data.note,
+      memo: parsed.data.memo,
       firstScheduledAt: parseDateInput(parsed.data.firstScheduledAt),
-      files,
+      questionFiles,
+      answerFiles,
     },
   };
 }

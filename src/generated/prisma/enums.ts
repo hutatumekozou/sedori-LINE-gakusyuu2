@@ -36,3 +36,11 @@ export const ConversationStateType = {
 } as const
 
 export type ConversationStateType = (typeof ConversationStateType)[keyof typeof ConversationStateType]
+
+
+export const ProductStudyImageKind = {
+  QUESTION: 'QUESTION',
+  ANSWER: 'ANSWER'
+} as const
+
+export type ProductStudyImageKind = (typeof ProductStudyImageKind)[keyof typeof ProductStudyImageKind]

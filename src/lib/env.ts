@@ -1,3 +1,6 @@
+import os from "node:os";
+import path from "node:path";
+
 import { z } from "zod";
 
 function getMissingEnvNames(names: string[]) {
@@ -13,6 +16,7 @@ export function getAppSettings() {
     .object({
       APP_TIMEZONE: z.string().trim().default("Asia/Tokyo"),
       APP_BASE_URL: z.string().trim().optional(),
+      LOCAL_SHARED_DATA_ROOT: z.string().trim().optional(),
       UPLOAD_STORAGE_DIR: z.string().trim().optional(),
       MAX_UPLOAD_SIZE_MB: z.coerce.number().int().positive().default(5),
       GEMINI_MODEL: z.string().trim().default("gemini-2.5-flash"),
@@ -22,11 +26,44 @@ export function getAppSettings() {
   return {
     appTimeZone: parsed.APP_TIMEZONE,
     appBaseUrl: parsed.APP_BASE_URL?.trim() || null,
+    localSharedDataRoot: parsed.LOCAL_SHARED_DATA_ROOT?.trim() || null,
     uploadStorageDir: parsed.UPLOAD_STORAGE_DIR?.trim() || null,
     maxUploadSizeMb: parsed.MAX_UPLOAD_SIZE_MB,
     maxUploadSizeBytes: parsed.MAX_UPLOAD_SIZE_MB * 1024 * 1024,
     geminiModel: parsed.GEMINI_MODEL,
   };
+}
+
+export function getResolvedDatabaseUrl() {
+  const rawUrl = process.env.DATABASE_URL?.trim() || "file:./prisma/dev.db";
+  const localSharedDataRoot =
+    getAppSettings().localSharedDataRoot || path.join(os.homedir(), "mercari-study-line-runtime");
+
+  if (
+    getAppSettings().localSharedDataRoot &&
+    (rawUrl.startsWith("file:./") || rawUrl.startsWith("file:../"))
+  ) {
+    const relativePath = rawUrl.slice("file:".length);
+    const resolvedPath = path.resolve(localSharedDataRoot, relativePath);
+    return `file:${resolvedPath}`;
+  }
+
+  return rawUrl;
+}
+
+export function getResolvedUploadStorageDir() {
+  const configuredPath = getAppSettings().uploadStorageDir;
+  const localSharedDataRoot = getAppSettings().localSharedDataRoot;
+
+  if (configuredPath) {
+    return path.resolve(configuredPath);
+  }
+
+  if (localSharedDataRoot) {
+    return path.join(localSharedDataRoot, "storage", "uploads");
+  }
+
+  return path.join(process.cwd(), "storage", "uploads");
 }
 
 export function getPublicAppUrl() {

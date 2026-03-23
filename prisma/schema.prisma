@@ -28,6 +28,11 @@ enum ConversationStateType {
   ANSWER_SHOWN
 }
 
+enum ProductStudyImageKind {
+  QUESTION
+  ANSWER
+}
+
 model User {
   id                      Int                      @id @default(autoincrement())
   lineUserId              String?                  @unique
@@ -75,6 +80,7 @@ model ProductStudyItem {
 model ProductStudyImage {
   id        Int              @id @default(autoincrement())
   itemId    Int
+  kind      ProductStudyImageKind @default(QUESTION)
   imagePath String
   sortOrder Int
   createdAt DateTime         @default(now())

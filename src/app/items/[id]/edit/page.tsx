@@ -23,7 +23,7 @@ export default async function EditItemPage({ params }: EditItemPageProps) {
     <div className="space-y-6">
       <PageHeader
         title={`問題編集 #${item.questionNumber}`}
-        description="商品情報や初回送信予定日を更新できます。画像を選択すると既存画像を差し替えます。"
+        description="商品情報や初回送信予定日を更新できます。画像を選択すると同じ枠の既存画像を差し替えます。"
       />
 
       <section className="rounded-[28px] border border-slate-200/70 bg-white/90 p-6 shadow-[0_20px_60px_-40px_rgba(15,23,42,0.35)]">
@@ -41,7 +41,8 @@ export default async function EditItemPage({ params }: EditItemPageProps) {
           pendingLabel="更新中..."
           maxUploadSizeMb={getAppSettings().maxUploadSizeMb}
           imageHelpText="画像を選択しない場合は現在の画像を保持します。"
-          currentImages={item.imageUrls}
+          currentQuestionImages={item.questionImageUrls}
+          currentAnswerImages={item.answerImageUrls}
         />
       </section>
     </div>

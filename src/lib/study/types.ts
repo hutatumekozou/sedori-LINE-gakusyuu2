@@ -22,6 +22,11 @@ export type StudyItemFormDefaults = {
   firstScheduledAt: string;
 };
 
+export type StudyFormImagePreview = {
+  id: number;
+  url: string;
+};
+
 export type StudyItemFilters = {
   query?: string;
   status?: ItemStatus | "ALL";

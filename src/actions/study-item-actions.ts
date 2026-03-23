@@ -34,7 +34,7 @@ export async function createStudyItemAction(
   formData: FormData,
 ): Promise<StudyItemFormState> {
   void _prevState;
-  const validated = validateStudyItemForm(formData, "create");
+  const validated = validateStudyItemForm(formData);
 
   if (!validated.success) {
     return validated.state;
@@ -44,7 +44,7 @@ export async function createStudyItemAction(
     const item = await createStudyItem(validated.data);
     revalidateAll(item.id);
     redirect(
-      `/items/${item.id}?message=${encodeURIComponent("問題を登録し、AIによる問題生成を完了しました。")}`,
+      `/items/${item.id}?message=${encodeURIComponent("問題を登録しました。")}`,
     );
   } catch (error) {
     return validationFailure(
@@ -59,7 +59,7 @@ export async function updateStudyItemAction(
   formData: FormData,
 ): Promise<StudyItemFormState> {
   void _prevState;
-  const validated = validateStudyItemForm(formData, "update");
+  const validated = validateStudyItemForm(formData);
 
   if (!validated.success) {
     return validated.state;

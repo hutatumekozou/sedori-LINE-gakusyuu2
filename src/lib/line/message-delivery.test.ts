@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { assertReachableImageMessages } from "@/lib/line/message-delivery";
-import type { LinePushMessage } from "@/lib/line/message-builder";
+import type { LineMessage } from "@/lib/line/message-builder";
 
 describe("assertReachableImageMessages", () => {
   const fetchMock = vi.fn<typeof fetch>();
@@ -38,7 +38,7 @@ describe("assertReachableImageMessages", () => {
       }),
     );
 
-    const messages: LinePushMessage[] = [
+    const messages: LineMessage[] = [
       {
         type: "image",
         originalContentUrl: "https://example.ngrok-free.app/api/uploads/a.jpg?variant=line-original",

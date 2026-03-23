@@ -10,7 +10,11 @@ import {
   getPublicAppUrl,
 } from "@/lib/env";
 import { assertReachableImageMessages } from "@/lib/line/message-delivery";
-import { buildQuestionPushMessages } from "@/lib/line/message-builder";
+import {
+  buildAnswerReplyMessages,
+  buildQuestionPushMessages,
+  type LineMessage,
+} from "@/lib/line/message-builder";
 import { prisma } from "@/lib/prisma";
 import {
   buildDispatchDecisionDebugInfo,
@@ -20,7 +24,6 @@ import {
 } from "@/lib/study/dispatch-rules";
 import {
   buildAnswerFirstMessage,
-  buildAnswerMessage,
   buildCorrectReplyMessage,
   buildIncorrectReplyMessage,
   buildLineHelpMessage,
@@ -70,17 +73,21 @@ function getLineClient() {
   });
 }
 
-async function replyText(replyToken: string, text: string) {
+async function replyMessages(replyToken: string, messages: LineMessage[]) {
   const client = getLineClient();
   await client.replyMessage({
     replyToken,
-    messages: [
-      {
-        type: "text",
-        text,
-      },
-    ],
+    messages,
   });
+}
+
+async function replyText(replyToken: string, text: string) {
+  await replyMessages(replyToken, [
+    {
+      type: "text",
+      text,
+    },
+  ]);
 }
 
 async function pushMessages(
@@ -162,7 +169,15 @@ async function handleAnswerRequest(userId: number, replyToken: string) {
       userId,
     },
     include: {
-      item: true,
+      item: {
+        include: {
+          images: {
+            orderBy: {
+              sortOrder: "asc",
+            },
+          },
+        },
+      },
     },
   });
 
@@ -176,10 +191,18 @@ async function handleAnswerRequest(userId: number, replyToken: string) {
     return;
   }
 
-  const message = buildAnswerMessage(activeState.item);
+  const messages = buildAnswerReplyMessages(
+    {
+      questionNumber: activeState.item.questionNumber,
+      answer: activeState.item.answer,
+      answerImages: activeState.item.images.filter((image) => image.kind === "ANSWER"),
+    },
+    getPublicAppUrl(),
+  );
 
   if (activeState.state === ConversationStateType.ANSWER_SHOWN) {
-    await replyText(replyToken, message);
+    await assertReachableImageMessages(messages);
+    await replyMessages(replyToken, messages);
     return;
   }
 
@@ -212,7 +235,8 @@ async function handleAnswerRequest(userId: number, replyToken: string) {
     });
   });
 
-  await replyText(replyToken, message);
+  await assertReachableImageMessages(messages);
+  await replyMessages(replyToken, messages);
 }
 
 async function handleResultRequest(

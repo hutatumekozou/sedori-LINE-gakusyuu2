@@ -82,7 +82,8 @@ describe("study messages", () => {
     expect(buildQuestionMessage(item)).toContain("問題番号: 12");
     expect(buildQuestionMessage(item)).toContain("解答");
 
-    expect(buildAnswerMessage(item)).toContain("模範解答");
-    expect(buildAnswerMessage(item)).toContain(item.explanation);
+    expect(buildAnswerMessage(item)).toContain("【解答】");
+    expect(buildAnswerMessage(item)).toContain(item.answer);
+    expect(buildAnswerMessage(item)).not.toContain("【解説】");
   });
 });

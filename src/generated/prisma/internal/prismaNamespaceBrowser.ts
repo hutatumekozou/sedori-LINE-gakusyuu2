@@ -113,6 +113,7 @@ export type ProductStudyItemScalarFieldEnum = (typeof ProductStudyItemScalarFiel
 export const ProductStudyImageScalarFieldEnum = {
   id: 'id',
   itemId: 'itemId',
+  kind: 'kind',
   imagePath: 'imagePath',
   sortOrder: 'sortOrder',
   createdAt: 'createdAt'
