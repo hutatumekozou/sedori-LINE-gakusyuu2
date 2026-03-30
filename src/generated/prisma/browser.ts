@@ -42,3 +42,13 @@ export type ReviewLog = Prisma.ReviewLogModel
  * 
  */
 export type ActiveConversationState = Prisma.ActiveConversationStateModel
+/**
+ * Model GeminiApiCallLog
+ * 
+ */
+export type GeminiApiCallLog = Prisma.GeminiApiCallLogModel
+/**
+ * Model LineApiCallLog
+ * 
+ */
+export type LineApiCallLog = Prisma.LineApiCallLogModel

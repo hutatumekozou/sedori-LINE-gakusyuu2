@@ -11,6 +11,7 @@ import {
   regenerateStudyItem,
   restoreStudyItem,
   updateAutoSendEnabled,
+  updateFavorite,
   updateManualSchedule,
   updateStudyItem,
 } from "@/lib/study/service";
@@ -97,6 +98,54 @@ export async function sendNowAction(formData: FormData) {
         redirectTo,
         "error",
         error instanceof Error ? error.message : "送信に失敗しました。",
+      ),
+    );
+  }
+}
+
+export async function sendSelectedNowAction(formData: FormData) {
+  const itemIds = formData
+    .getAll("itemIds")
+    .map((value) => Number(value))
+    .filter((value) => Number.isInteger(value) && value > 0);
+  const redirectTo = String(formData.get("redirectTo") || "/items");
+
+  if (itemIds.length === 0) {
+    redirect(buildRedirectUrl(redirectTo, "error", "送信する問題を選択してください。"));
+  }
+
+  try {
+    const result = await dispatchStudyItems(itemIds, true);
+    const failed = result.results.filter((entry) => entry.status === "failed");
+    const sentCount = result.results.filter((entry) => entry.status === "sent").length;
+    const skippedCount = result.results.filter((entry) => entry.status === "skipped").length;
+
+    for (const itemId of itemIds) {
+      revalidateAll(itemId);
+    }
+
+    if (failed.length > 0) {
+      redirect(
+        buildRedirectUrl(
+          redirectTo,
+          "error",
+          failed[0]?.reason || "一括送信に失敗しました。",
+        ),
+      );
+    }
+
+    const message =
+      skippedCount > 0
+        ? `${sentCount}件を送信しました。${skippedCount}件は送信対象外でした。`
+        : `${sentCount}件をLINEへ送信しました。`;
+
+    redirect(buildRedirectUrl(redirectTo, "message", message));
+  } catch (error) {
+    redirect(
+      buildRedirectUrl(
+        redirectTo,
+        "error",
+        error instanceof Error ? error.message : "一括送信に失敗しました。",
       ),
     );
   }
@@ -206,5 +255,65 @@ export async function updateAutoSendEnabledAction(formData: FormData) {
         error instanceof Error ? error.message : "自動送信設定の更新に失敗しました。",
       ),
     );
+  }
+}
+
+export async function updateFavoriteAction(formData: FormData) {
+  const itemId = Number(formData.get("itemId"));
+  const redirectTo = String(formData.get("redirectTo") || "/items");
+  const isFavorite = String(formData.get("isFavorite")) === "1";
+
+  try {
+    await updateFavorite(itemId, isFavorite);
+    revalidateAll(itemId);
+    redirect(
+      buildRedirectUrl(
+        redirectTo,
+        "message",
+        isFavorite ? "お気に入りに追加しました。" : "お気に入りを外しました。",
+      ),
+    );
+  } catch (error) {
+    redirect(
+      buildRedirectUrl(
+        redirectTo,
+        "error",
+        error instanceof Error ? error.message : "お気に入り設定の更新に失敗しました。",
+      ),
+    );
+  }
+}
+
+export async function updateFavoriteInlineAction(itemId: number, isFavorite: boolean) {
+  try {
+    await updateFavorite(itemId, isFavorite);
+    revalidateAll(itemId);
+
+    return {
+      success: true,
+      isFavorite,
+    } as const;
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "お気に入り設定の更新に失敗しました。",
+    } as const;
+  }
+}
+
+export async function updateAutoSendEnabledInlineAction(itemId: number, autoSendEnabled: boolean) {
+  try {
+    await updateAutoSendEnabled(itemId, autoSendEnabled);
+    revalidateAll(itemId);
+
+    return {
+      success: true,
+      autoSendEnabled,
+    } as const;
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "自動送信設定の更新に失敗しました。",
+    } as const;
   }
 }

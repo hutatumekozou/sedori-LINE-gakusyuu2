@@ -20,6 +20,7 @@ describe("review-state", () => {
     expect(normalizeLineCommand(" 解答 ")).toBe("answer");
     expect(normalizeLineCommand("正解")).toBe("correct");
     expect(normalizeLineCommand("不正解")).toBe("incorrect");
+    expect(normalizeLineCommand("手動")).toBe("manual");
     expect(normalizeLineCommand("こんにちは")).toBe("unknown");
   });
 
@@ -81,9 +82,11 @@ describe("study messages", () => {
   it("builds question and answer messages", () => {
     expect(buildQuestionMessage(item)).toContain("問題番号: 12");
     expect(buildQuestionMessage(item)).toContain("解答");
+    expect(buildQuestionMessage(item)).toContain("手動");
 
     expect(buildAnswerMessage(item)).toContain("【解答】");
     expect(buildAnswerMessage(item)).toContain(item.answer);
+    expect(buildAnswerMessage(item)).toContain("手動");
     expect(buildAnswerMessage(item)).not.toContain("【解説】");
   });
 });

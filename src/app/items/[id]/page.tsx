@@ -83,7 +83,7 @@ export default async function ItemDetailPage({
               {item.productName || "商品名未設定"}
             </h2>
             <p className="mt-2 text-sm text-slate-500">
-              ブランド: {item.brandName || "未設定"}
+              カテゴリ: {item.category || "その他"}
             </p>
 
             <div className="mt-6 space-y-5">
@@ -170,6 +170,10 @@ export default async function ItemDetailPage({
           <div className="rounded-[28px] border border-slate-200/70 bg-white/90 p-6 shadow-[0_20px_60px_-40px_rgba(15,23,42,0.35)]">
             <h2 className="text-lg font-semibold text-slate-950">商品情報</h2>
             <dl className="mt-4 space-y-4 text-sm">
+              <div>
+                <dt className="font-semibold text-slate-500">カテゴリ</dt>
+                <dd className="mt-1 text-slate-700">{item.category || "その他"}</dd>
+              </div>
               <div>
                 <dt className="font-semibold text-slate-500">問題文</dt>
                 <dd className="mt-1 whitespace-pre-wrap text-slate-700">{item.note || "-"}</dd>

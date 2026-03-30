@@ -280,6 +280,84 @@ export type EnumConversationStateTypeWithAggregatesFilter<$PrismaModel = never> 
   _max?: Prisma.NestedEnumConversationStateTypeFilter<$PrismaModel>
 }
 
+export type IntNullableFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
+  in?: number[] | null
+  notIn?: number[] | null
+  lt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedIntNullableFilter<$PrismaModel> | number | null
+}
+
+export type EnumGeminiApiCallStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.GeminiApiCallStatus | Prisma.EnumGeminiApiCallStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.GeminiApiCallStatus[]
+  notIn?: $Enums.GeminiApiCallStatus[]
+  not?: Prisma.NestedEnumGeminiApiCallStatusFilter<$PrismaModel> | $Enums.GeminiApiCallStatus
+}
+
+export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
+  in?: number[] | null
+  notIn?: number[] | null
+  lt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _avg?: Prisma.NestedFloatNullableFilter<$PrismaModel>
+  _sum?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedIntNullableFilter<$PrismaModel>
+}
+
+export type EnumGeminiApiCallStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.GeminiApiCallStatus | Prisma.EnumGeminiApiCallStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.GeminiApiCallStatus[]
+  notIn?: $Enums.GeminiApiCallStatus[]
+  not?: Prisma.NestedEnumGeminiApiCallStatusWithAggregatesFilter<$PrismaModel> | $Enums.GeminiApiCallStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumGeminiApiCallStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumGeminiApiCallStatusFilter<$PrismaModel>
+}
+
+export type EnumLineApiCallKindFilter<$PrismaModel = never> = {
+  equals?: $Enums.LineApiCallKind | Prisma.EnumLineApiCallKindFieldRefInput<$PrismaModel>
+  in?: $Enums.LineApiCallKind[]
+  notIn?: $Enums.LineApiCallKind[]
+  not?: Prisma.NestedEnumLineApiCallKindFilter<$PrismaModel> | $Enums.LineApiCallKind
+}
+
+export type EnumLineApiCallStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.LineApiCallStatus | Prisma.EnumLineApiCallStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.LineApiCallStatus[]
+  notIn?: $Enums.LineApiCallStatus[]
+  not?: Prisma.NestedEnumLineApiCallStatusFilter<$PrismaModel> | $Enums.LineApiCallStatus
+}
+
+export type EnumLineApiCallKindWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LineApiCallKind | Prisma.EnumLineApiCallKindFieldRefInput<$PrismaModel>
+  in?: $Enums.LineApiCallKind[]
+  notIn?: $Enums.LineApiCallKind[]
+  not?: Prisma.NestedEnumLineApiCallKindWithAggregatesFilter<$PrismaModel> | $Enums.LineApiCallKind
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLineApiCallKindFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLineApiCallKindFilter<$PrismaModel>
+}
+
+export type EnumLineApiCallStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LineApiCallStatus | Prisma.EnumLineApiCallStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.LineApiCallStatus[]
+  notIn?: $Enums.LineApiCallStatus[]
+  not?: Prisma.NestedEnumLineApiCallStatusWithAggregatesFilter<$PrismaModel> | $Enums.LineApiCallStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLineApiCallStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLineApiCallStatusFilter<$PrismaModel>
+}
+
 export type NestedIntFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[]
@@ -539,6 +617,84 @@ export type NestedEnumConversationStateTypeWithAggregatesFilter<$PrismaModel = n
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumConversationStateTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumConversationStateTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumGeminiApiCallStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.GeminiApiCallStatus | Prisma.EnumGeminiApiCallStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.GeminiApiCallStatus[]
+  notIn?: $Enums.GeminiApiCallStatus[]
+  not?: Prisma.NestedEnumGeminiApiCallStatusFilter<$PrismaModel> | $Enums.GeminiApiCallStatus
+}
+
+export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
+  in?: number[] | null
+  notIn?: number[] | null
+  lt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _avg?: Prisma.NestedFloatNullableFilter<$PrismaModel>
+  _sum?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedIntNullableFilter<$PrismaModel>
+}
+
+export type NestedFloatNullableFilter<$PrismaModel = never> = {
+  equals?: number | Prisma.FloatFieldRefInput<$PrismaModel> | null
+  in?: number[] | null
+  notIn?: number[] | null
+  lt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  lte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedFloatNullableFilter<$PrismaModel> | number | null
+}
+
+export type NestedEnumGeminiApiCallStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.GeminiApiCallStatus | Prisma.EnumGeminiApiCallStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.GeminiApiCallStatus[]
+  notIn?: $Enums.GeminiApiCallStatus[]
+  not?: Prisma.NestedEnumGeminiApiCallStatusWithAggregatesFilter<$PrismaModel> | $Enums.GeminiApiCallStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumGeminiApiCallStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumGeminiApiCallStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumLineApiCallKindFilter<$PrismaModel = never> = {
+  equals?: $Enums.LineApiCallKind | Prisma.EnumLineApiCallKindFieldRefInput<$PrismaModel>
+  in?: $Enums.LineApiCallKind[]
+  notIn?: $Enums.LineApiCallKind[]
+  not?: Prisma.NestedEnumLineApiCallKindFilter<$PrismaModel> | $Enums.LineApiCallKind
+}
+
+export type NestedEnumLineApiCallStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.LineApiCallStatus | Prisma.EnumLineApiCallStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.LineApiCallStatus[]
+  notIn?: $Enums.LineApiCallStatus[]
+  not?: Prisma.NestedEnumLineApiCallStatusFilter<$PrismaModel> | $Enums.LineApiCallStatus
+}
+
+export type NestedEnumLineApiCallKindWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LineApiCallKind | Prisma.EnumLineApiCallKindFieldRefInput<$PrismaModel>
+  in?: $Enums.LineApiCallKind[]
+  notIn?: $Enums.LineApiCallKind[]
+  not?: Prisma.NestedEnumLineApiCallKindWithAggregatesFilter<$PrismaModel> | $Enums.LineApiCallKind
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLineApiCallKindFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLineApiCallKindFilter<$PrismaModel>
+}
+
+export type NestedEnumLineApiCallStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LineApiCallStatus | Prisma.EnumLineApiCallStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.LineApiCallStatus[]
+  notIn?: $Enums.LineApiCallStatus[]
+  not?: Prisma.NestedEnumLineApiCallStatusWithAggregatesFilter<$PrismaModel> | $Enums.LineApiCallStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLineApiCallStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLineApiCallStatusFilter<$PrismaModel>
 }
 
 

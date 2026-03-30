@@ -1,11 +1,14 @@
 import {
+  GeminiApiCallStatus,
   ItemStatus,
+  LineApiCallKind,
+  LineApiCallStatus,
   ProductStudyImageKind,
   ReviewActionType,
 } from "@/generated/prisma/client";
 import type { Prisma } from "@/generated/prisma/client";
 
-import { getLatestDispatchCheckpoint, isDueToday } from "@/lib/date";
+import { getDaysSince, getLatestDispatchCheckpoint, isDueToday, scheduleNextReview } from "@/lib/date";
 import { getDefaultLineUserId } from "@/lib/env";
 import { prisma } from "@/lib/prisma";
 import {
@@ -20,11 +23,11 @@ type JsonArray = Prisma.JsonValue | null;
 
 function buildStoredStudyContent(input: {
   productName?: string | null;
-  brandName?: string | null;
+  category?: string | null;
   note: string;
   memo?: string | null;
 }) {
-  const titleParts = [input.brandName, input.productName].filter(Boolean);
+  const titleParts = [input.category, input.productName].filter(Boolean);
   const summaryBase = titleParts.length > 0 ? titleParts.join(" / ") : input.note;
 
   return {
@@ -42,13 +45,16 @@ export type StudyListItem = {
   id: number;
   questionNumber: number;
   autoSendEnabled: boolean;
+  isFavorite: boolean;
   productName: string | null;
-  brandName: string | null;
+  category: string | null;
   summary: string;
+  lastStudiedAt: Date | null;
   nextScheduledAt: Date;
   status: ItemStatus;
   difficulty: string;
   lastResult: LastResult;
+  correctCount: number;
   createdAt: Date;
   isDueToday: boolean;
 };
@@ -57,7 +63,7 @@ export type DeletedStudyListItem = {
   id: number;
   questionNumber: number;
   productName: string | null;
-  brandName: string | null;
+  category: string | null;
   createdAt: Date;
   deletedAt: Date;
 };
@@ -130,7 +136,21 @@ export async function getOrCreateDefaultUser() {
 }
 
 export async function getDashboardData() {
-  const [items, recentLogs, correctCount, incorrectCount] = await Promise.all([
+  const [
+    items,
+    recentLogs,
+    correctCount,
+    incorrectCount,
+    geminiCallCount,
+    geminiSuccessCount,
+    geminiFailureCount,
+    recentGeminiLogs,
+    lineApiCallCount,
+    linePushCount,
+    lineReplyCount,
+    lineEstimatedBillableCount,
+    recentLineLogs,
+  ] = await Promise.all([
     prisma.productStudyItem.findMany({
       where: {
         deletedAt: null,
@@ -171,6 +191,56 @@ export async function getDashboardData() {
         actionType: ReviewActionType.INCORRECT,
       },
     }),
+    prisma.geminiApiCallLog.count(),
+    prisma.geminiApiCallLog.count({
+      where: {
+        status: GeminiApiCallStatus.SUCCESS,
+      },
+    }),
+    prisma.geminiApiCallLog.count({
+      where: {
+        status: GeminiApiCallStatus.FAILED,
+      },
+    }),
+    prisma.geminiApiCallLog.findMany({
+      include: {
+        user: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 10,
+    }),
+    prisma.lineApiCallLog.count(),
+    prisma.lineApiCallLog.count({
+      where: {
+        kind: LineApiCallKind.PUSH,
+      },
+    }),
+    prisma.lineApiCallLog.count({
+      where: {
+        kind: LineApiCallKind.REPLY,
+      },
+    }),
+    prisma.lineApiCallLog.aggregate({
+      _sum: {
+        estimatedBillableCount: true,
+      },
+      where: {
+        kind: LineApiCallKind.PUSH,
+        status: LineApiCallStatus.SUCCESS,
+      },
+    }),
+    prisma.lineApiCallLog.findMany({
+      include: {
+        user: true,
+        item: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 10,
+    }),
   ]);
 
   const dueTodayItems = items
@@ -179,7 +249,7 @@ export async function getDashboardData() {
       id: item.id,
       questionNumber: item.questionNumber,
       productName: item.productName,
-      brandName: item.brandName,
+      category: item.category,
       status: item.status,
       nextScheduledAt: item.nextScheduledAt,
     }));
@@ -194,7 +264,16 @@ export async function getDashboardData() {
     unsentCount,
     correctCount,
     incorrectCount,
+    geminiCallCount,
+    geminiSuccessCount,
+    geminiFailureCount,
+    lineApiCallCount,
+    linePushCount,
+    lineReplyCount,
+    lineEstimatedBillableCount: lineEstimatedBillableCount._sum.estimatedBillableCount || 0,
     recentLogs,
+    recentGeminiLogs,
+    recentLineLogs,
     dueTodayItems,
   };
 }
@@ -220,21 +299,31 @@ export async function getStudyItems(
 
   const normalizedQuery = filters.query?.trim().toLowerCase() || "";
 
-  return items
+  const filteredItems = items
     .map((item) => {
       const lastResult = getLastResultFromLogs(item.reviewLogs);
+      const lastStudiedAt =
+        item.reviewLogs.find(
+          (log) =>
+            log.actionType === ReviewActionType.ANSWER_SHOWN ||
+            log.actionType === ReviewActionType.CORRECT ||
+            log.actionType === ReviewActionType.INCORRECT,
+        )?.actionAt || null;
 
       return {
         id: item.id,
         questionNumber: item.questionNumber,
         autoSendEnabled: item.autoSendEnabled,
+        isFavorite: item.isFavorite,
         productName: item.productName,
-        brandName: item.brandName,
+        category: item.category,
         summary: item.summary,
+        lastStudiedAt,
         nextScheduledAt: item.nextScheduledAt,
         status: item.status,
         difficulty: item.difficulty,
         lastResult,
+        correctCount: item.reviewLogs.filter((log) => log.actionType === ReviewActionType.CORRECT).length,
         createdAt: item.createdAt,
         isDueToday: isDueToday(item.nextScheduledAt),
       };
@@ -245,18 +334,64 @@ export async function getStudyItems(
         [
           item.questionNumber.toString(),
           item.productName || "",
-          item.brandName || "",
+          item.category || "",
           item.summary,
         ]
           .join(" ")
           .toLowerCase()
           .includes(normalizedQuery);
 
-      const matchesStatus = !filters.status || filters.status === "ALL" || item.status === filters.status;
+      const matchesStatus =
+        !filters.status ||
+        filters.status === "ALL" ||
+        (filters.status === ItemStatus.QUESTION_SENT
+          ? item.status === ItemStatus.QUESTION_SENT || item.status === ItemStatus.ANSWER_SHOWN
+          : item.status === filters.status);
+      const matchesCategory =
+        !filters.category || filters.category === "ALL" || (item.category || "その他") === filters.category;
+      const matchesSendMode =
+        !filters.sendMode ||
+        filters.sendMode === "ALL" ||
+        (filters.sendMode === "AUTO" && item.autoSendEnabled) ||
+        (filters.sendMode === "MANUAL" && !item.autoSendEnabled);
+      const matchesFavorite = !filters.favoriteOnly || item.isFavorite;
       const matchesToday = !filters.todayOnly || item.isDueToday;
 
-      return matchesQuery && matchesStatus && matchesToday;
+      return (
+        matchesQuery &&
+        matchesStatus &&
+        matchesCategory &&
+        matchesSendMode &&
+        matchesFavorite &&
+        matchesToday
+      );
     });
+
+  if (!filters.elapsedDaysOrder || filters.elapsedDaysOrder === "NONE") {
+    return filteredItems;
+  }
+
+  return filteredItems.toSorted((a, b) => {
+    if (!a.lastStudiedAt && !b.lastStudiedAt) {
+      return a.questionNumber - b.questionNumber;
+    }
+
+    if (!a.lastStudiedAt) {
+      return 1;
+    }
+
+    if (!b.lastStudiedAt) {
+      return -1;
+    }
+
+    const dayDiff = getDaysSince(a.lastStudiedAt) - getDaysSince(b.lastStudiedAt);
+
+    if (dayDiff === 0) {
+      return a.questionNumber - b.questionNumber;
+    }
+
+    return filters.elapsedDaysOrder === "ASC" ? dayDiff : -dayDiff;
+  });
 }
 
 export async function getDeletedStudyItems(): Promise<DeletedStudyListItem[]> {
@@ -270,7 +405,7 @@ export async function getDeletedStudyItems(): Promise<DeletedStudyListItem[]> {
       id: true,
       questionNumber: true,
       productName: true,
-      brandName: true,
+      category: true,
       createdAt: true,
       deletedAt: true,
     },
@@ -342,12 +477,14 @@ export async function getStudyItemDetail(itemId: number) {
 type CreateStudyItemInput = {
   autoSendEnabled: boolean;
   productName?: string;
-  brandName?: string;
+  category: string;
   note: string;
   memo?: string;
   firstScheduledAt: Date;
   questionFiles: File[];
   answerFiles: File[];
+  removeQuestionImages: boolean;
+  removeAnswerImages: boolean;
 };
 
 export async function createStudyItem(input: CreateStudyItemInput) {
@@ -375,8 +512,7 @@ export async function createStudyItem(input: CreateStudyItemInput) {
         questionNumber: (latestItem?.questionNumber || 0) + 1,
         autoSendEnabled: input.autoSendEnabled,
         productName: input.productName,
-        brandName: input.brandName,
-        category: null,
+        category: input.category,
         note: input.note,
         memo: input.memo,
         firstScheduledAt: input.firstScheduledAt,
@@ -414,13 +550,11 @@ export async function updateStudyItem(itemId: number, input: UpdateStudyItemInpu
   }
 
   const sentCount = existingItem.reviewLogs.filter((log) => log.actionType === "SENT").length;
-  const shouldReplaceQuestionImages = input.questionFiles.length > 0;
-  const shouldReplaceAnswerImages = input.answerFiles.length > 0;
   const [savedQuestionImages, savedAnswerImages] = await Promise.all([
-    shouldReplaceQuestionImages
+    input.questionFiles.length > 0
       ? saveUploadedImages(input.questionFiles, ProductStudyImageKind.QUESTION)
       : Promise.resolve(null),
-    shouldReplaceAnswerImages
+    input.answerFiles.length > 0
       ? saveUploadedImages(input.answerFiles, ProductStudyImageKind.ANSWER)
       : Promise.resolve(null),
   ]);
@@ -434,8 +568,7 @@ export async function updateStudyItem(itemId: number, input: UpdateStudyItemInpu
       data: {
         autoSendEnabled: input.autoSendEnabled,
         productName: input.productName,
-        brandName: input.brandName,
-        category: null,
+        category: input.category,
         note: input.note,
         memo: input.memo,
         firstScheduledAt: input.firstScheduledAt,
@@ -502,7 +635,7 @@ export async function regenerateStudyItem(itemId: number) {
 
   const content = buildStoredStudyContent({
     productName: item.productName,
-    brandName: item.brandName,
+    category: item.category,
     note: item.note,
     memo: item.memo,
   });
@@ -550,6 +683,7 @@ export async function updateAutoSendEnabled(itemId: number, autoSendEnabled: boo
     },
     select: {
       id: true,
+      autoSendEnabled: true,
     },
   });
 
@@ -563,6 +697,32 @@ export async function updateAutoSendEnabled(itemId: number, autoSendEnabled: boo
     },
     data: {
       autoSendEnabled,
+      nextScheduledAt:
+        autoSendEnabled && !item.autoSendEnabled ? scheduleNextReview(1) : undefined,
+    },
+  });
+}
+
+export async function updateFavorite(itemId: number, isFavorite: boolean) {
+  const item = await prisma.productStudyItem.findUnique({
+    where: {
+      id: itemId,
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  if (!item) {
+    throw new Error("対象の問題が見つかりませんでした。");
+  }
+
+  await prisma.productStudyItem.update({
+    where: {
+      id: itemId,
+    },
+    data: {
+      isFavorite,
     },
   });
 }
@@ -679,6 +839,8 @@ export async function getDueItemsForDispatch(itemIds?: number[]) {
       ...item,
       images: item.images.filter((image) => image.kind === ProductStudyImageKind.QUESTION),
       answerImages: item.images.filter((image) => image.kind === ProductStudyImageKind.ANSWER),
+      latestSentAt:
+        item.reviewLogs.find((log) => log.actionType === ReviewActionType.SENT)?.actionAt || null,
       latestSolvedAt:
         item.reviewLogs.find(
           (log) =>

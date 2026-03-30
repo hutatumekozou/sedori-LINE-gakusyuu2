@@ -1,4 +1,4 @@
-import { addDays, endOfDay, set, startOfDay, subDays } from "date-fns";
+import { addDays, differenceInCalendarDays, endOfDay, set, startOfDay, subDays } from "date-fns";
 import { formatInTimeZone, fromZonedTime, toZonedTime } from "date-fns-tz";
 
 import { getAppSettings } from "@/lib/env";
@@ -26,6 +26,13 @@ export function formatDateInputValue(date: Date | string) {
 export function getAppDayStart(date: Date | string = new Date()) {
   const zoned = toZonedTime(date, getTimeZone());
   return fromZonedTime(startOfDay(zoned), getTimeZone());
+}
+
+export function getDaysSince(date: Date | string, now: Date | string = new Date()) {
+  const zonedDate = startOfDay(toZonedTime(date, getTimeZone()));
+  const zonedNow = startOfDay(toZonedTime(now, getTimeZone()));
+
+  return differenceInCalendarDays(zonedNow, zonedDate);
 }
 
 export function getAppDayEnd(date: Date | string = new Date()) {

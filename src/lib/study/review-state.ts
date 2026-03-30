@@ -7,7 +7,7 @@ import type {
 import { scheduleNextReview } from "@/lib/date";
 import type { LastResult } from "@/lib/study/types";
 
-export type LineCommand = "answer" | "correct" | "incorrect" | "unknown";
+export type LineCommand = "answer" | "correct" | "incorrect" | "manual" | "unknown";
 
 export function normalizeLineCommand(text: string): LineCommand {
   const normalized = text.trim();
@@ -22,6 +22,10 @@ export function normalizeLineCommand(text: string): LineCommand {
 
   if (normalized === "不正解") {
     return "incorrect";
+  }
+
+  if (normalized === "手動") {
+    return "manual";
   }
 
   return "unknown";

@@ -4,24 +4,32 @@ import { z } from "zod";
 
 import { getAppSettings } from "@/lib/env";
 import { parseDateInput } from "@/lib/date";
-import { MAX_IMAGE_COUNT } from "@/lib/study/constants";
+import {
+  DEFAULT_STUDY_CATEGORY,
+  MAX_IMAGE_COUNT,
+  STUDY_CATEGORIES,
+} from "@/lib/study/constants";
 import type { StudyItemFormState } from "@/lib/study/types";
 
 type ValidatedStudyItemInput = {
   autoSendEnabled: boolean;
   productName?: string;
-  brandName?: string;
+  category: string;
   note: string;
   memo?: string;
   firstScheduledAt: Date;
   questionFiles: File[];
   answerFiles: File[];
+  removeQuestionImages: boolean;
+  removeAnswerImages: boolean;
 };
 
 const baseSchema = z
   .object({
     productName: z.string().max(120, "商品名は120文字以内で入力してください。").default(""),
-    brandName: z.string().max(120, "ブランド名は120文字以内で入力してください。").default(""),
+    category: z.enum(STUDY_CATEGORIES, {
+      error: "カテゴリを選択してください。",
+    }).default(DEFAULT_STUDY_CATEGORY),
     note: z
       .string()
       .trim()
@@ -99,7 +107,7 @@ export function validateStudyItemForm(
     } {
   const parsed = baseSchema.safeParse({
     productName: String(formData.get("productName") || ""),
-    brandName: String(formData.get("brandName") || ""),
+    category: String(formData.get("category") || DEFAULT_STUDY_CATEGORY),
     note: String(formData.get("note") || ""),
     memo: String(formData.get("memo") || ""),
     firstScheduledAt: String(formData.get("firstScheduledAt") || ""),
@@ -159,12 +167,14 @@ export function validateStudyItemForm(
     data: {
       autoSendEnabled: formData.get("autoSendEnabled") === "1",
       productName: toOptionalString(parsed.data.productName),
-      brandName: toOptionalString(parsed.data.brandName),
+      category: parsed.data.category,
       note: parsed.data.note,
       memo: parsed.data.memo,
       firstScheduledAt: parseDateInput(parsed.data.firstScheduledAt),
       questionFiles,
       answerFiles,
+      removeQuestionImages: formData.get("removeQuestionImages") === "1",
+      removeAnswerImages: formData.get("removeAnswerImages") === "1",
     },
   };
 }

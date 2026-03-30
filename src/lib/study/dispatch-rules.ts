@@ -135,10 +135,37 @@ export function sortDispatchCandidates<
   T extends {
     questionNumber: number;
     nextScheduledAt: Date;
+    latestSentAt?: Date | null;
     latestSolvedAt?: Date | null;
   },
 >(items: T[]) {
   return items.slice().sort((left, right) => {
+    const unansweredLeft =
+      !!left.latestSentAt &&
+      (!left.latestSolvedAt || left.latestSolvedAt.getTime() < left.latestSentAt.getTime());
+    const unansweredRight =
+      !!right.latestSentAt &&
+      (!right.latestSolvedAt || right.latestSolvedAt.getTime() < right.latestSentAt.getTime());
+
+    if (unansweredLeft !== unansweredRight) {
+      return unansweredLeft ? -1 : 1;
+    }
+
+    if (unansweredLeft && unansweredRight) {
+      if (left.nextScheduledAt.getTime() !== right.nextScheduledAt.getTime()) {
+        return left.nextScheduledAt.getTime() - right.nextScheduledAt.getTime();
+      }
+
+      const sentLeft = left.latestSentAt?.getTime() ?? Number.NEGATIVE_INFINITY;
+      const sentRight = right.latestSentAt?.getTime() ?? Number.NEGATIVE_INFINITY;
+
+      if (sentLeft !== sentRight) {
+        return sentLeft - sentRight;
+      }
+
+      return left.questionNumber - right.questionNumber;
+    }
+
     const solvedLeft = left.latestSolvedAt?.getTime() ?? Number.NEGATIVE_INFINITY;
     const solvedRight = right.latestSolvedAt?.getTime() ?? Number.NEGATIVE_INFINITY;
 

@@ -3,6 +3,7 @@ import { ItemForm } from "@/components/item-form";
 import { PageHeader } from "@/components/page-header";
 import { formatDateInputValue, scheduleNextReview } from "@/lib/date";
 import { getAppSettings } from "@/lib/env";
+import { DEFAULT_STUDY_CATEGORY } from "@/lib/study/constants";
 
 export default function NewItemPage() {
   return (
@@ -17,6 +18,7 @@ export default function NewItemPage() {
           action={createStudyItemAction}
           defaults={{
             autoSendEnabled: true,
+            category: DEFAULT_STUDY_CATEGORY,
             firstScheduledAt: formatDateInputValue(scheduleNextReview(1)),
           }}
           submitLabel="保存"

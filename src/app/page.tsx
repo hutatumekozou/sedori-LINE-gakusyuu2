@@ -47,6 +47,19 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
         <StatCard label="不正解数" value={dashboard.incorrectCount} />
       </section>
 
+      <section className="grid gap-4 md:grid-cols-3">
+        <StatCard label="Gemini呼び出し回数" value={dashboard.geminiCallCount} />
+        <StatCard label="Gemini成功回数" value={dashboard.geminiSuccessCount} />
+        <StatCard label="Gemini失敗回数" value={dashboard.geminiFailureCount} />
+      </section>
+
+      <section className="grid gap-4 md:grid-cols-4">
+        <StatCard label="LINE API呼び出し回数" value={dashboard.lineApiCallCount} />
+        <StatCard label="LINE Push回数" value={dashboard.linePushCount} />
+        <StatCard label="LINE Reply回数" value={dashboard.lineReplyCount} />
+        <StatCard label="LINE課金対象推定通数" value={dashboard.lineEstimatedBillableCount} />
+      </section>
+
       <section className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
         <div className="rounded-[28px] border border-slate-200/70 bg-white/90 p-6 shadow-[0_20px_60px_-40px_rgba(15,23,42,0.35)]">
           <div className="mb-4 flex items-center justify-between">
@@ -77,7 +90,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                         問題番号 {item.questionNumber}
                       </p>
                       <p className="text-sm text-slate-600">
-                        {item.productName || "商品名未設定"} / {item.brandName || "ブランド未設定"}
+                        {item.productName || "商品名未設定"} / {item.category || "その他"}
                       </p>
                     </div>
                     <Badge
@@ -128,6 +141,95 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               ))
             )}
           </div>
+        </div>
+      </section>
+
+      <section className="rounded-[28px] border border-slate-200/70 bg-white/90 p-6 shadow-[0_20px_60px_-40px_rgba(15,23,42,0.35)]">
+        <div className="mb-4">
+          <h2 className="text-lg font-semibold text-slate-950">Gemini利用ログ</h2>
+          <p className="text-sm text-slate-500">このアプリからの Gemini API 呼び出し履歴です。</p>
+        </div>
+
+        <div className="space-y-3">
+          {dashboard.recentGeminiLogs.length === 0 ? (
+            <p className="rounded-2xl border border-dashed border-slate-200 px-4 py-6 text-sm text-slate-500">
+              Gemini API の呼び出しログはまだありません。
+            </p>
+          ) : (
+            dashboard.recentGeminiLogs.map((log) => (
+              <div key={log.id} className="rounded-2xl border border-slate-200 px-4 py-4">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <Badge
+                      label={log.status === "SUCCESS" ? "成功" : "失敗"}
+                      className={
+                        log.status === "SUCCESS"
+                          ? "bg-emerald-100 text-emerald-800"
+                          : "bg-rose-100 text-rose-800"
+                      }
+                    />
+                    <p className="text-sm font-semibold text-slate-900">{log.model}</p>
+                  </div>
+                  <p className="text-xs text-slate-500">{formatDateTime(log.createdAt)}</p>
+                </div>
+                <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-600">
+                  <span>画像: {log.imageCount}枚</span>
+                  <span>入力文字数: {log.promptLength}</span>
+                  <span>出力文字数: {log.responseLength ?? "-"}</span>
+                  <span>利用者: {log.user?.displayName || "未設定"}</span>
+                </div>
+                {log.errorMessage ? (
+                  <p className="mt-2 text-xs text-rose-600">エラー: {log.errorMessage}</p>
+                ) : null}
+              </div>
+            ))
+          )}
+        </div>
+      </section>
+
+      <section className="rounded-[28px] border border-slate-200/70 bg-white/90 p-6 shadow-[0_20px_60px_-40px_rgba(15,23,42,0.35)]">
+        <div className="mb-4">
+          <h2 className="text-lg font-semibold text-slate-950">LINE利用ログ</h2>
+          <p className="text-sm text-slate-500">このアプリからの LINE API 呼び出し履歴です。</p>
+        </div>
+
+        <div className="space-y-3">
+          {dashboard.recentLineLogs.length === 0 ? (
+            <p className="rounded-2xl border border-dashed border-slate-200 px-4 py-6 text-sm text-slate-500">
+              LINE API の呼び出しログはまだありません。
+            </p>
+          ) : (
+            dashboard.recentLineLogs.map((log) => (
+              <div key={log.id} className="rounded-2xl border border-slate-200 px-4 py-4">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <Badge
+                      label={log.status === "SUCCESS" ? "成功" : "失敗"}
+                      className={
+                        log.status === "SUCCESS"
+                          ? "bg-emerald-100 text-emerald-800"
+                          : "bg-rose-100 text-rose-800"
+                      }
+                    />
+                    <p className="text-sm font-semibold text-slate-900">{log.kind}</p>
+                  </div>
+                  <p className="text-xs text-slate-500">{formatDateTime(log.createdAt)}</p>
+                </div>
+                <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-600">
+                  <span>メッセージ数: {log.messageCount}</span>
+                  <span>課金対象推定: {log.estimatedBillableCount}</span>
+                  <span>利用者: {log.user?.displayName || "未設定"}</span>
+                  <span>問題番号: {log.item?.questionNumber ?? "-"}</span>
+                </div>
+                {log.targetLineUserId ? (
+                  <p className="mt-2 text-xs text-slate-500">送信先: {log.targetLineUserId}</p>
+                ) : null}
+                {log.errorMessage ? (
+                  <p className="mt-2 text-xs text-rose-600">エラー: {log.errorMessage}</p>
+                ) : null}
+              </div>
+            ))
+          )}
         </div>
       </section>
     </div>

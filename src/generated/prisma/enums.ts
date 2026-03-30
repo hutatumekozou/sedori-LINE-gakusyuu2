@@ -44,3 +44,28 @@ export const ProductStudyImageKind = {
 } as const
 
 export type ProductStudyImageKind = (typeof ProductStudyImageKind)[keyof typeof ProductStudyImageKind]
+
+
+export const GeminiApiCallStatus = {
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED'
+} as const
+
+export type GeminiApiCallStatus = (typeof GeminiApiCallStatus)[keyof typeof GeminiApiCallStatus]
+
+
+export const LineApiCallKind = {
+  PUSH: 'PUSH',
+  REPLY: 'REPLY',
+  PROFILE: 'PROFILE'
+} as const
+
+export type LineApiCallKind = (typeof LineApiCallKind)[keyof typeof LineApiCallKind]
+
+
+export const LineApiCallStatus = {
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED'
+} as const
+
+export type LineApiCallStatus = (typeof LineApiCallStatus)[keyof typeof LineApiCallStatus]

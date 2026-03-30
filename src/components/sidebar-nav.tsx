@@ -43,7 +43,7 @@ export function SidebarNav() {
             key={item.href}
             href={item.href}
             className={cn(
-              "block rounded-2xl border px-4 py-3 text-sm font-medium transition",
+              "block rounded-2xl border px-3 py-2 text-[12px] leading-5 font-medium whitespace-normal transition",
               isActive
                 ? "border-emerald-200 bg-emerald-50 text-emerald-900"
                 : "border-slate-200 bg-white/80 text-slate-700 hover:border-slate-300 hover:bg-white",

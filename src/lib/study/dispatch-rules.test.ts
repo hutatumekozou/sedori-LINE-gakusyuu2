@@ -100,20 +100,48 @@ describe("dispatch-rules", () => {
       {
         questionNumber: 1,
         nextScheduledAt: new Date("2026-03-19T12:00:00+09:00"),
+        latestSentAt: null,
         latestSolvedAt: null,
       },
       {
         questionNumber: 2,
         nextScheduledAt: new Date("2026-03-20T12:00:00+09:00"),
+        latestSentAt: new Date("2026-03-18T12:00:00+09:00"),
         latestSolvedAt: new Date("2026-03-20T11:00:00+09:00"),
       },
       {
         questionNumber: 3,
         nextScheduledAt: new Date("2026-03-18T12:00:00+09:00"),
+        latestSentAt: new Date("2026-03-18T12:00:00+09:00"),
         latestSolvedAt: new Date("2026-03-20T10:00:00+09:00"),
       },
     ]);
 
     expect(sorted.map((item) => item.questionNumber)).toEqual([2, 3, 1]);
+  });
+
+  it("prioritizes unanswered carry-over items for the next auto dispatch", () => {
+    const sorted = sortDispatchCandidates([
+      {
+        questionNumber: 10,
+        nextScheduledAt: new Date("2026-03-19T12:00:00+09:00"),
+        latestSentAt: null,
+        latestSolvedAt: new Date("2026-03-19T11:00:00+09:00"),
+      },
+      {
+        questionNumber: 11,
+        nextScheduledAt: new Date("2026-03-19T12:00:00+09:00"),
+        latestSentAt: new Date("2026-03-18T12:00:00+09:00"),
+        latestSolvedAt: null,
+      },
+      {
+        questionNumber: 12,
+        nextScheduledAt: new Date("2026-03-19T12:00:00+09:00"),
+        latestSentAt: new Date("2026-03-18T12:00:00+09:00"),
+        latestSolvedAt: new Date("2026-03-17T12:00:00+09:00"),
+      },
+    ]);
+
+    expect(sorted.map((item) => item.questionNumber)).toEqual([11, 12, 10]);
   });
 });

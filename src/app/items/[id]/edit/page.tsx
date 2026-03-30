@@ -5,6 +5,7 @@ import { ItemForm } from "@/components/item-form";
 import { PageHeader } from "@/components/page-header";
 import { formatDateInputValue } from "@/lib/date";
 import { getAppSettings } from "@/lib/env";
+import { DEFAULT_STUDY_CATEGORY } from "@/lib/study/constants";
 import { getStudyItemDetail } from "@/lib/study/service";
 
 type EditItemPageProps = {
@@ -32,7 +33,7 @@ export default async function EditItemPage({ params }: EditItemPageProps) {
           defaults={{
             autoSendEnabled: item.autoSendEnabled,
             productName: item.productName,
-            brandName: item.brandName,
+            category: item.category || DEFAULT_STUDY_CATEGORY,
             note: item.note,
             memo: item.memo,
             firstScheduledAt: formatDateInputValue(item.firstScheduledAt),

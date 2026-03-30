@@ -55,7 +55,9 @@ export const ModelName = {
   ProductStudyItem: 'ProductStudyItem',
   ProductStudyImage: 'ProductStudyImage',
   ReviewLog: 'ReviewLog',
-  ActiveConversationState: 'ActiveConversationState'
+  ActiveConversationState: 'ActiveConversationState',
+  GeminiApiCallLog: 'GeminiApiCallLog',
+  LineApiCallLog: 'LineApiCallLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -87,6 +89,7 @@ export const ProductStudyItemScalarFieldEnum = {
   userId: 'userId',
   questionNumber: 'questionNumber',
   autoSendEnabled: 'autoSendEnabled',
+  isFavorite: 'isFavorite',
   deletedAt: 'deletedAt',
   productName: 'productName',
   brandName: 'brandName',
@@ -140,10 +143,43 @@ export const ActiveConversationStateScalarFieldEnum = {
   userId: 'userId',
   itemId: 'itemId',
   state: 'state',
+  questionLineMessageId: 'questionLineMessageId',
+  answerLineMessageId: 'answerLineMessageId',
   updatedAt: 'updatedAt'
 } as const
 
 export type ActiveConversationStateScalarFieldEnum = (typeof ActiveConversationStateScalarFieldEnum)[keyof typeof ActiveConversationStateScalarFieldEnum]
+
+
+export const GeminiApiCallLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  status: 'status',
+  model: 'model',
+  promptLength: 'promptLength',
+  imageCount: 'imageCount',
+  responseLength: 'responseLength',
+  errorMessage: 'errorMessage',
+  createdAt: 'createdAt'
+} as const
+
+export type GeminiApiCallLogScalarFieldEnum = (typeof GeminiApiCallLogScalarFieldEnum)[keyof typeof GeminiApiCallLogScalarFieldEnum]
+
+
+export const LineApiCallLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  itemId: 'itemId',
+  kind: 'kind',
+  status: 'status',
+  targetLineUserId: 'targetLineUserId',
+  messageCount: 'messageCount',
+  estimatedBillableCount: 'estimatedBillableCount',
+  errorMessage: 'errorMessage',
+  createdAt: 'createdAt'
+} as const
+
+export type LineApiCallLogScalarFieldEnum = (typeof LineApiCallLogScalarFieldEnum)[keyof typeof LineApiCallLogScalarFieldEnum]
 
 
 export const SortOrder = {

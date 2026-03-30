@@ -218,7 +218,9 @@ export type UserWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   studyItems?: Prisma.ProductStudyItemListRelationFilter
   reviewLogs?: Prisma.ReviewLogListRelationFilter
-  activeConversationState?: Prisma.XOR<Prisma.ActiveConversationStateNullableScalarRelationFilter, Prisma.ActiveConversationStateWhereInput> | null
+  activeConversationStates?: Prisma.ActiveConversationStateListRelationFilter
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogListRelationFilter
+  lineApiCallLogs?: Prisma.LineApiCallLogListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -229,7 +231,9 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   studyItems?: Prisma.ProductStudyItemOrderByRelationAggregateInput
   reviewLogs?: Prisma.ReviewLogOrderByRelationAggregateInput
-  activeConversationState?: Prisma.ActiveConversationStateOrderByWithRelationInput
+  activeConversationStates?: Prisma.ActiveConversationStateOrderByRelationAggregateInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogOrderByRelationAggregateInput
+  lineApiCallLogs?: Prisma.LineApiCallLogOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -243,7 +247,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   studyItems?: Prisma.ProductStudyItemListRelationFilter
   reviewLogs?: Prisma.ReviewLogListRelationFilter
-  activeConversationState?: Prisma.XOR<Prisma.ActiveConversationStateNullableScalarRelationFilter, Prisma.ActiveConversationStateWhereInput> | null
+  activeConversationStates?: Prisma.ActiveConversationStateListRelationFilter
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogListRelationFilter
+  lineApiCallLogs?: Prisma.LineApiCallLogListRelationFilter
 }, "id" | "lineUserId">
 
 export type UserOrderByWithAggregationInput = {
@@ -277,7 +283,9 @@ export type UserCreateInput = {
   updatedAt?: Date | string
   studyItems?: Prisma.ProductStudyItemCreateNestedManyWithoutUserInput
   reviewLogs?: Prisma.ReviewLogCreateNestedManyWithoutUserInput
-  activeConversationState?: Prisma.ActiveConversationStateCreateNestedOneWithoutUserInput
+  activeConversationStates?: Prisma.ActiveConversationStateCreateNestedManyWithoutUserInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogCreateNestedManyWithoutUserInput
+  lineApiCallLogs?: Prisma.LineApiCallLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -288,7 +296,9 @@ export type UserUncheckedCreateInput = {
   updatedAt?: Date | string
   studyItems?: Prisma.ProductStudyItemUncheckedCreateNestedManyWithoutUserInput
   reviewLogs?: Prisma.ReviewLogUncheckedCreateNestedManyWithoutUserInput
-  activeConversationState?: Prisma.ActiveConversationStateUncheckedCreateNestedOneWithoutUserInput
+  activeConversationStates?: Prisma.ActiveConversationStateUncheckedCreateNestedManyWithoutUserInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogUncheckedCreateNestedManyWithoutUserInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -298,7 +308,9 @@ export type UserUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   studyItems?: Prisma.ProductStudyItemUpdateManyWithoutUserNestedInput
   reviewLogs?: Prisma.ReviewLogUpdateManyWithoutUserNestedInput
-  activeConversationState?: Prisma.ActiveConversationStateUpdateOneWithoutUserNestedInput
+  activeConversationStates?: Prisma.ActiveConversationStateUpdateManyWithoutUserNestedInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogUpdateManyWithoutUserNestedInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -309,7 +321,9 @@ export type UserUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   studyItems?: Prisma.ProductStudyItemUncheckedUpdateManyWithoutUserNestedInput
   reviewLogs?: Prisma.ReviewLogUncheckedUpdateManyWithoutUserNestedInput
-  activeConversationState?: Prisma.ActiveConversationStateUncheckedUpdateOneWithoutUserNestedInput
+  activeConversationStates?: Prisma.ActiveConversationStateUncheckedUpdateManyWithoutUserNestedInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogUncheckedUpdateManyWithoutUserNestedInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -372,6 +386,11 @@ export type UserScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput
 }
 
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
+}
+
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
@@ -416,18 +435,50 @@ export type UserUpdateOneRequiredWithoutReviewLogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReviewLogsInput, Prisma.UserUpdateWithoutReviewLogsInput>, Prisma.UserUncheckedUpdateWithoutReviewLogsInput>
 }
 
-export type UserCreateNestedOneWithoutActiveConversationStateInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutActiveConversationStateInput, Prisma.UserUncheckedCreateWithoutActiveConversationStateInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutActiveConversationStateInput
+export type UserCreateNestedOneWithoutActiveConversationStatesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutActiveConversationStatesInput, Prisma.UserUncheckedCreateWithoutActiveConversationStatesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutActiveConversationStatesInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutActiveConversationStateNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutActiveConversationStateInput, Prisma.UserUncheckedCreateWithoutActiveConversationStateInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutActiveConversationStateInput
-  upsert?: Prisma.UserUpsertWithoutActiveConversationStateInput
+export type UserUpdateOneRequiredWithoutActiveConversationStatesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutActiveConversationStatesInput, Prisma.UserUncheckedCreateWithoutActiveConversationStatesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutActiveConversationStatesInput
+  upsert?: Prisma.UserUpsertWithoutActiveConversationStatesInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutActiveConversationStateInput, Prisma.UserUpdateWithoutActiveConversationStateInput>, Prisma.UserUncheckedUpdateWithoutActiveConversationStateInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutActiveConversationStatesInput, Prisma.UserUpdateWithoutActiveConversationStatesInput>, Prisma.UserUncheckedUpdateWithoutActiveConversationStatesInput>
+}
+
+export type UserCreateNestedOneWithoutGeminiApiCallLogsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutGeminiApiCallLogsInput, Prisma.UserUncheckedCreateWithoutGeminiApiCallLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutGeminiApiCallLogsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutGeminiApiCallLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutGeminiApiCallLogsInput, Prisma.UserUncheckedCreateWithoutGeminiApiCallLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutGeminiApiCallLogsInput
+  upsert?: Prisma.UserUpsertWithoutGeminiApiCallLogsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutGeminiApiCallLogsInput, Prisma.UserUpdateWithoutGeminiApiCallLogsInput>, Prisma.UserUncheckedUpdateWithoutGeminiApiCallLogsInput>
+}
+
+export type UserCreateNestedOneWithoutLineApiCallLogsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLineApiCallLogsInput, Prisma.UserUncheckedCreateWithoutLineApiCallLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLineApiCallLogsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutLineApiCallLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLineApiCallLogsInput, Prisma.UserUncheckedCreateWithoutLineApiCallLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLineApiCallLogsInput
+  upsert?: Prisma.UserUpsertWithoutLineApiCallLogsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutLineApiCallLogsInput, Prisma.UserUpdateWithoutLineApiCallLogsInput>, Prisma.UserUncheckedUpdateWithoutLineApiCallLogsInput>
 }
 
 export type UserCreateWithoutStudyItemsInput = {
@@ -436,7 +487,9 @@ export type UserCreateWithoutStudyItemsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   reviewLogs?: Prisma.ReviewLogCreateNestedManyWithoutUserInput
-  activeConversationState?: Prisma.ActiveConversationStateCreateNestedOneWithoutUserInput
+  activeConversationStates?: Prisma.ActiveConversationStateCreateNestedManyWithoutUserInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogCreateNestedManyWithoutUserInput
+  lineApiCallLogs?: Prisma.LineApiCallLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutStudyItemsInput = {
@@ -446,7 +499,9 @@ export type UserUncheckedCreateWithoutStudyItemsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   reviewLogs?: Prisma.ReviewLogUncheckedCreateNestedManyWithoutUserInput
-  activeConversationState?: Prisma.ActiveConversationStateUncheckedCreateNestedOneWithoutUserInput
+  activeConversationStates?: Prisma.ActiveConversationStateUncheckedCreateNestedManyWithoutUserInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogUncheckedCreateNestedManyWithoutUserInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStudyItemsInput = {
@@ -471,7 +526,9 @@ export type UserUpdateWithoutStudyItemsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviewLogs?: Prisma.ReviewLogUpdateManyWithoutUserNestedInput
-  activeConversationState?: Prisma.ActiveConversationStateUpdateOneWithoutUserNestedInput
+  activeConversationStates?: Prisma.ActiveConversationStateUpdateManyWithoutUserNestedInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogUpdateManyWithoutUserNestedInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStudyItemsInput = {
@@ -481,7 +538,9 @@ export type UserUncheckedUpdateWithoutStudyItemsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviewLogs?: Prisma.ReviewLogUncheckedUpdateManyWithoutUserNestedInput
-  activeConversationState?: Prisma.ActiveConversationStateUncheckedUpdateOneWithoutUserNestedInput
+  activeConversationStates?: Prisma.ActiveConversationStateUncheckedUpdateManyWithoutUserNestedInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogUncheckedUpdateManyWithoutUserNestedInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutReviewLogsInput = {
@@ -490,7 +549,9 @@ export type UserCreateWithoutReviewLogsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   studyItems?: Prisma.ProductStudyItemCreateNestedManyWithoutUserInput
-  activeConversationState?: Prisma.ActiveConversationStateCreateNestedOneWithoutUserInput
+  activeConversationStates?: Prisma.ActiveConversationStateCreateNestedManyWithoutUserInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogCreateNestedManyWithoutUserInput
+  lineApiCallLogs?: Prisma.LineApiCallLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutReviewLogsInput = {
@@ -500,7 +561,9 @@ export type UserUncheckedCreateWithoutReviewLogsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   studyItems?: Prisma.ProductStudyItemUncheckedCreateNestedManyWithoutUserInput
-  activeConversationState?: Prisma.ActiveConversationStateUncheckedCreateNestedOneWithoutUserInput
+  activeConversationStates?: Prisma.ActiveConversationStateUncheckedCreateNestedManyWithoutUserInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogUncheckedCreateNestedManyWithoutUserInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutReviewLogsInput = {
@@ -525,7 +588,9 @@ export type UserUpdateWithoutReviewLogsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   studyItems?: Prisma.ProductStudyItemUpdateManyWithoutUserNestedInput
-  activeConversationState?: Prisma.ActiveConversationStateUpdateOneWithoutUserNestedInput
+  activeConversationStates?: Prisma.ActiveConversationStateUpdateManyWithoutUserNestedInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogUpdateManyWithoutUserNestedInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReviewLogsInput = {
@@ -535,19 +600,23 @@ export type UserUncheckedUpdateWithoutReviewLogsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   studyItems?: Prisma.ProductStudyItemUncheckedUpdateManyWithoutUserNestedInput
-  activeConversationState?: Prisma.ActiveConversationStateUncheckedUpdateOneWithoutUserNestedInput
+  activeConversationStates?: Prisma.ActiveConversationStateUncheckedUpdateManyWithoutUserNestedInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogUncheckedUpdateManyWithoutUserNestedInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
-export type UserCreateWithoutActiveConversationStateInput = {
+export type UserCreateWithoutActiveConversationStatesInput = {
   lineUserId?: string | null
   displayName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   studyItems?: Prisma.ProductStudyItemCreateNestedManyWithoutUserInput
   reviewLogs?: Prisma.ReviewLogCreateNestedManyWithoutUserInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogCreateNestedManyWithoutUserInput
+  lineApiCallLogs?: Prisma.LineApiCallLogCreateNestedManyWithoutUserInput
 }
 
-export type UserUncheckedCreateWithoutActiveConversationStateInput = {
+export type UserUncheckedCreateWithoutActiveConversationStatesInput = {
   id?: number
   lineUserId?: string | null
   displayName?: string | null
@@ -555,34 +624,38 @@ export type UserUncheckedCreateWithoutActiveConversationStateInput = {
   updatedAt?: Date | string
   studyItems?: Prisma.ProductStudyItemUncheckedCreateNestedManyWithoutUserInput
   reviewLogs?: Prisma.ReviewLogUncheckedCreateNestedManyWithoutUserInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogUncheckedCreateNestedManyWithoutUserInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUncheckedCreateNestedManyWithoutUserInput
 }
 
-export type UserCreateOrConnectWithoutActiveConversationStateInput = {
+export type UserCreateOrConnectWithoutActiveConversationStatesInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutActiveConversationStateInput, Prisma.UserUncheckedCreateWithoutActiveConversationStateInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutActiveConversationStatesInput, Prisma.UserUncheckedCreateWithoutActiveConversationStatesInput>
 }
 
-export type UserUpsertWithoutActiveConversationStateInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutActiveConversationStateInput, Prisma.UserUncheckedUpdateWithoutActiveConversationStateInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutActiveConversationStateInput, Prisma.UserUncheckedCreateWithoutActiveConversationStateInput>
+export type UserUpsertWithoutActiveConversationStatesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutActiveConversationStatesInput, Prisma.UserUncheckedUpdateWithoutActiveConversationStatesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutActiveConversationStatesInput, Prisma.UserUncheckedCreateWithoutActiveConversationStatesInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutActiveConversationStateInput = {
+export type UserUpdateToOneWithWhereWithoutActiveConversationStatesInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutActiveConversationStateInput, Prisma.UserUncheckedUpdateWithoutActiveConversationStateInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutActiveConversationStatesInput, Prisma.UserUncheckedUpdateWithoutActiveConversationStatesInput>
 }
 
-export type UserUpdateWithoutActiveConversationStateInput = {
+export type UserUpdateWithoutActiveConversationStatesInput = {
   lineUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   studyItems?: Prisma.ProductStudyItemUpdateManyWithoutUserNestedInput
   reviewLogs?: Prisma.ReviewLogUpdateManyWithoutUserNestedInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogUpdateManyWithoutUserNestedInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUpdateManyWithoutUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutActiveConversationStateInput = {
+export type UserUncheckedUpdateWithoutActiveConversationStatesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   lineUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -590,6 +663,132 @@ export type UserUncheckedUpdateWithoutActiveConversationStateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   studyItems?: Prisma.ProductStudyItemUncheckedUpdateManyWithoutUserNestedInput
   reviewLogs?: Prisma.ReviewLogUncheckedUpdateManyWithoutUserNestedInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogUncheckedUpdateManyWithoutUserNestedInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutGeminiApiCallLogsInput = {
+  lineUserId?: string | null
+  displayName?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  studyItems?: Prisma.ProductStudyItemCreateNestedManyWithoutUserInput
+  reviewLogs?: Prisma.ReviewLogCreateNestedManyWithoutUserInput
+  activeConversationStates?: Prisma.ActiveConversationStateCreateNestedManyWithoutUserInput
+  lineApiCallLogs?: Prisma.LineApiCallLogCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutGeminiApiCallLogsInput = {
+  id?: number
+  lineUserId?: string | null
+  displayName?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  studyItems?: Prisma.ProductStudyItemUncheckedCreateNestedManyWithoutUserInput
+  reviewLogs?: Prisma.ReviewLogUncheckedCreateNestedManyWithoutUserInput
+  activeConversationStates?: Prisma.ActiveConversationStateUncheckedCreateNestedManyWithoutUserInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutGeminiApiCallLogsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutGeminiApiCallLogsInput, Prisma.UserUncheckedCreateWithoutGeminiApiCallLogsInput>
+}
+
+export type UserUpsertWithoutGeminiApiCallLogsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutGeminiApiCallLogsInput, Prisma.UserUncheckedUpdateWithoutGeminiApiCallLogsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutGeminiApiCallLogsInput, Prisma.UserUncheckedCreateWithoutGeminiApiCallLogsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutGeminiApiCallLogsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutGeminiApiCallLogsInput, Prisma.UserUncheckedUpdateWithoutGeminiApiCallLogsInput>
+}
+
+export type UserUpdateWithoutGeminiApiCallLogsInput = {
+  lineUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  studyItems?: Prisma.ProductStudyItemUpdateManyWithoutUserNestedInput
+  reviewLogs?: Prisma.ReviewLogUpdateManyWithoutUserNestedInput
+  activeConversationStates?: Prisma.ActiveConversationStateUpdateManyWithoutUserNestedInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutGeminiApiCallLogsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  lineUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  studyItems?: Prisma.ProductStudyItemUncheckedUpdateManyWithoutUserNestedInput
+  reviewLogs?: Prisma.ReviewLogUncheckedUpdateManyWithoutUserNestedInput
+  activeConversationStates?: Prisma.ActiveConversationStateUncheckedUpdateManyWithoutUserNestedInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutLineApiCallLogsInput = {
+  lineUserId?: string | null
+  displayName?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  studyItems?: Prisma.ProductStudyItemCreateNestedManyWithoutUserInput
+  reviewLogs?: Prisma.ReviewLogCreateNestedManyWithoutUserInput
+  activeConversationStates?: Prisma.ActiveConversationStateCreateNestedManyWithoutUserInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutLineApiCallLogsInput = {
+  id?: number
+  lineUserId?: string | null
+  displayName?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  studyItems?: Prisma.ProductStudyItemUncheckedCreateNestedManyWithoutUserInput
+  reviewLogs?: Prisma.ReviewLogUncheckedCreateNestedManyWithoutUserInput
+  activeConversationStates?: Prisma.ActiveConversationStateUncheckedCreateNestedManyWithoutUserInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutLineApiCallLogsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutLineApiCallLogsInput, Prisma.UserUncheckedCreateWithoutLineApiCallLogsInput>
+}
+
+export type UserUpsertWithoutLineApiCallLogsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutLineApiCallLogsInput, Prisma.UserUncheckedUpdateWithoutLineApiCallLogsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutLineApiCallLogsInput, Prisma.UserUncheckedCreateWithoutLineApiCallLogsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutLineApiCallLogsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutLineApiCallLogsInput, Prisma.UserUncheckedUpdateWithoutLineApiCallLogsInput>
+}
+
+export type UserUpdateWithoutLineApiCallLogsInput = {
+  lineUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  studyItems?: Prisma.ProductStudyItemUpdateManyWithoutUserNestedInput
+  reviewLogs?: Prisma.ReviewLogUpdateManyWithoutUserNestedInput
+  activeConversationStates?: Prisma.ActiveConversationStateUpdateManyWithoutUserNestedInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutLineApiCallLogsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  lineUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  studyItems?: Prisma.ProductStudyItemUncheckedUpdateManyWithoutUserNestedInput
+  reviewLogs?: Prisma.ReviewLogUncheckedUpdateManyWithoutUserNestedInput
+  activeConversationStates?: Prisma.ActiveConversationStateUncheckedUpdateManyWithoutUserNestedInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -600,11 +799,17 @@ export type UserUncheckedUpdateWithoutActiveConversationStateInput = {
 export type UserCountOutputType = {
   studyItems: number
   reviewLogs: number
+  activeConversationStates: number
+  geminiApiCallLogs: number
+  lineApiCallLogs: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   studyItems?: boolean | UserCountOutputTypeCountStudyItemsArgs
   reviewLogs?: boolean | UserCountOutputTypeCountReviewLogsArgs
+  activeConversationStates?: boolean | UserCountOutputTypeCountActiveConversationStatesArgs
+  geminiApiCallLogs?: boolean | UserCountOutputTypeCountGeminiApiCallLogsArgs
+  lineApiCallLogs?: boolean | UserCountOutputTypeCountLineApiCallLogsArgs
 }
 
 /**
@@ -631,6 +836,27 @@ export type UserCountOutputTypeCountReviewLogsArgs<ExtArgs extends runtime.Types
   where?: Prisma.ReviewLogWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountActiveConversationStatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ActiveConversationStateWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountGeminiApiCallLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GeminiApiCallLogWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountLineApiCallLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LineApiCallLogWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -640,7 +866,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   studyItems?: boolean | Prisma.User$studyItemsArgs<ExtArgs>
   reviewLogs?: boolean | Prisma.User$reviewLogsArgs<ExtArgs>
-  activeConversationState?: boolean | Prisma.User$activeConversationStateArgs<ExtArgs>
+  activeConversationStates?: boolean | Prisma.User$activeConversationStatesArgs<ExtArgs>
+  geminiApiCallLogs?: boolean | Prisma.User$geminiApiCallLogsArgs<ExtArgs>
+  lineApiCallLogs?: boolean | Prisma.User$lineApiCallLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -672,7 +900,9 @@ export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   studyItems?: boolean | Prisma.User$studyItemsArgs<ExtArgs>
   reviewLogs?: boolean | Prisma.User$reviewLogsArgs<ExtArgs>
-  activeConversationState?: boolean | Prisma.User$activeConversationStateArgs<ExtArgs>
+  activeConversationStates?: boolean | Prisma.User$activeConversationStatesArgs<ExtArgs>
+  geminiApiCallLogs?: boolean | Prisma.User$geminiApiCallLogsArgs<ExtArgs>
+  lineApiCallLogs?: boolean | Prisma.User$lineApiCallLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -683,7 +913,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     studyItems: Prisma.$ProductStudyItemPayload<ExtArgs>[]
     reviewLogs: Prisma.$ReviewLogPayload<ExtArgs>[]
-    activeConversationState: Prisma.$ActiveConversationStatePayload<ExtArgs> | null
+    activeConversationStates: Prisma.$ActiveConversationStatePayload<ExtArgs>[]
+    geminiApiCallLogs: Prisma.$GeminiApiCallLogPayload<ExtArgs>[]
+    lineApiCallLogs: Prisma.$LineApiCallLogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1087,7 +1319,9 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   studyItems<T extends Prisma.User$studyItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$studyItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductStudyItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reviewLogs<T extends Prisma.User$reviewLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  activeConversationState<T extends Prisma.User$activeConversationStateArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$activeConversationStateArgs<ExtArgs>>): Prisma.Prisma__ActiveConversationStateClient<runtime.Types.Result.GetResult<Prisma.$ActiveConversationStatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  activeConversationStates<T extends Prisma.User$activeConversationStatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$activeConversationStatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActiveConversationStatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  geminiApiCallLogs<T extends Prisma.User$geminiApiCallLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$geminiApiCallLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GeminiApiCallLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  lineApiCallLogs<T extends Prisma.User$lineApiCallLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$lineApiCallLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LineApiCallLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1561,9 +1795,9 @@ export type User$reviewLogsArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
- * User.activeConversationState
+ * User.activeConversationStates
  */
-export type User$activeConversationStateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$activeConversationStatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the ActiveConversationState
    */
@@ -1577,6 +1811,59 @@ export type User$activeConversationStateArgs<ExtArgs extends runtime.Types.Exten
    */
   include?: Prisma.ActiveConversationStateInclude<ExtArgs> | null
   where?: Prisma.ActiveConversationStateWhereInput
+  orderBy?: Prisma.ActiveConversationStateOrderByWithRelationInput | Prisma.ActiveConversationStateOrderByWithRelationInput[]
+  cursor?: Prisma.ActiveConversationStateWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ActiveConversationStateScalarFieldEnum | Prisma.ActiveConversationStateScalarFieldEnum[]
+}
+
+/**
+ * User.geminiApiCallLogs
+ */
+export type User$geminiApiCallLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GeminiApiCallLog
+   */
+  select?: Prisma.GeminiApiCallLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GeminiApiCallLog
+   */
+  omit?: Prisma.GeminiApiCallLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GeminiApiCallLogInclude<ExtArgs> | null
+  where?: Prisma.GeminiApiCallLogWhereInput
+  orderBy?: Prisma.GeminiApiCallLogOrderByWithRelationInput | Prisma.GeminiApiCallLogOrderByWithRelationInput[]
+  cursor?: Prisma.GeminiApiCallLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GeminiApiCallLogScalarFieldEnum | Prisma.GeminiApiCallLogScalarFieldEnum[]
+}
+
+/**
+ * User.lineApiCallLogs
+ */
+export type User$lineApiCallLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LineApiCallLog
+   */
+  select?: Prisma.LineApiCallLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LineApiCallLog
+   */
+  omit?: Prisma.LineApiCallLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LineApiCallLogInclude<ExtArgs> | null
+  where?: Prisma.LineApiCallLogWhereInput
+  orderBy?: Prisma.LineApiCallLogOrderByWithRelationInput | Prisma.LineApiCallLogOrderByWithRelationInput[]
+  cursor?: Prisma.LineApiCallLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LineApiCallLogScalarFieldEnum | Prisma.LineApiCallLogScalarFieldEnum[]
 }
 
 /**

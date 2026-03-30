@@ -388,7 +388,9 @@ export const ModelName = {
   ProductStudyItem: 'ProductStudyItem',
   ProductStudyImage: 'ProductStudyImage',
   ReviewLog: 'ReviewLog',
-  ActiveConversationState: 'ActiveConversationState'
+  ActiveConversationState: 'ActiveConversationState',
+  GeminiApiCallLog: 'GeminiApiCallLog',
+  LineApiCallLog: 'LineApiCallLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -404,7 +406,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "productStudyItem" | "productStudyImage" | "reviewLog" | "activeConversationState"
+    modelProps: "user" | "productStudyItem" | "productStudyImage" | "reviewLog" | "activeConversationState" | "geminiApiCallLog" | "lineApiCallLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -778,6 +780,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    GeminiApiCallLog: {
+      payload: Prisma.$GeminiApiCallLogPayload<ExtArgs>
+      fields: Prisma.GeminiApiCallLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GeminiApiCallLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeminiApiCallLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GeminiApiCallLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeminiApiCallLogPayload>
+        }
+        findFirst: {
+          args: Prisma.GeminiApiCallLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeminiApiCallLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GeminiApiCallLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeminiApiCallLogPayload>
+        }
+        findMany: {
+          args: Prisma.GeminiApiCallLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeminiApiCallLogPayload>[]
+        }
+        create: {
+          args: Prisma.GeminiApiCallLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeminiApiCallLogPayload>
+        }
+        createMany: {
+          args: Prisma.GeminiApiCallLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GeminiApiCallLogCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeminiApiCallLogPayload>[]
+        }
+        delete: {
+          args: Prisma.GeminiApiCallLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeminiApiCallLogPayload>
+        }
+        update: {
+          args: Prisma.GeminiApiCallLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeminiApiCallLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.GeminiApiCallLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GeminiApiCallLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GeminiApiCallLogUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeminiApiCallLogPayload>[]
+        }
+        upsert: {
+          args: Prisma.GeminiApiCallLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeminiApiCallLogPayload>
+        }
+        aggregate: {
+          args: Prisma.GeminiApiCallLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGeminiApiCallLog>
+        }
+        groupBy: {
+          args: Prisma.GeminiApiCallLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GeminiApiCallLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GeminiApiCallLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GeminiApiCallLogCountAggregateOutputType> | number
+        }
+      }
+    }
+    LineApiCallLog: {
+      payload: Prisma.$LineApiCallLogPayload<ExtArgs>
+      fields: Prisma.LineApiCallLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LineApiCallLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LineApiCallLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LineApiCallLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LineApiCallLogPayload>
+        }
+        findFirst: {
+          args: Prisma.LineApiCallLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LineApiCallLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LineApiCallLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LineApiCallLogPayload>
+        }
+        findMany: {
+          args: Prisma.LineApiCallLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LineApiCallLogPayload>[]
+        }
+        create: {
+          args: Prisma.LineApiCallLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LineApiCallLogPayload>
+        }
+        createMany: {
+          args: Prisma.LineApiCallLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LineApiCallLogCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LineApiCallLogPayload>[]
+        }
+        delete: {
+          args: Prisma.LineApiCallLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LineApiCallLogPayload>
+        }
+        update: {
+          args: Prisma.LineApiCallLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LineApiCallLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.LineApiCallLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LineApiCallLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LineApiCallLogUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LineApiCallLogPayload>[]
+        }
+        upsert: {
+          args: Prisma.LineApiCallLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LineApiCallLogPayload>
+        }
+        aggregate: {
+          args: Prisma.LineApiCallLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLineApiCallLog>
+        }
+        groupBy: {
+          args: Prisma.LineApiCallLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LineApiCallLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LineApiCallLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LineApiCallLogCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -830,6 +980,7 @@ export const ProductStudyItemScalarFieldEnum = {
   userId: 'userId',
   questionNumber: 'questionNumber',
   autoSendEnabled: 'autoSendEnabled',
+  isFavorite: 'isFavorite',
   deletedAt: 'deletedAt',
   productName: 'productName',
   brandName: 'brandName',
@@ -883,10 +1034,43 @@ export const ActiveConversationStateScalarFieldEnum = {
   userId: 'userId',
   itemId: 'itemId',
   state: 'state',
+  questionLineMessageId: 'questionLineMessageId',
+  answerLineMessageId: 'answerLineMessageId',
   updatedAt: 'updatedAt'
 } as const
 
 export type ActiveConversationStateScalarFieldEnum = (typeof ActiveConversationStateScalarFieldEnum)[keyof typeof ActiveConversationStateScalarFieldEnum]
+
+
+export const GeminiApiCallLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  status: 'status',
+  model: 'model',
+  promptLength: 'promptLength',
+  imageCount: 'imageCount',
+  responseLength: 'responseLength',
+  errorMessage: 'errorMessage',
+  createdAt: 'createdAt'
+} as const
+
+export type GeminiApiCallLogScalarFieldEnum = (typeof GeminiApiCallLogScalarFieldEnum)[keyof typeof GeminiApiCallLogScalarFieldEnum]
+
+
+export const LineApiCallLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  itemId: 'itemId',
+  kind: 'kind',
+  status: 'status',
+  targetLineUserId: 'targetLineUserId',
+  messageCount: 'messageCount',
+  estimatedBillableCount: 'estimatedBillableCount',
+  errorMessage: 'errorMessage',
+  createdAt: 'createdAt'
+} as const
+
+export type LineApiCallLogScalarFieldEnum = (typeof LineApiCallLogScalarFieldEnum)[keyof typeof LineApiCallLogScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1006,6 +1190,27 @@ export type EnumConversationStateTypeFieldRefInput<$PrismaModel> = FieldRefInput
 
 
 /**
+ * Reference to a field of type 'GeminiApiCallStatus'
+ */
+export type EnumGeminiApiCallStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GeminiApiCallStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'LineApiCallKind'
+ */
+export type EnumLineApiCallKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LineApiCallKind'>
+    
+
+
+/**
+ * Reference to a field of type 'LineApiCallStatus'
+ */
+export type EnumLineApiCallStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LineApiCallStatus'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1111,6 +1316,8 @@ export type GlobalOmitConfig = {
   productStudyImage?: Prisma.ProductStudyImageOmit
   reviewLog?: Prisma.ReviewLogOmit
   activeConversationState?: Prisma.ActiveConversationStateOmit
+  geminiApiCallLog?: Prisma.GeminiApiCallLogOmit
+  lineApiCallLog?: Prisma.LineApiCallLogOmit
 }
 
 /* Types for Logging */

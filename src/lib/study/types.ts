@@ -16,7 +16,7 @@ export const emptyStudyItemFormState: StudyItemFormState = {
 export type StudyItemFormDefaults = {
   autoSendEnabled?: boolean;
   productName?: string | null;
-  brandName?: string | null;
+  category?: string | null;
   note?: string | null;
   memo?: string | null;
   firstScheduledAt: string;
@@ -30,5 +30,9 @@ export type StudyFormImagePreview = {
 export type StudyItemFilters = {
   query?: string;
   status?: ItemStatus | "ALL";
+  category?: string;
+  sendMode?: "ALL" | "AUTO" | "MANUAL";
+  elapsedDaysOrder?: "NONE" | "ASC" | "DESC";
+  favoriteOnly?: boolean;
   todayOnly?: boolean;
 };

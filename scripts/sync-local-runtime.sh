@@ -15,6 +15,9 @@ rsync -a \
   --exclude ".next_stale_*/" \
   --exclude "coverage/" \
   --exclude "deploy/vps/" \
+  --exclude ".env" \
+  --exclude "prisma/dev.db" \
+  --exclude "storage/uploads/" \
   "$SOURCE_ROOT/" "$RUNTIME_ROOT/"
 
 echo "Runtime synced to $RUNTIME_ROOT"

@@ -43,6 +43,7 @@ export type ProductStudyItemMinAggregateOutputType = {
   userId: number | null
   questionNumber: number | null
   autoSendEnabled: boolean | null
+  isFavorite: boolean | null
   deletedAt: Date | null
   productName: string | null
   brandName: string | null
@@ -66,6 +67,7 @@ export type ProductStudyItemMaxAggregateOutputType = {
   userId: number | null
   questionNumber: number | null
   autoSendEnabled: boolean | null
+  isFavorite: boolean | null
   deletedAt: Date | null
   productName: string | null
   brandName: string | null
@@ -89,6 +91,7 @@ export type ProductStudyItemCountAggregateOutputType = {
   userId: number
   questionNumber: number
   autoSendEnabled: number
+  isFavorite: number
   deletedAt: number
   productName: number
   brandName: number
@@ -128,6 +131,7 @@ export type ProductStudyItemMinAggregateInputType = {
   userId?: true
   questionNumber?: true
   autoSendEnabled?: true
+  isFavorite?: true
   deletedAt?: true
   productName?: true
   brandName?: true
@@ -151,6 +155,7 @@ export type ProductStudyItemMaxAggregateInputType = {
   userId?: true
   questionNumber?: true
   autoSendEnabled?: true
+  isFavorite?: true
   deletedAt?: true
   productName?: true
   brandName?: true
@@ -174,6 +179,7 @@ export type ProductStudyItemCountAggregateInputType = {
   userId?: true
   questionNumber?: true
   autoSendEnabled?: true
+  isFavorite?: true
   deletedAt?: true
   productName?: true
   brandName?: true
@@ -286,6 +292,7 @@ export type ProductStudyItemGroupByOutputType = {
   userId: number
   questionNumber: number
   autoSendEnabled: boolean
+  isFavorite: boolean
   deletedAt: Date | null
   productName: string | null
   brandName: string | null
@@ -334,6 +341,7 @@ export type ProductStudyItemWhereInput = {
   userId?: Prisma.IntFilter<"ProductStudyItem"> | number
   questionNumber?: Prisma.IntFilter<"ProductStudyItem"> | number
   autoSendEnabled?: Prisma.BoolFilter<"ProductStudyItem"> | boolean
+  isFavorite?: Prisma.BoolFilter<"ProductStudyItem"> | boolean
   deletedAt?: Prisma.DateTimeNullableFilter<"ProductStudyItem"> | Date | string | null
   productName?: Prisma.StringNullableFilter<"ProductStudyItem"> | string | null
   brandName?: Prisma.StringNullableFilter<"ProductStudyItem"> | string | null
@@ -356,6 +364,7 @@ export type ProductStudyItemWhereInput = {
   images?: Prisma.ProductStudyImageListRelationFilter
   reviewLogs?: Prisma.ReviewLogListRelationFilter
   activeConversations?: Prisma.ActiveConversationStateListRelationFilter
+  lineApiCallLogs?: Prisma.LineApiCallLogListRelationFilter
 }
 
 export type ProductStudyItemOrderByWithRelationInput = {
@@ -363,6 +372,7 @@ export type ProductStudyItemOrderByWithRelationInput = {
   userId?: Prisma.SortOrder
   questionNumber?: Prisma.SortOrder
   autoSendEnabled?: Prisma.SortOrder
+  isFavorite?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   productName?: Prisma.SortOrderInput | Prisma.SortOrder
   brandName?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -385,6 +395,7 @@ export type ProductStudyItemOrderByWithRelationInput = {
   images?: Prisma.ProductStudyImageOrderByRelationAggregateInput
   reviewLogs?: Prisma.ReviewLogOrderByRelationAggregateInput
   activeConversations?: Prisma.ActiveConversationStateOrderByRelationAggregateInput
+  lineApiCallLogs?: Prisma.LineApiCallLogOrderByRelationAggregateInput
 }
 
 export type ProductStudyItemWhereUniqueInput = Prisma.AtLeast<{
@@ -395,6 +406,7 @@ export type ProductStudyItemWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ProductStudyItemWhereInput | Prisma.ProductStudyItemWhereInput[]
   userId?: Prisma.IntFilter<"ProductStudyItem"> | number
   autoSendEnabled?: Prisma.BoolFilter<"ProductStudyItem"> | boolean
+  isFavorite?: Prisma.BoolFilter<"ProductStudyItem"> | boolean
   deletedAt?: Prisma.DateTimeNullableFilter<"ProductStudyItem"> | Date | string | null
   productName?: Prisma.StringNullableFilter<"ProductStudyItem"> | string | null
   brandName?: Prisma.StringNullableFilter<"ProductStudyItem"> | string | null
@@ -417,6 +429,7 @@ export type ProductStudyItemWhereUniqueInput = Prisma.AtLeast<{
   images?: Prisma.ProductStudyImageListRelationFilter
   reviewLogs?: Prisma.ReviewLogListRelationFilter
   activeConversations?: Prisma.ActiveConversationStateListRelationFilter
+  lineApiCallLogs?: Prisma.LineApiCallLogListRelationFilter
 }, "id" | "questionNumber">
 
 export type ProductStudyItemOrderByWithAggregationInput = {
@@ -424,6 +437,7 @@ export type ProductStudyItemOrderByWithAggregationInput = {
   userId?: Prisma.SortOrder
   questionNumber?: Prisma.SortOrder
   autoSendEnabled?: Prisma.SortOrder
+  isFavorite?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   productName?: Prisma.SortOrderInput | Prisma.SortOrder
   brandName?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -457,6 +471,7 @@ export type ProductStudyItemScalarWhereWithAggregatesInput = {
   userId?: Prisma.IntWithAggregatesFilter<"ProductStudyItem"> | number
   questionNumber?: Prisma.IntWithAggregatesFilter<"ProductStudyItem"> | number
   autoSendEnabled?: Prisma.BoolWithAggregatesFilter<"ProductStudyItem"> | boolean
+  isFavorite?: Prisma.BoolWithAggregatesFilter<"ProductStudyItem"> | boolean
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ProductStudyItem"> | Date | string | null
   productName?: Prisma.StringNullableWithAggregatesFilter<"ProductStudyItem"> | string | null
   brandName?: Prisma.StringNullableWithAggregatesFilter<"ProductStudyItem"> | string | null
@@ -480,6 +495,7 @@ export type ProductStudyItemScalarWhereWithAggregatesInput = {
 export type ProductStudyItemCreateInput = {
   questionNumber: number
   autoSendEnabled?: boolean
+  isFavorite?: boolean
   deletedAt?: Date | string | null
   productName?: string | null
   brandName?: string | null
@@ -502,6 +518,7 @@ export type ProductStudyItemCreateInput = {
   images?: Prisma.ProductStudyImageCreateNestedManyWithoutItemInput
   reviewLogs?: Prisma.ReviewLogCreateNestedManyWithoutItemInput
   activeConversations?: Prisma.ActiveConversationStateCreateNestedManyWithoutItemInput
+  lineApiCallLogs?: Prisma.LineApiCallLogCreateNestedManyWithoutItemInput
 }
 
 export type ProductStudyItemUncheckedCreateInput = {
@@ -509,6 +526,7 @@ export type ProductStudyItemUncheckedCreateInput = {
   userId: number
   questionNumber: number
   autoSendEnabled?: boolean
+  isFavorite?: boolean
   deletedAt?: Date | string | null
   productName?: string | null
   brandName?: string | null
@@ -530,11 +548,13 @@ export type ProductStudyItemUncheckedCreateInput = {
   images?: Prisma.ProductStudyImageUncheckedCreateNestedManyWithoutItemInput
   reviewLogs?: Prisma.ReviewLogUncheckedCreateNestedManyWithoutItemInput
   activeConversations?: Prisma.ActiveConversationStateUncheckedCreateNestedManyWithoutItemInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUncheckedCreateNestedManyWithoutItemInput
 }
 
 export type ProductStudyItemUpdateInput = {
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -557,6 +577,7 @@ export type ProductStudyItemUpdateInput = {
   images?: Prisma.ProductStudyImageUpdateManyWithoutItemNestedInput
   reviewLogs?: Prisma.ReviewLogUpdateManyWithoutItemNestedInput
   activeConversations?: Prisma.ActiveConversationStateUpdateManyWithoutItemNestedInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUpdateManyWithoutItemNestedInput
 }
 
 export type ProductStudyItemUncheckedUpdateInput = {
@@ -564,6 +585,7 @@ export type ProductStudyItemUncheckedUpdateInput = {
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -585,6 +607,7 @@ export type ProductStudyItemUncheckedUpdateInput = {
   images?: Prisma.ProductStudyImageUncheckedUpdateManyWithoutItemNestedInput
   reviewLogs?: Prisma.ReviewLogUncheckedUpdateManyWithoutItemNestedInput
   activeConversations?: Prisma.ActiveConversationStateUncheckedUpdateManyWithoutItemNestedInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUncheckedUpdateManyWithoutItemNestedInput
 }
 
 export type ProductStudyItemCreateManyInput = {
@@ -592,6 +615,7 @@ export type ProductStudyItemCreateManyInput = {
   userId: number
   questionNumber: number
   autoSendEnabled?: boolean
+  isFavorite?: boolean
   deletedAt?: Date | string | null
   productName?: string | null
   brandName?: string | null
@@ -615,6 +639,7 @@ export type ProductStudyItemCreateManyInput = {
 export type ProductStudyItemUpdateManyMutationInput = {
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -640,6 +665,7 @@ export type ProductStudyItemUncheckedUpdateManyInput = {
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -675,6 +701,7 @@ export type ProductStudyItemCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   questionNumber?: Prisma.SortOrder
   autoSendEnabled?: Prisma.SortOrder
+  isFavorite?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   productName?: Prisma.SortOrder
   brandName?: Prisma.SortOrder
@@ -706,6 +733,7 @@ export type ProductStudyItemMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   questionNumber?: Prisma.SortOrder
   autoSendEnabled?: Prisma.SortOrder
+  isFavorite?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   productName?: Prisma.SortOrder
   brandName?: Prisma.SortOrder
@@ -729,6 +757,7 @@ export type ProductStudyItemMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   questionNumber?: Prisma.SortOrder
   autoSendEnabled?: Prisma.SortOrder
+  isFavorite?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   productName?: Prisma.SortOrder
   brandName?: Prisma.SortOrder
@@ -756,6 +785,11 @@ export type ProductStudyItemSumOrderByAggregateInput = {
 export type ProductStudyItemScalarRelationFilter = {
   is?: Prisma.ProductStudyItemWhereInput
   isNot?: Prisma.ProductStudyItemWhereInput
+}
+
+export type ProductStudyItemNullableScalarRelationFilter = {
+  is?: Prisma.ProductStudyItemWhereInput | null
+  isNot?: Prisma.ProductStudyItemWhereInput | null
 }
 
 export type ProductStudyItemCreateNestedManyWithoutUserInput = {
@@ -858,9 +892,26 @@ export type ProductStudyItemUpdateOneRequiredWithoutActiveConversationsNestedInp
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProductStudyItemUpdateToOneWithWhereWithoutActiveConversationsInput, Prisma.ProductStudyItemUpdateWithoutActiveConversationsInput>, Prisma.ProductStudyItemUncheckedUpdateWithoutActiveConversationsInput>
 }
 
+export type ProductStudyItemCreateNestedOneWithoutLineApiCallLogsInput = {
+  create?: Prisma.XOR<Prisma.ProductStudyItemCreateWithoutLineApiCallLogsInput, Prisma.ProductStudyItemUncheckedCreateWithoutLineApiCallLogsInput>
+  connectOrCreate?: Prisma.ProductStudyItemCreateOrConnectWithoutLineApiCallLogsInput
+  connect?: Prisma.ProductStudyItemWhereUniqueInput
+}
+
+export type ProductStudyItemUpdateOneWithoutLineApiCallLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProductStudyItemCreateWithoutLineApiCallLogsInput, Prisma.ProductStudyItemUncheckedCreateWithoutLineApiCallLogsInput>
+  connectOrCreate?: Prisma.ProductStudyItemCreateOrConnectWithoutLineApiCallLogsInput
+  upsert?: Prisma.ProductStudyItemUpsertWithoutLineApiCallLogsInput
+  disconnect?: Prisma.ProductStudyItemWhereInput | boolean
+  delete?: Prisma.ProductStudyItemWhereInput | boolean
+  connect?: Prisma.ProductStudyItemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductStudyItemUpdateToOneWithWhereWithoutLineApiCallLogsInput, Prisma.ProductStudyItemUpdateWithoutLineApiCallLogsInput>, Prisma.ProductStudyItemUncheckedUpdateWithoutLineApiCallLogsInput>
+}
+
 export type ProductStudyItemCreateWithoutUserInput = {
   questionNumber: number
   autoSendEnabled?: boolean
+  isFavorite?: boolean
   deletedAt?: Date | string | null
   productName?: string | null
   brandName?: string | null
@@ -882,12 +933,14 @@ export type ProductStudyItemCreateWithoutUserInput = {
   images?: Prisma.ProductStudyImageCreateNestedManyWithoutItemInput
   reviewLogs?: Prisma.ReviewLogCreateNestedManyWithoutItemInput
   activeConversations?: Prisma.ActiveConversationStateCreateNestedManyWithoutItemInput
+  lineApiCallLogs?: Prisma.LineApiCallLogCreateNestedManyWithoutItemInput
 }
 
 export type ProductStudyItemUncheckedCreateWithoutUserInput = {
   id?: number
   questionNumber: number
   autoSendEnabled?: boolean
+  isFavorite?: boolean
   deletedAt?: Date | string | null
   productName?: string | null
   brandName?: string | null
@@ -909,6 +962,7 @@ export type ProductStudyItemUncheckedCreateWithoutUserInput = {
   images?: Prisma.ProductStudyImageUncheckedCreateNestedManyWithoutItemInput
   reviewLogs?: Prisma.ReviewLogUncheckedCreateNestedManyWithoutItemInput
   activeConversations?: Prisma.ActiveConversationStateUncheckedCreateNestedManyWithoutItemInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUncheckedCreateNestedManyWithoutItemInput
 }
 
 export type ProductStudyItemCreateOrConnectWithoutUserInput = {
@@ -944,6 +998,7 @@ export type ProductStudyItemScalarWhereInput = {
   userId?: Prisma.IntFilter<"ProductStudyItem"> | number
   questionNumber?: Prisma.IntFilter<"ProductStudyItem"> | number
   autoSendEnabled?: Prisma.BoolFilter<"ProductStudyItem"> | boolean
+  isFavorite?: Prisma.BoolFilter<"ProductStudyItem"> | boolean
   deletedAt?: Prisma.DateTimeNullableFilter<"ProductStudyItem"> | Date | string | null
   productName?: Prisma.StringNullableFilter<"ProductStudyItem"> | string | null
   brandName?: Prisma.StringNullableFilter<"ProductStudyItem"> | string | null
@@ -967,6 +1022,7 @@ export type ProductStudyItemScalarWhereInput = {
 export type ProductStudyItemCreateWithoutImagesInput = {
   questionNumber: number
   autoSendEnabled?: boolean
+  isFavorite?: boolean
   deletedAt?: Date | string | null
   productName?: string | null
   brandName?: string | null
@@ -988,6 +1044,7 @@ export type ProductStudyItemCreateWithoutImagesInput = {
   user: Prisma.UserCreateNestedOneWithoutStudyItemsInput
   reviewLogs?: Prisma.ReviewLogCreateNestedManyWithoutItemInput
   activeConversations?: Prisma.ActiveConversationStateCreateNestedManyWithoutItemInput
+  lineApiCallLogs?: Prisma.LineApiCallLogCreateNestedManyWithoutItemInput
 }
 
 export type ProductStudyItemUncheckedCreateWithoutImagesInput = {
@@ -995,6 +1052,7 @@ export type ProductStudyItemUncheckedCreateWithoutImagesInput = {
   userId: number
   questionNumber: number
   autoSendEnabled?: boolean
+  isFavorite?: boolean
   deletedAt?: Date | string | null
   productName?: string | null
   brandName?: string | null
@@ -1015,6 +1073,7 @@ export type ProductStudyItemUncheckedCreateWithoutImagesInput = {
   updatedAt?: Date | string
   reviewLogs?: Prisma.ReviewLogUncheckedCreateNestedManyWithoutItemInput
   activeConversations?: Prisma.ActiveConversationStateUncheckedCreateNestedManyWithoutItemInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUncheckedCreateNestedManyWithoutItemInput
 }
 
 export type ProductStudyItemCreateOrConnectWithoutImagesInput = {
@@ -1036,6 +1095,7 @@ export type ProductStudyItemUpdateToOneWithWhereWithoutImagesInput = {
 export type ProductStudyItemUpdateWithoutImagesInput = {
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1057,6 +1117,7 @@ export type ProductStudyItemUpdateWithoutImagesInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutStudyItemsNestedInput
   reviewLogs?: Prisma.ReviewLogUpdateManyWithoutItemNestedInput
   activeConversations?: Prisma.ActiveConversationStateUpdateManyWithoutItemNestedInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUpdateManyWithoutItemNestedInput
 }
 
 export type ProductStudyItemUncheckedUpdateWithoutImagesInput = {
@@ -1064,6 +1125,7 @@ export type ProductStudyItemUncheckedUpdateWithoutImagesInput = {
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1084,11 +1146,13 @@ export type ProductStudyItemUncheckedUpdateWithoutImagesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviewLogs?: Prisma.ReviewLogUncheckedUpdateManyWithoutItemNestedInput
   activeConversations?: Prisma.ActiveConversationStateUncheckedUpdateManyWithoutItemNestedInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUncheckedUpdateManyWithoutItemNestedInput
 }
 
 export type ProductStudyItemCreateWithoutReviewLogsInput = {
   questionNumber: number
   autoSendEnabled?: boolean
+  isFavorite?: boolean
   deletedAt?: Date | string | null
   productName?: string | null
   brandName?: string | null
@@ -1110,6 +1174,7 @@ export type ProductStudyItemCreateWithoutReviewLogsInput = {
   user: Prisma.UserCreateNestedOneWithoutStudyItemsInput
   images?: Prisma.ProductStudyImageCreateNestedManyWithoutItemInput
   activeConversations?: Prisma.ActiveConversationStateCreateNestedManyWithoutItemInput
+  lineApiCallLogs?: Prisma.LineApiCallLogCreateNestedManyWithoutItemInput
 }
 
 export type ProductStudyItemUncheckedCreateWithoutReviewLogsInput = {
@@ -1117,6 +1182,7 @@ export type ProductStudyItemUncheckedCreateWithoutReviewLogsInput = {
   userId: number
   questionNumber: number
   autoSendEnabled?: boolean
+  isFavorite?: boolean
   deletedAt?: Date | string | null
   productName?: string | null
   brandName?: string | null
@@ -1137,6 +1203,7 @@ export type ProductStudyItemUncheckedCreateWithoutReviewLogsInput = {
   updatedAt?: Date | string
   images?: Prisma.ProductStudyImageUncheckedCreateNestedManyWithoutItemInput
   activeConversations?: Prisma.ActiveConversationStateUncheckedCreateNestedManyWithoutItemInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUncheckedCreateNestedManyWithoutItemInput
 }
 
 export type ProductStudyItemCreateOrConnectWithoutReviewLogsInput = {
@@ -1158,6 +1225,7 @@ export type ProductStudyItemUpdateToOneWithWhereWithoutReviewLogsInput = {
 export type ProductStudyItemUpdateWithoutReviewLogsInput = {
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1179,6 +1247,7 @@ export type ProductStudyItemUpdateWithoutReviewLogsInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutStudyItemsNestedInput
   images?: Prisma.ProductStudyImageUpdateManyWithoutItemNestedInput
   activeConversations?: Prisma.ActiveConversationStateUpdateManyWithoutItemNestedInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUpdateManyWithoutItemNestedInput
 }
 
 export type ProductStudyItemUncheckedUpdateWithoutReviewLogsInput = {
@@ -1186,6 +1255,7 @@ export type ProductStudyItemUncheckedUpdateWithoutReviewLogsInput = {
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1206,11 +1276,13 @@ export type ProductStudyItemUncheckedUpdateWithoutReviewLogsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   images?: Prisma.ProductStudyImageUncheckedUpdateManyWithoutItemNestedInput
   activeConversations?: Prisma.ActiveConversationStateUncheckedUpdateManyWithoutItemNestedInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUncheckedUpdateManyWithoutItemNestedInput
 }
 
 export type ProductStudyItemCreateWithoutActiveConversationsInput = {
   questionNumber: number
   autoSendEnabled?: boolean
+  isFavorite?: boolean
   deletedAt?: Date | string | null
   productName?: string | null
   brandName?: string | null
@@ -1232,6 +1304,7 @@ export type ProductStudyItemCreateWithoutActiveConversationsInput = {
   user: Prisma.UserCreateNestedOneWithoutStudyItemsInput
   images?: Prisma.ProductStudyImageCreateNestedManyWithoutItemInput
   reviewLogs?: Prisma.ReviewLogCreateNestedManyWithoutItemInput
+  lineApiCallLogs?: Prisma.LineApiCallLogCreateNestedManyWithoutItemInput
 }
 
 export type ProductStudyItemUncheckedCreateWithoutActiveConversationsInput = {
@@ -1239,6 +1312,7 @@ export type ProductStudyItemUncheckedCreateWithoutActiveConversationsInput = {
   userId: number
   questionNumber: number
   autoSendEnabled?: boolean
+  isFavorite?: boolean
   deletedAt?: Date | string | null
   productName?: string | null
   brandName?: string | null
@@ -1259,6 +1333,7 @@ export type ProductStudyItemUncheckedCreateWithoutActiveConversationsInput = {
   updatedAt?: Date | string
   images?: Prisma.ProductStudyImageUncheckedCreateNestedManyWithoutItemInput
   reviewLogs?: Prisma.ReviewLogUncheckedCreateNestedManyWithoutItemInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUncheckedCreateNestedManyWithoutItemInput
 }
 
 export type ProductStudyItemCreateOrConnectWithoutActiveConversationsInput = {
@@ -1280,6 +1355,7 @@ export type ProductStudyItemUpdateToOneWithWhereWithoutActiveConversationsInput 
 export type ProductStudyItemUpdateWithoutActiveConversationsInput = {
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1301,6 +1377,7 @@ export type ProductStudyItemUpdateWithoutActiveConversationsInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutStudyItemsNestedInput
   images?: Prisma.ProductStudyImageUpdateManyWithoutItemNestedInput
   reviewLogs?: Prisma.ReviewLogUpdateManyWithoutItemNestedInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUpdateManyWithoutItemNestedInput
 }
 
 export type ProductStudyItemUncheckedUpdateWithoutActiveConversationsInput = {
@@ -1308,6 +1385,7 @@ export type ProductStudyItemUncheckedUpdateWithoutActiveConversationsInput = {
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1328,12 +1406,144 @@ export type ProductStudyItemUncheckedUpdateWithoutActiveConversationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   images?: Prisma.ProductStudyImageUncheckedUpdateManyWithoutItemNestedInput
   reviewLogs?: Prisma.ReviewLogUncheckedUpdateManyWithoutItemNestedInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUncheckedUpdateManyWithoutItemNestedInput
+}
+
+export type ProductStudyItemCreateWithoutLineApiCallLogsInput = {
+  questionNumber: number
+  autoSendEnabled?: boolean
+  isFavorite?: boolean
+  deletedAt?: Date | string | null
+  productName?: string | null
+  brandName?: string | null
+  category?: string | null
+  note?: string
+  memo?: string | null
+  firstScheduledAt: Date | string
+  nextScheduledAt: Date | string
+  status?: $Enums.ItemStatus
+  summary: string
+  question: string
+  answer: string
+  explanation: string
+  difficulty: string
+  tags: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  keyPoints: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutStudyItemsInput
+  images?: Prisma.ProductStudyImageCreateNestedManyWithoutItemInput
+  reviewLogs?: Prisma.ReviewLogCreateNestedManyWithoutItemInput
+  activeConversations?: Prisma.ActiveConversationStateCreateNestedManyWithoutItemInput
+}
+
+export type ProductStudyItemUncheckedCreateWithoutLineApiCallLogsInput = {
+  id?: number
+  userId: number
+  questionNumber: number
+  autoSendEnabled?: boolean
+  isFavorite?: boolean
+  deletedAt?: Date | string | null
+  productName?: string | null
+  brandName?: string | null
+  category?: string | null
+  note?: string
+  memo?: string | null
+  firstScheduledAt: Date | string
+  nextScheduledAt: Date | string
+  status?: $Enums.ItemStatus
+  summary: string
+  question: string
+  answer: string
+  explanation: string
+  difficulty: string
+  tags: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  keyPoints: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  images?: Prisma.ProductStudyImageUncheckedCreateNestedManyWithoutItemInput
+  reviewLogs?: Prisma.ReviewLogUncheckedCreateNestedManyWithoutItemInput
+  activeConversations?: Prisma.ActiveConversationStateUncheckedCreateNestedManyWithoutItemInput
+}
+
+export type ProductStudyItemCreateOrConnectWithoutLineApiCallLogsInput = {
+  where: Prisma.ProductStudyItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProductStudyItemCreateWithoutLineApiCallLogsInput, Prisma.ProductStudyItemUncheckedCreateWithoutLineApiCallLogsInput>
+}
+
+export type ProductStudyItemUpsertWithoutLineApiCallLogsInput = {
+  update: Prisma.XOR<Prisma.ProductStudyItemUpdateWithoutLineApiCallLogsInput, Prisma.ProductStudyItemUncheckedUpdateWithoutLineApiCallLogsInput>
+  create: Prisma.XOR<Prisma.ProductStudyItemCreateWithoutLineApiCallLogsInput, Prisma.ProductStudyItemUncheckedCreateWithoutLineApiCallLogsInput>
+  where?: Prisma.ProductStudyItemWhereInput
+}
+
+export type ProductStudyItemUpdateToOneWithWhereWithoutLineApiCallLogsInput = {
+  where?: Prisma.ProductStudyItemWhereInput
+  data: Prisma.XOR<Prisma.ProductStudyItemUpdateWithoutLineApiCallLogsInput, Prisma.ProductStudyItemUncheckedUpdateWithoutLineApiCallLogsInput>
+}
+
+export type ProductStudyItemUpdateWithoutLineApiCallLogsInput = {
+  questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  note?: Prisma.StringFieldUpdateOperationsInput | string
+  memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstScheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nextScheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumItemStatusFieldUpdateOperationsInput | $Enums.ItemStatus
+  summary?: Prisma.StringFieldUpdateOperationsInput | string
+  question?: Prisma.StringFieldUpdateOperationsInput | string
+  answer?: Prisma.StringFieldUpdateOperationsInput | string
+  explanation?: Prisma.StringFieldUpdateOperationsInput | string
+  difficulty?: Prisma.StringFieldUpdateOperationsInput | string
+  tags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  keyPoints?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutStudyItemsNestedInput
+  images?: Prisma.ProductStudyImageUpdateManyWithoutItemNestedInput
+  reviewLogs?: Prisma.ReviewLogUpdateManyWithoutItemNestedInput
+  activeConversations?: Prisma.ActiveConversationStateUpdateManyWithoutItemNestedInput
+}
+
+export type ProductStudyItemUncheckedUpdateWithoutLineApiCallLogsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  note?: Prisma.StringFieldUpdateOperationsInput | string
+  memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstScheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nextScheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumItemStatusFieldUpdateOperationsInput | $Enums.ItemStatus
+  summary?: Prisma.StringFieldUpdateOperationsInput | string
+  question?: Prisma.StringFieldUpdateOperationsInput | string
+  answer?: Prisma.StringFieldUpdateOperationsInput | string
+  explanation?: Prisma.StringFieldUpdateOperationsInput | string
+  difficulty?: Prisma.StringFieldUpdateOperationsInput | string
+  tags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  keyPoints?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  images?: Prisma.ProductStudyImageUncheckedUpdateManyWithoutItemNestedInput
+  reviewLogs?: Prisma.ReviewLogUncheckedUpdateManyWithoutItemNestedInput
+  activeConversations?: Prisma.ActiveConversationStateUncheckedUpdateManyWithoutItemNestedInput
 }
 
 export type ProductStudyItemCreateManyUserInput = {
   id?: number
   questionNumber: number
   autoSendEnabled?: boolean
+  isFavorite?: boolean
   deletedAt?: Date | string | null
   productName?: string | null
   brandName?: string | null
@@ -1357,6 +1567,7 @@ export type ProductStudyItemCreateManyUserInput = {
 export type ProductStudyItemUpdateWithoutUserInput = {
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1378,12 +1589,14 @@ export type ProductStudyItemUpdateWithoutUserInput = {
   images?: Prisma.ProductStudyImageUpdateManyWithoutItemNestedInput
   reviewLogs?: Prisma.ReviewLogUpdateManyWithoutItemNestedInput
   activeConversations?: Prisma.ActiveConversationStateUpdateManyWithoutItemNestedInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUpdateManyWithoutItemNestedInput
 }
 
 export type ProductStudyItemUncheckedUpdateWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1405,12 +1618,14 @@ export type ProductStudyItemUncheckedUpdateWithoutUserInput = {
   images?: Prisma.ProductStudyImageUncheckedUpdateManyWithoutItemNestedInput
   reviewLogs?: Prisma.ReviewLogUncheckedUpdateManyWithoutItemNestedInput
   activeConversations?: Prisma.ActiveConversationStateUncheckedUpdateManyWithoutItemNestedInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUncheckedUpdateManyWithoutItemNestedInput
 }
 
 export type ProductStudyItemUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
   autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1440,12 +1655,14 @@ export type ProductStudyItemCountOutputType = {
   images: number
   reviewLogs: number
   activeConversations: number
+  lineApiCallLogs: number
 }
 
 export type ProductStudyItemCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   images?: boolean | ProductStudyItemCountOutputTypeCountImagesArgs
   reviewLogs?: boolean | ProductStudyItemCountOutputTypeCountReviewLogsArgs
   activeConversations?: boolean | ProductStudyItemCountOutputTypeCountActiveConversationsArgs
+  lineApiCallLogs?: boolean | ProductStudyItemCountOutputTypeCountLineApiCallLogsArgs
 }
 
 /**
@@ -1479,12 +1696,20 @@ export type ProductStudyItemCountOutputTypeCountActiveConversationsArgs<ExtArgs 
   where?: Prisma.ActiveConversationStateWhereInput
 }
 
+/**
+ * ProductStudyItemCountOutputType without action
+ */
+export type ProductStudyItemCountOutputTypeCountLineApiCallLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LineApiCallLogWhereInput
+}
+
 
 export type ProductStudyItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
   questionNumber?: boolean
   autoSendEnabled?: boolean
+  isFavorite?: boolean
   deletedAt?: boolean
   productName?: boolean
   brandName?: boolean
@@ -1507,6 +1732,7 @@ export type ProductStudyItemSelect<ExtArgs extends runtime.Types.Extensions.Inte
   images?: boolean | Prisma.ProductStudyItem$imagesArgs<ExtArgs>
   reviewLogs?: boolean | Prisma.ProductStudyItem$reviewLogsArgs<ExtArgs>
   activeConversations?: boolean | Prisma.ProductStudyItem$activeConversationsArgs<ExtArgs>
+  lineApiCallLogs?: boolean | Prisma.ProductStudyItem$lineApiCallLogsArgs<ExtArgs>
   _count?: boolean | Prisma.ProductStudyItemCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["productStudyItem"]>
 
@@ -1515,6 +1741,7 @@ export type ProductStudyItemSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   userId?: boolean
   questionNumber?: boolean
   autoSendEnabled?: boolean
+  isFavorite?: boolean
   deletedAt?: boolean
   productName?: boolean
   brandName?: boolean
@@ -1541,6 +1768,7 @@ export type ProductStudyItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   userId?: boolean
   questionNumber?: boolean
   autoSendEnabled?: boolean
+  isFavorite?: boolean
   deletedAt?: boolean
   productName?: boolean
   brandName?: boolean
@@ -1567,6 +1795,7 @@ export type ProductStudyItemSelectScalar = {
   userId?: boolean
   questionNumber?: boolean
   autoSendEnabled?: boolean
+  isFavorite?: boolean
   deletedAt?: boolean
   productName?: boolean
   brandName?: boolean
@@ -1587,12 +1816,13 @@ export type ProductStudyItemSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ProductStudyItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "questionNumber" | "autoSendEnabled" | "deletedAt" | "productName" | "brandName" | "category" | "note" | "memo" | "firstScheduledAt" | "nextScheduledAt" | "status" | "summary" | "question" | "answer" | "explanation" | "difficulty" | "tags" | "keyPoints" | "createdAt" | "updatedAt", ExtArgs["result"]["productStudyItem"]>
+export type ProductStudyItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "questionNumber" | "autoSendEnabled" | "isFavorite" | "deletedAt" | "productName" | "brandName" | "category" | "note" | "memo" | "firstScheduledAt" | "nextScheduledAt" | "status" | "summary" | "question" | "answer" | "explanation" | "difficulty" | "tags" | "keyPoints" | "createdAt" | "updatedAt", ExtArgs["result"]["productStudyItem"]>
 export type ProductStudyItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   images?: boolean | Prisma.ProductStudyItem$imagesArgs<ExtArgs>
   reviewLogs?: boolean | Prisma.ProductStudyItem$reviewLogsArgs<ExtArgs>
   activeConversations?: boolean | Prisma.ProductStudyItem$activeConversationsArgs<ExtArgs>
+  lineApiCallLogs?: boolean | Prisma.ProductStudyItem$lineApiCallLogsArgs<ExtArgs>
   _count?: boolean | Prisma.ProductStudyItemCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProductStudyItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1609,12 +1839,14 @@ export type $ProductStudyItemPayload<ExtArgs extends runtime.Types.Extensions.In
     images: Prisma.$ProductStudyImagePayload<ExtArgs>[]
     reviewLogs: Prisma.$ReviewLogPayload<ExtArgs>[]
     activeConversations: Prisma.$ActiveConversationStatePayload<ExtArgs>[]
+    lineApiCallLogs: Prisma.$LineApiCallLogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     userId: number
     questionNumber: number
     autoSendEnabled: boolean
+    isFavorite: boolean
     deletedAt: Date | null
     productName: string | null
     brandName: string | null
@@ -2031,6 +2263,7 @@ export interface Prisma__ProductStudyItemClient<T, Null = never, ExtArgs extends
   images<T extends Prisma.ProductStudyItem$imagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProductStudyItem$imagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductStudyImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reviewLogs<T extends Prisma.ProductStudyItem$reviewLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProductStudyItem$reviewLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   activeConversations<T extends Prisma.ProductStudyItem$activeConversationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProductStudyItem$activeConversationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActiveConversationStatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  lineApiCallLogs<T extends Prisma.ProductStudyItem$lineApiCallLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProductStudyItem$lineApiCallLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LineApiCallLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2064,6 +2297,7 @@ export interface ProductStudyItemFieldRefs {
   readonly userId: Prisma.FieldRef<"ProductStudyItem", 'Int'>
   readonly questionNumber: Prisma.FieldRef<"ProductStudyItem", 'Int'>
   readonly autoSendEnabled: Prisma.FieldRef<"ProductStudyItem", 'Boolean'>
+  readonly isFavorite: Prisma.FieldRef<"ProductStudyItem", 'Boolean'>
   readonly deletedAt: Prisma.FieldRef<"ProductStudyItem", 'DateTime'>
   readonly productName: Prisma.FieldRef<"ProductStudyItem", 'String'>
   readonly brandName: Prisma.FieldRef<"ProductStudyItem", 'String'>
@@ -2550,6 +2784,30 @@ export type ProductStudyItem$activeConversationsArgs<ExtArgs extends runtime.Typ
   take?: number
   skip?: number
   distinct?: Prisma.ActiveConversationStateScalarFieldEnum | Prisma.ActiveConversationStateScalarFieldEnum[]
+}
+
+/**
+ * ProductStudyItem.lineApiCallLogs
+ */
+export type ProductStudyItem$lineApiCallLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LineApiCallLog
+   */
+  select?: Prisma.LineApiCallLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LineApiCallLog
+   */
+  omit?: Prisma.LineApiCallLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LineApiCallLogInclude<ExtArgs> | null
+  where?: Prisma.LineApiCallLogWhereInput
+  orderBy?: Prisma.LineApiCallLogOrderByWithRelationInput | Prisma.LineApiCallLogOrderByWithRelationInput[]
+  cursor?: Prisma.LineApiCallLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LineApiCallLogScalarFieldEnum | Prisma.LineApiCallLogScalarFieldEnum[]
 }
 
 /**

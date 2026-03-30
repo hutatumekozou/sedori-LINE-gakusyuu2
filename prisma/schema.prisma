@@ -33,15 +33,33 @@ enum ProductStudyImageKind {
   ANSWER
 }
 
+enum GeminiApiCallStatus {
+  SUCCESS
+  FAILED
+}
+
+enum LineApiCallKind {
+  PUSH
+  REPLY
+  PROFILE
+}
+
+enum LineApiCallStatus {
+  SUCCESS
+  FAILED
+}
+
 model User {
-  id                      Int                      @id @default(autoincrement())
-  lineUserId              String?                  @unique
-  displayName             String?
-  createdAt               DateTime                 @default(now())
-  updatedAt               DateTime                 @updatedAt
-  studyItems              ProductStudyItem[]
-  reviewLogs              ReviewLog[]
-  activeConversationState ActiveConversationState?
+  id                       Int                       @id @default(autoincrement())
+  lineUserId               String?                   @unique
+  displayName              String?
+  createdAt                DateTime                  @default(now())
+  updatedAt                DateTime                  @updatedAt
+  studyItems               ProductStudyItem[]
+  reviewLogs               ReviewLog[]
+  activeConversationStates ActiveConversationState[]
+  geminiApiCallLogs        GeminiApiCallLog[]
+  lineApiCallLogs          LineApiCallLog[]
 }
 
 model ProductStudyItem {
@@ -49,6 +67,7 @@ model ProductStudyItem {
   userId              Int
   questionNumber      Int                       @unique
   autoSendEnabled     Boolean                   @default(true)
+  isFavorite          Boolean                   @default(false)
   deletedAt           DateTime?
   productName         String?
   brandName           String?
@@ -71,6 +90,7 @@ model ProductStudyItem {
   images              ProductStudyImage[]
   reviewLogs          ReviewLog[]
   activeConversations ActiveConversationState[]
+  lineApiCallLogs     LineApiCallLog[]
 
   @@index([nextScheduledAt])
   @@index([status])
@@ -105,13 +125,55 @@ model ReviewLog {
 }
 
 model ActiveConversationState {
-  id        Int                   @id @default(autoincrement())
-  userId    Int                   @unique
-  itemId    Int
-  state     ConversationStateType
-  updatedAt DateTime              @updatedAt
-  user      User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  item      ProductStudyItem      @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  id                    Int                   @id @default(autoincrement())
+  userId                Int
+  itemId                Int
+  state                 ConversationStateType
+  questionLineMessageId String?               @unique
+  answerLineMessageId   String?               @unique
+  updatedAt             DateTime              @updatedAt
+  user                  User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  item                  ProductStudyItem      @relation(fields: [itemId], references: [id], onDelete: Cascade)
 
   @@index([itemId])
+  @@index([userId])
+  @@unique([userId, itemId])
+}
+
+model GeminiApiCallLog {
+  id             Int                 @id @default(autoincrement())
+  userId         Int?
+  status         GeminiApiCallStatus
+  model          String
+  promptLength   Int
+  imageCount     Int
+  responseLength Int?
+  errorMessage   String?
+  createdAt      DateTime            @default(now())
+  user           User?               @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt])
+  @@index([status, createdAt])
+  @@index([userId, createdAt])
+}
+
+model LineApiCallLog {
+  id                   Int               @id @default(autoincrement())
+  userId               Int?
+  itemId               Int?
+  kind                 LineApiCallKind
+  status               LineApiCallStatus
+  targetLineUserId     String?
+  messageCount         Int               @default(0)
+  estimatedBillableCount Int             @default(0)
+  errorMessage         String?
+  createdAt            DateTime          @default(now())
+  user                 User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+  item                 ProductStudyItem? @relation(fields: [itemId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt])
+  @@index([kind, createdAt])
+  @@index([status, createdAt])
+  @@index([userId, createdAt])
+  @@index([itemId, createdAt])
 }

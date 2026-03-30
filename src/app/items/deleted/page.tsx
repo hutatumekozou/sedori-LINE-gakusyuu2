@@ -32,7 +32,7 @@ export default async function DeletedItemsPage({ searchParams }: DeletedItemsPag
               <tr>
                 <th className="px-4 py-4 font-semibold">問題番号</th>
                 <th className="px-4 py-4 font-semibold">商品名</th>
-                <th className="px-4 py-4 font-semibold">ブランド名</th>
+                <th className="px-4 py-4 font-semibold">カテゴリ</th>
                 <th className="px-4 py-4 font-semibold">作成日</th>
                 <th className="px-4 py-4 font-semibold">削除日時</th>
                 <th className="px-4 py-4 font-semibold">操作</th>
@@ -50,7 +50,7 @@ export default async function DeletedItemsPage({ searchParams }: DeletedItemsPag
                   <tr key={item.id} className="border-t border-slate-100 align-top">
                     <td className="px-4 py-4 font-semibold text-slate-900">{item.questionNumber}</td>
                     <td className="px-4 py-4 text-slate-700">{item.productName || "未設定"}</td>
-                    <td className="px-4 py-4 text-slate-700">{item.brandName || "未設定"}</td>
+                    <td className="px-4 py-4 text-slate-700">{item.category || "その他"}</td>
                     <td className="px-4 py-4 text-slate-700">{formatDate(item.createdAt)}</td>
                     <td className="px-4 py-4 text-slate-700">{formatDateTime(item.deletedAt)}</td>
                     <td className="px-4 py-4">

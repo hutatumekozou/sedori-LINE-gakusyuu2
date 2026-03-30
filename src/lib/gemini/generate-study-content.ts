@@ -1,8 +1,11 @@
+import { GeminiApiCallStatus } from "@/generated/prisma/client";
 import { GoogleGenAI } from "@google/genai";
 import { z } from "zod";
 
 import { getGeminiConfig } from "@/lib/env";
+import { prisma } from "@/lib/prisma";
 import { MAX_IMAGE_COUNT } from "@/lib/study/constants";
+import { getOrCreateDefaultUser } from "@/lib/study/service";
 
 const aiOutputSchema = z.object({
   summary: z.string().min(20).max(300),
@@ -116,6 +119,7 @@ export async function generateStudyContent(
 ): Promise<GeneratedStudyContent> {
   const validatedInput = validateGenerateStudyContentInput(input);
   const config = getGeminiConfig();
+  const prompt = buildPrompt(validatedInput);
   const client = new GoogleGenAI({
     apiKey: config.apiKey,
   });
@@ -128,7 +132,7 @@ export async function generateStudyContent(
           role: "user",
           parts: [
             {
-              text: buildPrompt(validatedInput),
+              text: prompt,
             },
             ...validatedInput.imageDataUrls.map((imageUrl) => ({
               inlineData: dataUrlToInlineData(imageUrl),
@@ -155,6 +159,18 @@ export async function generateStudyContent(
 
     const parsedJson = JSON.parse(response.text);
     const output = aiOutputSchema.parse(parsedJson);
+
+    const user = await getOrCreateDefaultUser();
+    await prisma.geminiApiCallLog.create({
+      data: {
+        userId: user.id,
+        status: GeminiApiCallStatus.SUCCESS,
+        model: config.model,
+        promptLength: prompt.length,
+        imageCount: validatedInput.imageDataUrls.length,
+        responseLength: response.text.length,
+      },
+    });
 
     return {
       summary: output.summary.trim(),
@@ -184,8 +200,31 @@ export async function generateStudyContent(
     }
 
     if (error instanceof SyntaxError) {
+      const user = await getOrCreateDefaultUser();
+      await prisma.geminiApiCallLog.create({
+        data: {
+          userId: user.id,
+          status: GeminiApiCallStatus.FAILED,
+          model: config.model,
+          promptLength: prompt.length,
+          imageCount: validatedInput.imageDataUrls.length,
+          errorMessage: error.message.slice(0, 500),
+        },
+      });
       throw new Error("AIから問題生成結果をJSONとして正しく受け取れませんでした。時間をおいて再試行してください。");
     }
+
+    const user = await getOrCreateDefaultUser();
+    await prisma.geminiApiCallLog.create({
+      data: {
+        userId: user.id,
+        status: GeminiApiCallStatus.FAILED,
+        model: config.model,
+        promptLength: prompt.length,
+        imageCount: validatedInput.imageDataUrls.length,
+        errorMessage: error instanceof Error ? error.message.slice(0, 500) : "Unknown error",
+      },
+    });
 
     throw new Error(
       "Geminiによる問題生成に失敗しました。APIキー、利用状況、入力画像を確認して再試行してください。",
