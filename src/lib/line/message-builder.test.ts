@@ -7,6 +7,7 @@ describe("buildQuestionPushMessages", () => {
     const messages = buildQuestionPushMessages(
       {
         questionNumber: 3,
+        productName: "BIRDWELL ボードショーツ",
         question: "テスト問題です。",
         images: [],
       },
@@ -17,12 +18,16 @@ describe("buildQuestionPushMessages", () => {
     expect(messages[0]).toMatchObject({
       type: "text",
     });
+    expect(messages[0]).toMatchObject({
+      text: expect.stringContaining("問題番号:3 BIRDWELL ボードショーツ"),
+    });
   });
 
   it("builds ordered image messages before the text message", () => {
     const messages = buildQuestionPushMessages(
       {
         questionNumber: 3,
+        productName: "BIRDWELL ボードショーツ",
         question: "テスト問題です。",
         images: [
           { imagePath: "2026/03/b.jpg", sortOrder: 1 },
@@ -45,6 +50,7 @@ describe("buildQuestionPushMessages", () => {
     });
     expect(messages[2]).toMatchObject({
       type: "text",
+      text: expect.stringContaining("問題番号:3 BIRDWELL ボードショーツ"),
     });
   });
 });

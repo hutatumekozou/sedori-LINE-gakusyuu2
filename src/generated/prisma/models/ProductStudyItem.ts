@@ -972,6 +972,7 @@ export type ProductStudyItemCreateOrConnectWithoutUserInput = {
 
 export type ProductStudyItemCreateManyUserInputEnvelope = {
   data: Prisma.ProductStudyItemCreateManyUserInput | Prisma.ProductStudyItemCreateManyUserInput[]
+  skipDuplicates?: boolean
 }
 
 export type ProductStudyItemUpsertWithWhereUniqueWithoutUserInput = {
@@ -2550,6 +2551,7 @@ export type ProductStudyItemCreateManyArgs<ExtArgs extends runtime.Types.Extensi
    * The data used to create many ProductStudyItems.
    */
   data: Prisma.ProductStudyItemCreateManyInput | Prisma.ProductStudyItemCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -2568,6 +2570,7 @@ export type ProductStudyItemCreateManyAndReturnArgs<ExtArgs extends runtime.Type
    * The data used to create many ProductStudyItems.
    */
   data: Prisma.ProductStudyItemCreateManyInput | Prisma.ProductStudyItemCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

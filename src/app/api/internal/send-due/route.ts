@@ -13,6 +13,14 @@ function extractSecret(request: Request) {
 }
 
 export async function POST(request: Request) {
+  return handleSendDueRequest(request);
+}
+
+export async function GET(request: Request) {
+  return handleSendDueRequest(request);
+}
+
+async function handleSendDueRequest(request: Request) {
   const secret = extractSecret(request);
   const url = new URL(request.url);
   const force = url.searchParams.get("force") === "1";

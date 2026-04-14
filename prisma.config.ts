@@ -1,23 +1,8 @@
 import "dotenv/config";
 
-import path from "node:path";
+import { defineConfig } from "prisma/config";
 
-import { defineConfig, env } from "prisma/config";
-
-function getResolvedDatabaseUrl() {
-  const rawUrl = env("DATABASE_URL");
-  const localSharedDataRoot = process.env.LOCAL_SHARED_DATA_ROOT?.trim();
-
-  if (
-    localSharedDataRoot &&
-    (rawUrl.startsWith("file:./") || rawUrl.startsWith("file:../"))
-  ) {
-    const relativePath = rawUrl.slice("file:".length);
-    return `file:${path.resolve(localSharedDataRoot, relativePath)}`;
-  }
-
-  return rawUrl;
-}
+const databaseUrl = process.env.DIRECT_URL?.trim() || process.env.DATABASE_URL?.trim();
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
@@ -26,6 +11,6 @@ export default defineConfig({
     seed: "tsx prisma/seed.ts",
   },
   datasource: {
-    url: getResolvedDatabaseUrl(),
+    url: databaseUrl,
   },
 });

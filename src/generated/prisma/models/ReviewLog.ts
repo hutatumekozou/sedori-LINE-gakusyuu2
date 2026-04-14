@@ -528,6 +528,7 @@ export type ReviewLogCreateOrConnectWithoutUserInput = {
 
 export type ReviewLogCreateManyUserInputEnvelope = {
   data: Prisma.ReviewLogCreateManyUserInput | Prisma.ReviewLogCreateManyUserInput[]
+  skipDuplicates?: boolean
 }
 
 export type ReviewLogUpsertWithWhereUniqueWithoutUserInput = {
@@ -583,6 +584,7 @@ export type ReviewLogCreateOrConnectWithoutItemInput = {
 
 export type ReviewLogCreateManyItemInputEnvelope = {
   data: Prisma.ReviewLogCreateManyItemInput | Prisma.ReviewLogCreateManyItemInput[]
+  skipDuplicates?: boolean
 }
 
 export type ReviewLogUpsertWithWhereUniqueWithoutItemInput = {
@@ -1413,6 +1415,7 @@ export type ReviewLogCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * The data used to create many ReviewLogs.
    */
   data: Prisma.ReviewLogCreateManyInput | Prisma.ReviewLogCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1431,6 +1434,7 @@ export type ReviewLogCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exten
    * The data used to create many ReviewLogs.
    */
   data: Prisma.ReviewLogCreateManyInput | Prisma.ReviewLogCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

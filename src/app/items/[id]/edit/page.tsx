@@ -24,7 +24,7 @@ export default async function EditItemPage({ params }: EditItemPageProps) {
     <div className="space-y-6">
       <PageHeader
         title={`問題編集 #${item.questionNumber}`}
-        description="商品情報や初回送信予定日を更新できます。画像を選択すると同じ枠の既存画像を差し替えます。"
+        description="商品情報や初回送信予定日を更新できます。画像は追加でき、既存画像は選択したものだけ削除できます。"
       />
 
       <section className="rounded-[28px] border border-slate-200/70 bg-white/90 p-6 shadow-[0_20px_60px_-40px_rgba(15,23,42,0.35)]">
@@ -33,6 +33,7 @@ export default async function EditItemPage({ params }: EditItemPageProps) {
           defaults={{
             autoSendEnabled: item.autoSendEnabled,
             productName: item.productName,
+            brandName: item.brandName,
             category: item.category || DEFAULT_STUDY_CATEGORY,
             note: item.note,
             memo: item.memo,
@@ -41,7 +42,7 @@ export default async function EditItemPage({ params }: EditItemPageProps) {
           submitLabel="更新する"
           pendingLabel="更新中..."
           maxUploadSizeMb={getAppSettings().maxUploadSizeMb}
-          imageHelpText="画像を選択しない場合は現在の画像を保持します。"
+          imageHelpText="画像を選択すると現在の画像に追加します。既存画像を削除したい場合は下で対象画像を選択してください。"
           currentQuestionImages={item.questionImageUrls}
           currentAnswerImages={item.answerImageUrls}
         />

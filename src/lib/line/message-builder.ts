@@ -21,6 +21,7 @@ type DispatchImage = {
 
 type QuestionDispatchItem = {
   questionNumber: number;
+  productName?: string | null;
   question: string;
   images: DispatchImage[];
 };

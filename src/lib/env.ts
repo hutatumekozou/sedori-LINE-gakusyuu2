@@ -1,4 +1,3 @@
-import os from "node:os";
 import path from "node:path";
 
 import { z } from "zod";
@@ -16,9 +15,8 @@ export function getAppSettings() {
     .object({
       APP_TIMEZONE: z.string().trim().default("Asia/Tokyo"),
       APP_BASE_URL: z.string().trim().optional(),
-      LOCAL_SHARED_DATA_ROOT: z.string().trim().optional(),
       UPLOAD_STORAGE_DIR: z.string().trim().optional(),
-      MAX_UPLOAD_SIZE_MB: z.coerce.number().int().positive().default(5),
+      MAX_UPLOAD_SIZE_MB: z.coerce.number().int().positive().default(4),
       GEMINI_MODEL: z.string().trim().default("gemini-2.5-flash"),
     })
     .parse(process.env);
@@ -26,7 +24,6 @@ export function getAppSettings() {
   return {
     appTimeZone: parsed.APP_TIMEZONE,
     appBaseUrl: parsed.APP_BASE_URL?.trim() || null,
-    localSharedDataRoot: parsed.LOCAL_SHARED_DATA_ROOT?.trim() || null,
     uploadStorageDir: parsed.UPLOAD_STORAGE_DIR?.trim() || null,
     maxUploadSizeMb: parsed.MAX_UPLOAD_SIZE_MB,
     maxUploadSizeBytes: parsed.MAX_UPLOAD_SIZE_MB * 1024 * 1024,
@@ -35,32 +32,20 @@ export function getAppSettings() {
 }
 
 export function getResolvedDatabaseUrl() {
-  const rawUrl = process.env.DATABASE_URL?.trim() || "file:./prisma/dev.db";
-  const localSharedDataRoot =
-    getAppSettings().localSharedDataRoot || path.join(os.homedir(), "mercari-study-line-runtime");
+  const databaseUrl = process.env.DATABASE_URL?.trim();
 
-  if (
-    getAppSettings().localSharedDataRoot &&
-    (rawUrl.startsWith("file:./") || rawUrl.startsWith("file:../"))
-  ) {
-    const relativePath = rawUrl.slice("file:".length);
-    const resolvedPath = path.resolve(localSharedDataRoot, relativePath);
-    return `file:${resolvedPath}`;
+  if (!databaseUrl) {
+    throw new Error("DATABASE_URL が設定されていません。Postgres の接続文字列を設定してください。");
   }
 
-  return rawUrl;
+  return databaseUrl;
 }
 
 export function getResolvedUploadStorageDir() {
   const configuredPath = getAppSettings().uploadStorageDir;
-  const localSharedDataRoot = getAppSettings().localSharedDataRoot;
 
   if (configuredPath) {
     return path.resolve(configuredPath);
-  }
-
-  if (localSharedDataRoot) {
-    return path.join(localSharedDataRoot, "storage", "uploads");
   }
 
   return path.join(process.cwd(), "storage", "uploads");

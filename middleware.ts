@@ -1,47 +1,42 @@
 import { NextRequest, NextResponse } from "next/server";
 
-function unauthorizedResponse() {
-  return new NextResponse("認証が必要です。", {
-    status: 401,
-    headers: {
-      "WWW-Authenticate": 'Basic realm="Mercari Study Admin"',
-    },
-  });
-}
+import {
+  APP_SESSION_COOKIE_NAME,
+  getSafeRedirectPath,
+  isAuthenticatedSession,
+} from "@/lib/auth";
 
 export function middleware(request: NextRequest) {
-  const username = process.env.BASIC_AUTH_USER;
-  const password = process.env.BASIC_AUTH_PASSWORD;
+  const pathname = request.nextUrl.pathname;
+  const isAuthenticated = isAuthenticatedSession(
+    request.cookies.get(APP_SESSION_COOKIE_NAME)?.value,
+  );
+  const isLoginPage = pathname === "/login";
+  const isAuthRoute = pathname.startsWith("/api/auth/");
 
-  if (!username || !password) {
-    return NextResponse.next();
-  }
-
-  const authHeader = request.headers.get("authorization");
-
-  if (!authHeader?.startsWith("Basic ")) {
-    return unauthorizedResponse();
-  }
-
-  try {
-    const decoded = atob(authHeader.replace("Basic ", ""));
-    const separatorIndex = decoded.indexOf(":");
-
-    if (separatorIndex === -1) {
-      return unauthorizedResponse();
-    }
-
-    const incomingUser = decoded.slice(0, separatorIndex);
-    const incomingPassword = decoded.slice(separatorIndex + 1);
-
-    if (incomingUser !== username || incomingPassword !== password) {
-      return unauthorizedResponse();
+  if (isLoginPage) {
+    if (isAuthenticated) {
+      const next = getSafeRedirectPath(request.nextUrl.searchParams.get("next"));
+      return NextResponse.redirect(new URL(next, request.url));
     }
 
     return NextResponse.next();
-  } catch {
-    return unauthorizedResponse();
   }
+
+  if (isAuthRoute) {
+    return NextResponse.next();
+  }
+
+  if (isAuthenticated) {
+    return NextResponse.next();
+  }
+
+  const loginUrl = new URL("/login", request.url);
+  loginUrl.searchParams.set(
+    "next",
+    getSafeRedirectPath(`${pathname}${request.nextUrl.search}`),
+  );
+  return NextResponse.redirect(loginUrl);
 }
 
 export const config = {

@@ -616,6 +616,7 @@ export type LineApiCallLogCreateOrConnectWithoutUserInput = {
 
 export type LineApiCallLogCreateManyUserInputEnvelope = {
   data: Prisma.LineApiCallLogCreateManyUserInput | Prisma.LineApiCallLogCreateManyUserInput[]
+  skipDuplicates?: boolean
 }
 
 export type LineApiCallLogUpsertWithWhereUniqueWithoutUserInput = {
@@ -680,6 +681,7 @@ export type LineApiCallLogCreateOrConnectWithoutItemInput = {
 
 export type LineApiCallLogCreateManyItemInputEnvelope = {
   data: Prisma.LineApiCallLogCreateManyItemInput | Prisma.LineApiCallLogCreateManyItemInput[]
+  skipDuplicates?: boolean
 }
 
 export type LineApiCallLogUpsertWithWhereUniqueWithoutItemInput = {
@@ -1552,6 +1554,7 @@ export type LineApiCallLogCreateManyArgs<ExtArgs extends runtime.Types.Extension
    * The data used to create many LineApiCallLogs.
    */
   data: Prisma.LineApiCallLogCreateManyInput | Prisma.LineApiCallLogCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1570,6 +1573,7 @@ export type LineApiCallLogCreateManyAndReturnArgs<ExtArgs extends runtime.Types.
    * The data used to create many LineApiCallLogs.
    */
   data: Prisma.LineApiCallLogCreateManyInput | Prisma.LineApiCallLogCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

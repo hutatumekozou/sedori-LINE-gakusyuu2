@@ -16,7 +16,10 @@ import {
   getPublicAppUrl,
 } from "@/lib/env";
 import { scheduleNextReview } from "@/lib/date";
-import { assertReachableImageMessages } from "@/lib/line/message-delivery";
+import {
+  getMessagesWithImageFallback,
+  getReplyMessagesWithImageFallback,
+} from "@/lib/line/message-delivery";
 import {
   buildAnswerReplyMessages,
   buildQuestionPushMessages,
@@ -30,9 +33,13 @@ import {
   resolveLineTargetUserId,
 } from "@/lib/study/dispatch-rules";
 import {
+  buildCategoryDispatchStartMessage,
+  buildEmptyCategoryDispatchMessage,
+  buildAnswerImageFallbackMessage,
   buildAnswerFirstMessage,
   buildBatchDispatchSummaryMessage,
   buildCorrectReplyMessage,
+  buildGreatCorrectReplyMessage,
   buildIncorrectReplyMessage,
   buildLineHelpMessage,
   buildManualModeReplyMessage,
@@ -52,7 +59,7 @@ import {
   getItemStatusAfterReviewResult,
   normalizeLineCommand,
 } from "@/lib/study/review-state";
-import { getDueItemsForDispatch } from "@/lib/study/service";
+import { getCategoryItemsForLineRequest, getDueItemsForDispatch } from "@/lib/study/service";
 
 const lineWebhookSchema = z.object({
   events: z.array(
@@ -133,6 +140,10 @@ async function replyMessages(
 
     return response;
   } catch (error) {
+    const fallbackTargetLineUserId = metadata?.targetLineUserId || null;
+    const shouldFallbackToPush =
+      !!fallbackTargetLineUserId && isReplyTokenFailure(error);
+
     await logLineApiCall({
       userId: metadata?.userId,
       itemId: metadata?.itemId,
@@ -142,8 +153,40 @@ async function replyMessages(
       messageCount: messages.length,
       errorMessage: error instanceof Error ? error.message : "Unknown LINE reply error",
     });
+
+    if (shouldFallbackToPush) {
+      console.warn("LINE reply failed. Falling back to push message.", {
+        itemId: metadata?.itemId,
+        userId: metadata?.userId,
+        targetLineUserId: fallbackTargetLineUserId,
+        error,
+      });
+
+      return pushMessages(fallbackTargetLineUserId, messages, {
+        userId: metadata?.userId,
+        itemId: metadata?.itemId,
+      });
+    }
+
     throw error;
   }
+}
+
+function isReplyTokenFailure(error: unknown) {
+  if (!error || typeof error !== "object") {
+    return false;
+  }
+
+  const message = "message" in error && typeof error.message === "string" ? error.message : "";
+  const status = "status" in error && typeof error.status === "number" ? error.status : null;
+  const body = "body" in error && typeof error.body === "string" ? error.body : "";
+  const combined = `${message}\n${body}`.toLowerCase();
+
+  return (
+    combined.includes("invalid reply token") ||
+    combined.includes("reply token") ||
+    status === 400
+  );
 }
 
 async function replyText(
@@ -198,8 +241,24 @@ async function pushMessages(
   }
 }
 
+type QuestionSendItem = {
+  id: number;
+  userId: number;
+  questionNumber: number;
+  productName?: string | null;
+  question: string;
+  images: Array<{
+    imagePath: string;
+    sortOrder: number;
+  }>;
+};
+
+function getSentMessageIds(response: { sentMessages: Array<{ id: string }> }) {
+  return response.sentMessages.map((message) => message.id).filter(Boolean);
+}
+
 function getLastSentMessageId(response: { sentMessages: Array<{ id: string }> }) {
-  return response.sentMessages.at(-1)?.id ?? null;
+  return getSentMessageIds(response).at(-1) ?? null;
 }
 
 async function syncLineProfile(lineUserId: string) {
@@ -285,7 +344,9 @@ async function findActiveConversationStateForAnswer(userId: number, quotedMessag
         userId,
         OR: [
           { questionLineMessageId: quotedMessageId },
+          { questionLineMessageIds: { has: quotedMessageId } },
           { answerLineMessageId: quotedMessageId },
+          { answerLineMessageIds: { has: quotedMessageId } },
         ],
       },
       include: {
@@ -330,7 +391,9 @@ async function findActiveConversationStateForResult(userId: number, quotedMessag
         userId,
         OR: [
           { questionLineMessageId: quotedMessageId },
+          { questionLineMessageIds: { has: quotedMessageId } },
           { answerLineMessageId: quotedMessageId },
+          { answerLineMessageIds: { has: quotedMessageId } },
         ],
       },
     });
@@ -354,8 +417,25 @@ async function countActiveConversationStates(userId: number) {
   });
 }
 
+async function findSingleActiveConversationStateForAnswer(userId: number) {
+  if ((await countActiveConversationStates(userId)) !== 1) {
+    return null;
+  }
+
+  return findActiveConversationStateForAnswer(userId);
+}
+
+async function findSingleActiveConversationStateForResult(userId: number) {
+  if ((await countActiveConversationStates(userId)) !== 1) {
+    return null;
+  }
+
+  return findActiveConversationStateForResult(userId);
+}
+
 async function handleAnswerRequest(
   userId: number,
+  lineUserId: string,
   replyToken: string,
   rawText: string,
   quotedMessageId?: string,
@@ -363,15 +443,29 @@ async function handleAnswerRequest(
   if (!quotedMessageId && (await countActiveConversationStates(userId)) > 1) {
     await replyText(replyToken, buildReplyToQuestionMessage(), {
       userId,
+      targetLineUserId: lineUserId,
     });
     return;
   }
 
-  const activeState = await findActiveConversationStateForAnswer(userId, quotedMessageId);
+  let activeState = await findActiveConversationStateForAnswer(userId, quotedMessageId);
+
+  if (!activeState && quotedMessageId) {
+    activeState = await findSingleActiveConversationStateForAnswer(userId);
+  }
 
   if (!activeState) {
+    if (quotedMessageId && (await countActiveConversationStates(userId)) > 0) {
+      await replyText(replyToken, buildReplyToQuestionMessage(), {
+        userId,
+        targetLineUserId: lineUserId,
+      });
+      return;
+    }
+
     await replyText(replyToken, buildNoActiveQuestionMessage(), {
       userId,
+      targetLineUserId: lineUserId,
     });
     return;
   }
@@ -380,6 +474,7 @@ async function handleAnswerRequest(
     await replyText(replyToken, buildAnswerFirstMessage(), {
       userId,
       itemId: activeState.itemId,
+      targetLineUserId: lineUserId,
     });
     return;
   }
@@ -392,12 +487,33 @@ async function handleAnswerRequest(
     },
     getPublicAppUrl(),
   );
+  const preparedMessages = await getReplyMessagesWithImageFallback(messages);
+  const replyMessagesInput = preparedMessages.fellBackToTextOnly
+    ? [
+        {
+          type: "text" as const,
+          text: buildAnswerImageFallbackMessage(),
+        },
+        ...preparedMessages.messages,
+      ]
+    : preparedMessages.messages;
 
-  if (activeState.state === ConversationStateType.ANSWER_SHOWN) {
-    await assertReachableImageMessages(messages);
-    const response = await replyMessages(replyToken, messages, {
+  if (preparedMessages.fellBackToTextOnly) {
+    console.warn("LINE answer image fallback applied", {
       userId,
       itemId: activeState.itemId,
+      error:
+        preparedMessages.error instanceof Error
+          ? preparedMessages.error.message
+          : String(preparedMessages.error),
+    });
+  }
+
+  if (activeState.state === ConversationStateType.ANSWER_SHOWN) {
+    const response = await replyMessages(replyToken, replyMessagesInput, {
+      userId,
+      itemId: activeState.itemId,
+      targetLineUserId: lineUserId,
     });
 
     await prisma.activeConversationState.update({
@@ -406,15 +522,16 @@ async function handleAnswerRequest(
       },
       data: {
         answerLineMessageId: getLastSentMessageId(response),
+        answerLineMessageIds: getSentMessageIds(response),
       },
     });
     return;
   }
 
-  await assertReachableImageMessages(messages);
-  const response = await replyMessages(replyToken, messages, {
+  const response = await replyMessages(replyToken, replyMessagesInput, {
     userId,
     itemId: activeState.itemId,
+    targetLineUserId: lineUserId,
   });
 
   await prisma.$transaction(async (tx) => {
@@ -434,6 +551,7 @@ async function handleAnswerRequest(
       data: {
         state: getConversationStateAfterAnswerShown(activeState.state)!,
         answerLineMessageId: getLastSentMessageId(response),
+        answerLineMessageIds: getSentMessageIds(response),
       },
     });
 
@@ -450,23 +568,38 @@ async function handleAnswerRequest(
 
 async function handleResultRequest(
   userId: number,
+  lineUserId: string,
   replyToken: string,
-  result: "correct" | "incorrect",
+  result: "greatCorrect" | "correct" | "incorrect",
   rawText: string,
   quotedMessageId?: string,
 ) {
   if (!quotedMessageId && (await countActiveConversationStates(userId)) > 1) {
     await replyText(replyToken, buildReplyToAnswerMessage(), {
       userId,
+      targetLineUserId: lineUserId,
     });
     return;
   }
 
-  const activeState = await findActiveConversationStateForResult(userId, quotedMessageId);
+  let activeState = await findActiveConversationStateForResult(userId, quotedMessageId);
+
+  if (!activeState && quotedMessageId) {
+    activeState = await findSingleActiveConversationStateForResult(userId);
+  }
 
   if (!activeState) {
+    if (quotedMessageId && (await countActiveConversationStates(userId)) > 0) {
+      await replyText(replyToken, buildReplyToAnswerMessage(), {
+        userId,
+        targetLineUserId: lineUserId,
+      });
+      return;
+    }
+
     await replyText(replyToken, buildNoActiveQuestionMessage(), {
       userId,
+      targetLineUserId: lineUserId,
     });
     return;
   }
@@ -475,13 +608,18 @@ async function handleResultRequest(
     await replyText(replyToken, buildAnswerFirstMessage(), {
       userId,
       itemId: activeState.itemId,
+      targetLineUserId: lineUserId,
     });
     return;
   }
 
   const nextScheduledAt = calculateNextScheduledAtFromResult(result);
   const actionType =
-    result === "correct" ? ReviewActionType.CORRECT : ReviewActionType.INCORRECT;
+    result === "greatCorrect"
+      ? ReviewActionType.GREAT_CORRECT
+      : result === "correct"
+        ? ReviewActionType.CORRECT
+        : ReviewActionType.INCORRECT;
   const status = getItemStatusAfterReviewResult(result);
 
   await prisma.$transaction(async (tx) => {
@@ -513,18 +651,22 @@ async function handleResultRequest(
 
   await replyText(
     replyToken,
-    result === "correct"
-      ? buildCorrectReplyMessage()
-      : buildIncorrectReplyMessage(),
+    result === "greatCorrect"
+      ? buildGreatCorrectReplyMessage()
+      : result === "correct"
+        ? buildCorrectReplyMessage()
+        : buildIncorrectReplyMessage(),
     {
       userId,
       itemId: activeState.itemId,
+      targetLineUserId: lineUserId,
     },
   );
 }
 
 async function handleManualModeRequest(
   userId: number,
+  lineUserId: string,
   replyToken: string,
   itemText: string,
   quotedMessageId?: string,
@@ -532,15 +674,29 @@ async function handleManualModeRequest(
   if (!quotedMessageId && (await countActiveConversationStates(userId)) > 1) {
     await replyText(replyToken, buildReplyToManualTargetMessage(), {
       userId,
+      targetLineUserId: lineUserId,
     });
     return;
   }
 
-  const activeState = await findActiveConversationStateForResult(userId, quotedMessageId);
+  let activeState = await findActiveConversationStateForResult(userId, quotedMessageId);
+
+  if (!activeState && quotedMessageId) {
+    activeState = await findSingleActiveConversationStateForResult(userId);
+  }
 
   if (!activeState) {
+    if (quotedMessageId && (await countActiveConversationStates(userId)) > 0) {
+      await replyText(replyToken, buildReplyToManualTargetMessage(), {
+        userId,
+        targetLineUserId: lineUserId,
+      });
+      return;
+    }
+
     await replyText(replyToken, buildNoActiveQuestionMessage(), {
       userId,
+      targetLineUserId: lineUserId,
     });
     return;
   }
@@ -557,6 +713,7 @@ async function handleManualModeRequest(
   await replyText(replyToken, buildManualModeReplyMessage(), {
     userId,
     itemId: activeState.itemId,
+    targetLineUserId: lineUserId,
   });
 
   console.info("LINE manual mode enabled", {
@@ -564,6 +721,140 @@ async function handleManualModeRequest(
     itemId: activeState.itemId,
     rawText: itemText,
   });
+}
+
+async function sendQuestionItem(
+  item: QuestionSendItem,
+  lineUserId: string,
+  options?: {
+    rescheduleAfterSend?: boolean;
+  },
+) {
+  const messages =
+    item.images.length > 0
+      ? buildQuestionPushMessages(item, getPublicAppUrl())
+      : [
+          {
+            type: "text" as const,
+            text: buildQuestionMessage(item),
+          },
+        ];
+
+  const preparedMessages = await getMessagesWithImageFallback(messages);
+
+  if (preparedMessages.fellBackToTextOnly) {
+    console.warn("LINE question image fallback applied", {
+      itemId: item.id,
+      questionNumber: item.questionNumber,
+      lineUserId,
+      error: preparedMessages.error,
+    });
+  }
+
+  const response = await pushMessages(lineUserId, preparedMessages.messages, {
+    userId: item.userId,
+    itemId: item.id,
+  });
+
+  await prisma.$transaction(async (tx) => {
+    await tx.productStudyItem.update({
+      where: {
+        id: item.id,
+      },
+      data: {
+        nextScheduledAt: options?.rescheduleAfterSend ? scheduleNextReview(1) : undefined,
+        status: ItemStatus.QUESTION_SENT,
+      },
+    });
+
+    await tx.reviewLog.create({
+      data: {
+        itemId: item.id,
+        userId: item.userId,
+        actionType: ReviewActionType.SENT,
+      },
+    });
+
+    const existingState = await tx.activeConversationState.findFirst({
+      where: {
+        userId: item.userId,
+        itemId: item.id,
+      },
+    });
+
+    if (existingState) {
+      await tx.activeConversationState.update({
+        where: {
+          id: existingState.id,
+        },
+        data: {
+          state: getConversationStateAfterQuestionSent(),
+          questionLineMessageId: getLastSentMessageId(response),
+          questionLineMessageIds: getSentMessageIds(response),
+          answerLineMessageId: null,
+          answerLineMessageIds: [],
+        },
+      });
+      return;
+    }
+
+    await tx.activeConversationState.create({
+      data: {
+        userId: item.userId,
+        itemId: item.id,
+        state: getConversationStateAfterQuestionSent(),
+        questionLineMessageId: getLastSentMessageId(response),
+        questionLineMessageIds: getSentMessageIds(response),
+      },
+    });
+  });
+}
+
+async function handleCategoryRequest(
+  userId: number,
+  lineUserId: string,
+  replyToken: string,
+  rawText: string,
+) {
+  const selection = await getCategoryItemsForLineRequest(userId, rawText);
+
+  if (!selection.matched) {
+    return false;
+  }
+
+  if (selection.items.length === 0) {
+    await replyText(replyToken, buildEmptyCategoryDispatchMessage(selection.category), {
+      userId,
+      targetLineUserId: lineUserId,
+    });
+    return true;
+  }
+
+  await replyText(replyToken, buildCategoryDispatchStartMessage(selection.category, selection.items.length), {
+    userId,
+    targetLineUserId: lineUserId,
+  });
+
+  for (const item of selection.items) {
+    await sendQuestionItem(item, lineUserId);
+  }
+
+  await pushMessages(
+    lineUserId,
+    [
+      {
+        type: "text",
+        text: buildBatchDispatchSummaryMessage(
+          selection.items.map((item) => item.questionNumber),
+        ),
+      },
+    ],
+    {
+      userId,
+    },
+  );
+
+  return true;
 }
 
 async function handleTextEvent(event: z.infer<typeof lineWebhookSchema>["events"][number]) {
@@ -583,15 +874,34 @@ async function handleTextEvent(event: z.infer<typeof lineWebhookSchema>["events"
   const quotedMessageId = event.message.quotedMessageId;
 
   if (command === "answer") {
-    await handleAnswerRequest(user.id, event.replyToken, event.message.text || "", quotedMessageId);
+    await handleAnswerRequest(
+      user.id,
+      lineUserId,
+      event.replyToken,
+      event.message.text || "",
+      quotedMessageId,
+    );
     return;
   }
 
   if (command === "correct") {
     await handleResultRequest(
       user.id,
+      lineUserId,
       event.replyToken,
       "correct",
+      event.message.text || "",
+      quotedMessageId,
+    );
+    return;
+  }
+
+  if (command === "greatCorrect") {
+    await handleResultRequest(
+      user.id,
+      lineUserId,
+      event.replyToken,
+      "greatCorrect",
       event.message.text || "",
       quotedMessageId,
     );
@@ -601,6 +911,7 @@ async function handleTextEvent(event: z.infer<typeof lineWebhookSchema>["events"
   if (command === "incorrect") {
     await handleResultRequest(
       user.id,
+      lineUserId,
       event.replyToken,
       "incorrect",
       event.message.text || "",
@@ -612,10 +923,15 @@ async function handleTextEvent(event: z.infer<typeof lineWebhookSchema>["events"
   if (command === "manual") {
     await handleManualModeRequest(
       user.id,
+      lineUserId,
       event.replyToken,
       event.message.text || "",
       quotedMessageId,
     );
+    return;
+  }
+
+  if (await handleCategoryRequest(user.id, lineUserId, event.replyToken, event.message.text || "")) {
     return;
   }
 
@@ -653,6 +969,7 @@ export async function dispatchStudyItems(itemIds?: number[], force = false) {
   const results: Array<{ itemId: number; status: "sent" | "skipped" | "failed"; reason?: string }> = [];
   const defaultLineUserId = getDefaultLineUserId();
   const batchSummaryTargets = new Map<string, { userId: number; questionNumbers: number[] }>();
+  const shouldSendBatchSummary = itemIds === undefined || itemIds.length > 1;
 
   if (itemIds) {
     const foundIds = new Set(items.map((item) => item.id));
@@ -710,70 +1027,8 @@ export async function dispatchStudyItems(itemIds?: number[], force = false) {
     }
 
     try {
-      const messages =
-        item.images.length > 0
-          ? buildQuestionPushMessages(item, getPublicAppUrl())
-          : [
-              {
-                type: "text" as const,
-                text: buildQuestionMessage(item),
-              },
-            ];
-
-      await assertReachableImageMessages(messages);
-      const response = await pushMessages(lineUserId, messages, {
-        userId: item.userId,
-        itemId: item.id,
-      });
-
-      await prisma.$transaction(async (tx) => {
-        await tx.productStudyItem.update({
-          where: {
-            id: item.id,
-          },
-          data: {
-            nextScheduledAt:
-              !itemIds && !force ? scheduleNextReview(1) : undefined,
-            status: ItemStatus.QUESTION_SENT,
-          },
-        });
-
-        await tx.reviewLog.create({
-          data: {
-            itemId: item.id,
-            userId: item.userId,
-            actionType: ReviewActionType.SENT,
-          },
-        });
-
-        const existingState = await tx.activeConversationState.findFirst({
-          where: {
-            userId: item.userId,
-            itemId: item.id,
-          },
-        });
-
-        if (existingState) {
-          await tx.activeConversationState.update({
-            where: {
-              id: existingState.id,
-            },
-            data: {
-              state: getConversationStateAfterQuestionSent(),
-              questionLineMessageId: getLastSentMessageId(response),
-              answerLineMessageId: null,
-            },
-          });
-        } else {
-          await tx.activeConversationState.create({
-            data: {
-              userId: item.userId,
-              itemId: item.id,
-              state: getConversationStateAfterQuestionSent(),
-              questionLineMessageId: getLastSentMessageId(response),
-            },
-          });
-        }
+      await sendQuestionItem(item, lineUserId, {
+        rescheduleAfterSend: !itemIds && !force,
       });
 
       results.push({
@@ -781,17 +1036,15 @@ export async function dispatchStudyItems(itemIds?: number[], force = false) {
         status: "sent",
       });
 
-      if (!itemIds) {
-        const existingTarget = batchSummaryTargets.get(lineUserId);
+      const existingTarget = batchSummaryTargets.get(lineUserId);
 
-        if (existingTarget) {
-          existingTarget.questionNumbers.push(item.questionNumber);
-        } else {
-          batchSummaryTargets.set(lineUserId, {
-            userId: item.userId,
-            questionNumbers: [item.questionNumber],
-          });
-        }
+      if (existingTarget) {
+        existingTarget.questionNumbers.push(item.questionNumber);
+      } else {
+        batchSummaryTargets.set(lineUserId, {
+          userId: item.userId,
+          questionNumbers: [item.questionNumber],
+        });
       }
     } catch (error) {
       results.push({
@@ -808,7 +1061,7 @@ export async function dispatchStudyItems(itemIds?: number[], force = false) {
     }
   }
 
-  if (!itemIds) {
+  if (shouldSendBatchSummary) {
     for (const [lineUserId, target] of batchSummaryTargets) {
       if (target.questionNumbers.length === 0) {
         continue;

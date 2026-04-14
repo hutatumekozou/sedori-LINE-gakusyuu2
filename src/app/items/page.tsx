@@ -20,6 +20,7 @@ import {
   STATUS_LABELS,
   STATUS_STYLES,
 } from "@/lib/study/constants";
+import { buildQuestionLabel } from "@/lib/study/messages";
 import { getStudyItems } from "@/lib/study/service";
 import { cn, getSingleSearchParam } from "@/lib/utils";
 
@@ -148,7 +149,7 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
               type="text"
               name="q"
               defaultValue={query}
-              placeholder="商品名、カテゴリ、問題番号で検索"
+              placeholder="商品名、ブランド、カテゴリ、問題番号で検索"
               className="rounded-[18px] border border-slate-200 bg-white px-3.5 py-2 text-[12px] outline-none transition focus:border-emerald-300"
             />
 
@@ -240,6 +241,7 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
                 <th className="sticky top-0 z-20 bg-slate-50 px-2 py-3.5 font-semibold whitespace-nowrap">問題番号</th>
                 <th className="sticky top-0 z-20 bg-slate-50 px-1.5 py-3.5 font-semibold whitespace-nowrap">☆</th>
                 <th className="sticky top-0 z-20 bg-slate-50 px-3 py-3.5 font-semibold whitespace-nowrap">商品名</th>
+                <th className="sticky top-0 z-20 bg-slate-50 px-3 py-3.5 font-semibold whitespace-nowrap">ブランド</th>
                 <th className="sticky top-0 z-20 min-w-[6.5rem] bg-slate-50 px-3 py-3.5 font-semibold whitespace-nowrap">カテゴリ</th>
                 <th className="sticky top-0 z-20 bg-slate-50 px-3 py-3.5 font-semibold whitespace-nowrap">自動送信</th>
                 <th className="sticky top-0 z-20 bg-slate-50 px-2.5 py-3.5 font-semibold whitespace-nowrap">最終学習日</th>
@@ -247,6 +249,7 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
                 <th className="sticky top-0 z-20 bg-slate-50 px-2.5 py-3.5 font-semibold whitespace-nowrap">次回送信日</th>
                 <th className="sticky top-0 z-20 bg-slate-50 px-2.5 py-3.5 font-semibold whitespace-nowrap">状態</th>
                 <th className="sticky top-0 z-20 bg-slate-50 px-2.5 py-3.5 font-semibold whitespace-nowrap">最終結果</th>
+                <th className="sticky top-0 z-20 bg-slate-50 px-1.5 py-3.5 font-semibold whitespace-nowrap">回答数</th>
                 <th className="sticky top-0 z-20 bg-slate-50 px-1.5 py-3.5 font-semibold whitespace-nowrap">正解回数</th>
                 <th className="sticky top-0 z-20 bg-slate-50 px-2.5 py-3.5 font-semibold whitespace-nowrap">操作</th>
                 <th className="sticky top-0 z-20 bg-slate-50 px-2.5 py-3.5 font-semibold whitespace-nowrap">作成日</th>
@@ -255,7 +258,7 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
             <tbody>
               {items.length === 0 ? (
                 <tr>
-                  <td colSpan={14} className="px-3 py-10 text-center text-slate-500">
+                  <td colSpan={16} className="px-3 py-10 text-center text-slate-500">
                     条件に一致する問題はありません。
                   </td>
                 </tr>
@@ -272,7 +275,17 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
                         aria-label={`問題番号${item.questionNumber}を選択`}
                       />
                     </td>
-                    <td className="px-2 py-3.5 font-semibold text-slate-900 whitespace-nowrap">{item.questionNumber}</td>
+                    <td className="px-2 py-3.5 font-semibold text-slate-900">
+                      <span className="block max-w-[12rem] leading-5 break-words">
+                        {buildQuestionLabel(
+                          {
+                            questionNumber: item.questionNumber,
+                            productName: item.productName,
+                          },
+                          { includeSentAt: false },
+                        )}
+                      </span>
+                    </td>
                     <td className="px-1.5 py-3.5">
                       <FavoriteToggle
                         itemId={item.id}
@@ -283,6 +296,11 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
                     <td className="px-3 py-3.5 text-slate-700">
                       <span className="block max-w-[9rem] leading-6 break-words">
                         {item.productName || "未設定"}
+                      </span>
+                    </td>
+                    <td className="px-3 py-3.5 text-slate-700">
+                      <span className="block max-w-[8rem] leading-6 break-words">
+                        {item.brandName || "-"}
                       </span>
                     </td>
                     <td className="min-w-[6.5rem] px-3 py-3.5 text-slate-700">
@@ -315,6 +333,7 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
                         {LAST_RESULT_LABELS[item.lastResult]}
                       </span>
                     </td>
+                    <td className="px-1.5 py-3.5 font-semibold text-slate-700 whitespace-nowrap">{item.answerCount}</td>
                     <td className="px-1.5 py-3.5 font-semibold text-slate-700 whitespace-nowrap">{item.correctCount}</td>
                     <td className="px-2.5 py-3.5">
                       <div className="grid min-w-[8.75rem] grid-cols-2 gap-1">

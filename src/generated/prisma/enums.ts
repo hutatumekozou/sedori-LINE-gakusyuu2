@@ -23,6 +23,7 @@ export type ItemStatus = (typeof ItemStatus)[keyof typeof ItemStatus]
 export const ReviewActionType = {
   SENT: 'SENT',
   ANSWER_SHOWN: 'ANSWER_SHOWN',
+  GREAT_CORRECT: 'GREAT_CORRECT',
   CORRECT: 'CORRECT',
   INCORRECT: 'INCORRECT'
 } as const

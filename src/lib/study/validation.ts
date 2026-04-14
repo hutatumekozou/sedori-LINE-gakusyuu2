@@ -1,5 +1,3 @@
-import path from "node:path";
-
 import { z } from "zod";
 
 import { getAppSettings } from "@/lib/env";
@@ -9,24 +7,32 @@ import {
   MAX_IMAGE_COUNT,
   STUDY_CATEGORIES,
 } from "@/lib/study/constants";
+import {
+  isAllowedImageFileLike,
+  parseUploadedImagePaths,
+} from "@/lib/study/image-upload";
 import type { StudyItemFormState } from "@/lib/study/types";
 
 type ValidatedStudyItemInput = {
   autoSendEnabled: boolean;
   productName?: string;
+  brandName?: string;
   category: string;
   note: string;
   memo?: string;
   firstScheduledAt: Date;
   questionFiles: File[];
   answerFiles: File[];
-  removeQuestionImages: boolean;
-  removeAnswerImages: boolean;
+  questionUploadedImagePaths: string[];
+  answerUploadedImagePaths: string[];
+  removeQuestionImageIds: number[];
+  removeAnswerImageIds: number[];
 };
 
 const baseSchema = z
   .object({
     productName: z.string().max(120, "商品名は120文字以内で入力してください。").default(""),
+    brandName: z.string().max(120, "ブランドは120文字以内で入力してください。").default(""),
     category: z.enum(STUDY_CATEGORIES, {
       error: "カテゴリを選択してください。",
     }).default(DEFAULT_STUDY_CATEGORY),
@@ -60,19 +66,11 @@ function buildFieldErrors(
   return validationResult.error.flatten().fieldErrors;
 }
 
-function isAllowedImageFile(file: File) {
-  const extension = path.extname(file.name).toLowerCase();
-  const allowedExtensions = [".jpg", ".jpeg", ".png", ".webp", ".gif", ".heic", ".heif"];
-  const allowedMimeTypes = [
-    "image/jpeg",
-    "image/png",
-    "image/webp",
-    "image/gif",
-    "image/heic",
-    "image/heif",
-  ];
-
-  return allowedMimeTypes.includes(file.type) || allowedExtensions.includes(extension);
+function parseSelectedImageIds(formData: FormData, fieldName: string) {
+  return formData
+    .getAll(fieldName)
+    .map((value) => Number(value))
+    .filter((value, index, values) => Number.isInteger(value) && value > 0 && values.indexOf(value) === index);
 }
 
 export function validationFailure(
@@ -107,6 +105,7 @@ export function validateStudyItemForm(
     } {
   const parsed = baseSchema.safeParse({
     productName: String(formData.get("productName") || ""),
+    brandName: String(formData.get("brandName") || ""),
     category: String(formData.get("category") || DEFAULT_STUDY_CATEGORY),
     note: String(formData.get("note") || ""),
     memo: String(formData.get("memo") || ""),
@@ -120,17 +119,19 @@ export function validateStudyItemForm(
   const answerFiles = formData
     .getAll("answerImages")
     .filter((entry): entry is File => entry instanceof File && entry.size > 0);
+  const questionUploadedImagePaths = parseUploadedImagePaths(formData, "uploadedQuestionImagePaths");
+  const answerUploadedImagePaths = parseUploadedImagePaths(formData, "uploadedAnswerImagePaths");
 
   const allFiles = [...questionFiles, ...answerFiles];
 
   const fieldErrors: Record<string, string[]> = buildFieldErrors(parsed);
   const maxUploadSizeBytes = getAppSettings().maxUploadSizeBytes;
 
-  if (questionFiles.length > MAX_IMAGE_COUNT) {
+  if (questionFiles.length + questionUploadedImagePaths.length > MAX_IMAGE_COUNT) {
     fieldErrors.questionImages = ["問題文の画像は最大4枚までです。"];
   }
 
-  if (answerFiles.length > MAX_IMAGE_COUNT) {
+  if (answerFiles.length + answerUploadedImagePaths.length > MAX_IMAGE_COUNT) {
     fieldErrors.answerImages = ["解答の画像は最大4枚までです。"];
   }
 
@@ -143,7 +144,7 @@ export function validateStudyItemForm(
     ];
   }
 
-  if (allFiles.some((file) => !isAllowedImageFile(file))) {
+  if (allFiles.some((file) => !isAllowedImageFileLike(file))) {
     fieldErrors.questionImages = [
       "画像形式は jpeg / png / webp / gif / heic / heif に対応しています。",
     ];
@@ -167,14 +168,17 @@ export function validateStudyItemForm(
     data: {
       autoSendEnabled: formData.get("autoSendEnabled") === "1",
       productName: toOptionalString(parsed.data.productName),
+      brandName: toOptionalString(parsed.data.brandName),
       category: parsed.data.category,
       note: parsed.data.note,
       memo: parsed.data.memo,
       firstScheduledAt: parseDateInput(parsed.data.firstScheduledAt),
       questionFiles,
       answerFiles,
-      removeQuestionImages: formData.get("removeQuestionImages") === "1",
-      removeAnswerImages: formData.get("removeAnswerImages") === "1",
+      questionUploadedImagePaths,
+      answerUploadedImagePaths,
+      removeQuestionImageIds: parseSelectedImageIds(formData, "removeQuestionImageIds"),
+      removeAnswerImageIds: parseSelectedImageIds(formData, "removeAnswerImageIds"),
     },
   };
 }

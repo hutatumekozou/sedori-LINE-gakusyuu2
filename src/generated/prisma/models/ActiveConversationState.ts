@@ -64,7 +64,9 @@ export type ActiveConversationStateCountAggregateOutputType = {
   itemId: number
   state: number
   questionLineMessageId: number
+  questionLineMessageIds: number
   answerLineMessageId: number
+  answerLineMessageIds: number
   updatedAt: number
   _all: number
 }
@@ -108,7 +110,9 @@ export type ActiveConversationStateCountAggregateInputType = {
   itemId?: true
   state?: true
   questionLineMessageId?: true
+  questionLineMessageIds?: true
   answerLineMessageId?: true
+  answerLineMessageIds?: true
   updatedAt?: true
   _all?: true
 }
@@ -205,7 +209,9 @@ export type ActiveConversationStateGroupByOutputType = {
   itemId: number
   state: $Enums.ConversationStateType
   questionLineMessageId: string | null
+  questionLineMessageIds: string[]
   answerLineMessageId: string | null
+  answerLineMessageIds: string[]
   updatedAt: Date
   _count: ActiveConversationStateCountAggregateOutputType | null
   _avg: ActiveConversationStateAvgAggregateOutputType | null
@@ -238,7 +244,9 @@ export type ActiveConversationStateWhereInput = {
   itemId?: Prisma.IntFilter<"ActiveConversationState"> | number
   state?: Prisma.EnumConversationStateTypeFilter<"ActiveConversationState"> | $Enums.ConversationStateType
   questionLineMessageId?: Prisma.StringNullableFilter<"ActiveConversationState"> | string | null
+  questionLineMessageIds?: Prisma.StringNullableListFilter<"ActiveConversationState">
   answerLineMessageId?: Prisma.StringNullableFilter<"ActiveConversationState"> | string | null
+  answerLineMessageIds?: Prisma.StringNullableListFilter<"ActiveConversationState">
   updatedAt?: Prisma.DateTimeFilter<"ActiveConversationState"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   item?: Prisma.XOR<Prisma.ProductStudyItemScalarRelationFilter, Prisma.ProductStudyItemWhereInput>
@@ -250,7 +258,9 @@ export type ActiveConversationStateOrderByWithRelationInput = {
   itemId?: Prisma.SortOrder
   state?: Prisma.SortOrder
   questionLineMessageId?: Prisma.SortOrderInput | Prisma.SortOrder
+  questionLineMessageIds?: Prisma.SortOrder
   answerLineMessageId?: Prisma.SortOrderInput | Prisma.SortOrder
+  answerLineMessageIds?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   item?: Prisma.ProductStudyItemOrderByWithRelationInput
@@ -267,6 +277,8 @@ export type ActiveConversationStateWhereUniqueInput = Prisma.AtLeast<{
   userId?: Prisma.IntFilter<"ActiveConversationState"> | number
   itemId?: Prisma.IntFilter<"ActiveConversationState"> | number
   state?: Prisma.EnumConversationStateTypeFilter<"ActiveConversationState"> | $Enums.ConversationStateType
+  questionLineMessageIds?: Prisma.StringNullableListFilter<"ActiveConversationState">
+  answerLineMessageIds?: Prisma.StringNullableListFilter<"ActiveConversationState">
   updatedAt?: Prisma.DateTimeFilter<"ActiveConversationState"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   item?: Prisma.XOR<Prisma.ProductStudyItemScalarRelationFilter, Prisma.ProductStudyItemWhereInput>
@@ -278,7 +290,9 @@ export type ActiveConversationStateOrderByWithAggregationInput = {
   itemId?: Prisma.SortOrder
   state?: Prisma.SortOrder
   questionLineMessageId?: Prisma.SortOrderInput | Prisma.SortOrder
+  questionLineMessageIds?: Prisma.SortOrder
   answerLineMessageId?: Prisma.SortOrderInput | Prisma.SortOrder
+  answerLineMessageIds?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ActiveConversationStateCountOrderByAggregateInput
   _avg?: Prisma.ActiveConversationStateAvgOrderByAggregateInput
@@ -296,14 +310,18 @@ export type ActiveConversationStateScalarWhereWithAggregatesInput = {
   itemId?: Prisma.IntWithAggregatesFilter<"ActiveConversationState"> | number
   state?: Prisma.EnumConversationStateTypeWithAggregatesFilter<"ActiveConversationState"> | $Enums.ConversationStateType
   questionLineMessageId?: Prisma.StringNullableWithAggregatesFilter<"ActiveConversationState"> | string | null
+  questionLineMessageIds?: Prisma.StringNullableListFilter<"ActiveConversationState">
   answerLineMessageId?: Prisma.StringNullableWithAggregatesFilter<"ActiveConversationState"> | string | null
+  answerLineMessageIds?: Prisma.StringNullableListFilter<"ActiveConversationState">
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ActiveConversationState"> | Date | string
 }
 
 export type ActiveConversationStateCreateInput = {
   state: $Enums.ConversationStateType
   questionLineMessageId?: string | null
+  questionLineMessageIds?: Prisma.ActiveConversationStateCreatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: string | null
+  answerLineMessageIds?: Prisma.ActiveConversationStateCreateanswerLineMessageIdsInput | string[]
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutActiveConversationStatesInput
   item: Prisma.ProductStudyItemCreateNestedOneWithoutActiveConversationsInput
@@ -315,14 +333,18 @@ export type ActiveConversationStateUncheckedCreateInput = {
   itemId: number
   state: $Enums.ConversationStateType
   questionLineMessageId?: string | null
+  questionLineMessageIds?: Prisma.ActiveConversationStateCreatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: string | null
+  answerLineMessageIds?: Prisma.ActiveConversationStateCreateanswerLineMessageIdsInput | string[]
   updatedAt?: Date | string
 }
 
 export type ActiveConversationStateUpdateInput = {
   state?: Prisma.EnumConversationStateTypeFieldUpdateOperationsInput | $Enums.ConversationStateType
   questionLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  questionLineMessageIds?: Prisma.ActiveConversationStateUpdatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  answerLineMessageIds?: Prisma.ActiveConversationStateUpdateanswerLineMessageIdsInput | string[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutActiveConversationStatesNestedInput
   item?: Prisma.ProductStudyItemUpdateOneRequiredWithoutActiveConversationsNestedInput
@@ -334,7 +356,9 @@ export type ActiveConversationStateUncheckedUpdateInput = {
   itemId?: Prisma.IntFieldUpdateOperationsInput | number
   state?: Prisma.EnumConversationStateTypeFieldUpdateOperationsInput | $Enums.ConversationStateType
   questionLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  questionLineMessageIds?: Prisma.ActiveConversationStateUpdatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  answerLineMessageIds?: Prisma.ActiveConversationStateUpdateanswerLineMessageIdsInput | string[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -344,14 +368,18 @@ export type ActiveConversationStateCreateManyInput = {
   itemId: number
   state: $Enums.ConversationStateType
   questionLineMessageId?: string | null
+  questionLineMessageIds?: Prisma.ActiveConversationStateCreatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: string | null
+  answerLineMessageIds?: Prisma.ActiveConversationStateCreateanswerLineMessageIdsInput | string[]
   updatedAt?: Date | string
 }
 
 export type ActiveConversationStateUpdateManyMutationInput = {
   state?: Prisma.EnumConversationStateTypeFieldUpdateOperationsInput | $Enums.ConversationStateType
   questionLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  questionLineMessageIds?: Prisma.ActiveConversationStateUpdatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  answerLineMessageIds?: Prisma.ActiveConversationStateUpdateanswerLineMessageIdsInput | string[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -361,7 +389,9 @@ export type ActiveConversationStateUncheckedUpdateManyInput = {
   itemId?: Prisma.IntFieldUpdateOperationsInput | number
   state?: Prisma.EnumConversationStateTypeFieldUpdateOperationsInput | $Enums.ConversationStateType
   questionLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  questionLineMessageIds?: Prisma.ActiveConversationStateUpdatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  answerLineMessageIds?: Prisma.ActiveConversationStateUpdateanswerLineMessageIdsInput | string[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -375,6 +405,14 @@ export type ActiveConversationStateOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type StringNullableListFilter<$PrismaModel = never> = {
+  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
+}
+
 export type ActiveConversationStateUserIdItemIdCompoundUniqueInput = {
   userId: number
   itemId: number
@@ -386,7 +424,9 @@ export type ActiveConversationStateCountOrderByAggregateInput = {
   itemId?: Prisma.SortOrder
   state?: Prisma.SortOrder
   questionLineMessageId?: Prisma.SortOrder
+  questionLineMessageIds?: Prisma.SortOrder
   answerLineMessageId?: Prisma.SortOrder
+  answerLineMessageIds?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -506,14 +546,34 @@ export type ActiveConversationStateUncheckedUpdateManyWithoutItemNestedInput = {
   deleteMany?: Prisma.ActiveConversationStateScalarWhereInput | Prisma.ActiveConversationStateScalarWhereInput[]
 }
 
+export type ActiveConversationStateCreatequestionLineMessageIdsInput = {
+  set: string[]
+}
+
+export type ActiveConversationStateCreateanswerLineMessageIdsInput = {
+  set: string[]
+}
+
 export type EnumConversationStateTypeFieldUpdateOperationsInput = {
   set?: $Enums.ConversationStateType
+}
+
+export type ActiveConversationStateUpdatequestionLineMessageIdsInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type ActiveConversationStateUpdateanswerLineMessageIdsInput = {
+  set?: string[]
+  push?: string | string[]
 }
 
 export type ActiveConversationStateCreateWithoutUserInput = {
   state: $Enums.ConversationStateType
   questionLineMessageId?: string | null
+  questionLineMessageIds?: Prisma.ActiveConversationStateCreatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: string | null
+  answerLineMessageIds?: Prisma.ActiveConversationStateCreateanswerLineMessageIdsInput | string[]
   updatedAt?: Date | string
   item: Prisma.ProductStudyItemCreateNestedOneWithoutActiveConversationsInput
 }
@@ -523,7 +583,9 @@ export type ActiveConversationStateUncheckedCreateWithoutUserInput = {
   itemId: number
   state: $Enums.ConversationStateType
   questionLineMessageId?: string | null
+  questionLineMessageIds?: Prisma.ActiveConversationStateCreatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: string | null
+  answerLineMessageIds?: Prisma.ActiveConversationStateCreateanswerLineMessageIdsInput | string[]
   updatedAt?: Date | string
 }
 
@@ -534,6 +596,7 @@ export type ActiveConversationStateCreateOrConnectWithoutUserInput = {
 
 export type ActiveConversationStateCreateManyUserInputEnvelope = {
   data: Prisma.ActiveConversationStateCreateManyUserInput | Prisma.ActiveConversationStateCreateManyUserInput[]
+  skipDuplicates?: boolean
 }
 
 export type ActiveConversationStateUpsertWithWhereUniqueWithoutUserInput = {
@@ -561,14 +624,18 @@ export type ActiveConversationStateScalarWhereInput = {
   itemId?: Prisma.IntFilter<"ActiveConversationState"> | number
   state?: Prisma.EnumConversationStateTypeFilter<"ActiveConversationState"> | $Enums.ConversationStateType
   questionLineMessageId?: Prisma.StringNullableFilter<"ActiveConversationState"> | string | null
+  questionLineMessageIds?: Prisma.StringNullableListFilter<"ActiveConversationState">
   answerLineMessageId?: Prisma.StringNullableFilter<"ActiveConversationState"> | string | null
+  answerLineMessageIds?: Prisma.StringNullableListFilter<"ActiveConversationState">
   updatedAt?: Prisma.DateTimeFilter<"ActiveConversationState"> | Date | string
 }
 
 export type ActiveConversationStateCreateWithoutItemInput = {
   state: $Enums.ConversationStateType
   questionLineMessageId?: string | null
+  questionLineMessageIds?: Prisma.ActiveConversationStateCreatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: string | null
+  answerLineMessageIds?: Prisma.ActiveConversationStateCreateanswerLineMessageIdsInput | string[]
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutActiveConversationStatesInput
 }
@@ -578,7 +645,9 @@ export type ActiveConversationStateUncheckedCreateWithoutItemInput = {
   userId: number
   state: $Enums.ConversationStateType
   questionLineMessageId?: string | null
+  questionLineMessageIds?: Prisma.ActiveConversationStateCreatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: string | null
+  answerLineMessageIds?: Prisma.ActiveConversationStateCreateanswerLineMessageIdsInput | string[]
   updatedAt?: Date | string
 }
 
@@ -589,6 +658,7 @@ export type ActiveConversationStateCreateOrConnectWithoutItemInput = {
 
 export type ActiveConversationStateCreateManyItemInputEnvelope = {
   data: Prisma.ActiveConversationStateCreateManyItemInput | Prisma.ActiveConversationStateCreateManyItemInput[]
+  skipDuplicates?: boolean
 }
 
 export type ActiveConversationStateUpsertWithWhereUniqueWithoutItemInput = {
@@ -612,14 +682,18 @@ export type ActiveConversationStateCreateManyUserInput = {
   itemId: number
   state: $Enums.ConversationStateType
   questionLineMessageId?: string | null
+  questionLineMessageIds?: Prisma.ActiveConversationStateCreatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: string | null
+  answerLineMessageIds?: Prisma.ActiveConversationStateCreateanswerLineMessageIdsInput | string[]
   updatedAt?: Date | string
 }
 
 export type ActiveConversationStateUpdateWithoutUserInput = {
   state?: Prisma.EnumConversationStateTypeFieldUpdateOperationsInput | $Enums.ConversationStateType
   questionLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  questionLineMessageIds?: Prisma.ActiveConversationStateUpdatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  answerLineMessageIds?: Prisma.ActiveConversationStateUpdateanswerLineMessageIdsInput | string[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   item?: Prisma.ProductStudyItemUpdateOneRequiredWithoutActiveConversationsNestedInput
 }
@@ -629,7 +703,9 @@ export type ActiveConversationStateUncheckedUpdateWithoutUserInput = {
   itemId?: Prisma.IntFieldUpdateOperationsInput | number
   state?: Prisma.EnumConversationStateTypeFieldUpdateOperationsInput | $Enums.ConversationStateType
   questionLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  questionLineMessageIds?: Prisma.ActiveConversationStateUpdatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  answerLineMessageIds?: Prisma.ActiveConversationStateUpdateanswerLineMessageIdsInput | string[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -638,7 +714,9 @@ export type ActiveConversationStateUncheckedUpdateManyWithoutUserInput = {
   itemId?: Prisma.IntFieldUpdateOperationsInput | number
   state?: Prisma.EnumConversationStateTypeFieldUpdateOperationsInput | $Enums.ConversationStateType
   questionLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  questionLineMessageIds?: Prisma.ActiveConversationStateUpdatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  answerLineMessageIds?: Prisma.ActiveConversationStateUpdateanswerLineMessageIdsInput | string[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -647,14 +725,18 @@ export type ActiveConversationStateCreateManyItemInput = {
   userId: number
   state: $Enums.ConversationStateType
   questionLineMessageId?: string | null
+  questionLineMessageIds?: Prisma.ActiveConversationStateCreatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: string | null
+  answerLineMessageIds?: Prisma.ActiveConversationStateCreateanswerLineMessageIdsInput | string[]
   updatedAt?: Date | string
 }
 
 export type ActiveConversationStateUpdateWithoutItemInput = {
   state?: Prisma.EnumConversationStateTypeFieldUpdateOperationsInput | $Enums.ConversationStateType
   questionLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  questionLineMessageIds?: Prisma.ActiveConversationStateUpdatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  answerLineMessageIds?: Prisma.ActiveConversationStateUpdateanswerLineMessageIdsInput | string[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutActiveConversationStatesNestedInput
 }
@@ -664,7 +746,9 @@ export type ActiveConversationStateUncheckedUpdateWithoutItemInput = {
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   state?: Prisma.EnumConversationStateTypeFieldUpdateOperationsInput | $Enums.ConversationStateType
   questionLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  questionLineMessageIds?: Prisma.ActiveConversationStateUpdatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  answerLineMessageIds?: Prisma.ActiveConversationStateUpdateanswerLineMessageIdsInput | string[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -673,7 +757,9 @@ export type ActiveConversationStateUncheckedUpdateManyWithoutItemInput = {
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   state?: Prisma.EnumConversationStateTypeFieldUpdateOperationsInput | $Enums.ConversationStateType
   questionLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  questionLineMessageIds?: Prisma.ActiveConversationStateUpdatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  answerLineMessageIds?: Prisma.ActiveConversationStateUpdateanswerLineMessageIdsInput | string[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -685,7 +771,9 @@ export type ActiveConversationStateSelect<ExtArgs extends runtime.Types.Extensio
   itemId?: boolean
   state?: boolean
   questionLineMessageId?: boolean
+  questionLineMessageIds?: boolean
   answerLineMessageId?: boolean
+  answerLineMessageIds?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   item?: boolean | Prisma.ProductStudyItemDefaultArgs<ExtArgs>
@@ -697,7 +785,9 @@ export type ActiveConversationStateSelectCreateManyAndReturn<ExtArgs extends run
   itemId?: boolean
   state?: boolean
   questionLineMessageId?: boolean
+  questionLineMessageIds?: boolean
   answerLineMessageId?: boolean
+  answerLineMessageIds?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   item?: boolean | Prisma.ProductStudyItemDefaultArgs<ExtArgs>
@@ -709,7 +799,9 @@ export type ActiveConversationStateSelectUpdateManyAndReturn<ExtArgs extends run
   itemId?: boolean
   state?: boolean
   questionLineMessageId?: boolean
+  questionLineMessageIds?: boolean
   answerLineMessageId?: boolean
+  answerLineMessageIds?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   item?: boolean | Prisma.ProductStudyItemDefaultArgs<ExtArgs>
@@ -721,11 +813,13 @@ export type ActiveConversationStateSelectScalar = {
   itemId?: boolean
   state?: boolean
   questionLineMessageId?: boolean
+  questionLineMessageIds?: boolean
   answerLineMessageId?: boolean
+  answerLineMessageIds?: boolean
   updatedAt?: boolean
 }
 
-export type ActiveConversationStateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "itemId" | "state" | "questionLineMessageId" | "answerLineMessageId" | "updatedAt", ExtArgs["result"]["activeConversationState"]>
+export type ActiveConversationStateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "itemId" | "state" | "questionLineMessageId" | "questionLineMessageIds" | "answerLineMessageId" | "answerLineMessageIds" | "updatedAt", ExtArgs["result"]["activeConversationState"]>
 export type ActiveConversationStateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   item?: boolean | Prisma.ProductStudyItemDefaultArgs<ExtArgs>
@@ -751,7 +845,9 @@ export type $ActiveConversationStatePayload<ExtArgs extends runtime.Types.Extens
     itemId: number
     state: $Enums.ConversationStateType
     questionLineMessageId: string | null
+    questionLineMessageIds: string[]
     answerLineMessageId: string | null
+    answerLineMessageIds: string[]
     updatedAt: Date
   }, ExtArgs["result"]["activeConversationState"]>
   composites: {}
@@ -1183,7 +1279,9 @@ export interface ActiveConversationStateFieldRefs {
   readonly itemId: Prisma.FieldRef<"ActiveConversationState", 'Int'>
   readonly state: Prisma.FieldRef<"ActiveConversationState", 'ConversationStateType'>
   readonly questionLineMessageId: Prisma.FieldRef<"ActiveConversationState", 'String'>
+  readonly questionLineMessageIds: Prisma.FieldRef<"ActiveConversationState", 'String[]'>
   readonly answerLineMessageId: Prisma.FieldRef<"ActiveConversationState", 'String'>
+  readonly answerLineMessageIds: Prisma.FieldRef<"ActiveConversationState", 'String[]'>
   readonly updatedAt: Prisma.FieldRef<"ActiveConversationState", 'DateTime'>
 }
     
@@ -1419,6 +1517,7 @@ export type ActiveConversationStateCreateManyArgs<ExtArgs extends runtime.Types.
    * The data used to create many ActiveConversationStates.
    */
   data: Prisma.ActiveConversationStateCreateManyInput | Prisma.ActiveConversationStateCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1437,6 +1536,7 @@ export type ActiveConversationStateCreateManyAndReturnArgs<ExtArgs extends runti
    * The data used to create many ActiveConversationStates.
    */
   data: Prisma.ActiveConversationStateCreateManyInput | Prisma.ActiveConversationStateCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

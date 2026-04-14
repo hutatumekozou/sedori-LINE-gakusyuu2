@@ -10,13 +10,13 @@
 - LINE webhook で `解答` `正解` `不正解` を処理
 - 正解なら7日後、不正解なら翌日に次回送信日を更新
 - `npm run send:due` で本日送信対象をまとめて送信
-- ローカル開発は SQLite、ORM は Prisma、将来 PostgreSQL へ寄せやすい構成
+- Prisma + PostgreSQL で学習データを保持し、Vercel では Vercel Blob に画像を保存
 
 ## 技術スタック
 
 - Next.js 16 / App Router / TypeScript
 - Tailwind CSS
-- Prisma 7 + SQLite
+- Prisma 7 + PostgreSQL
 - Zod
 - Google Gemini API
 - LINE Messaging API
@@ -70,11 +70,13 @@ npm run dev
 
 | 変数名 | 必須 | 用途 |
 | --- | --- | --- |
-| `DATABASE_URL` | 必須 | SQLite 接続文字列 |
+| `DATABASE_URL` | 必須 | アプリ実行時に使う PostgreSQL 接続文字列 |
+| `DIRECT_URL` | Prisma CLI利用時に推奨 | `prisma migrate` / `prisma db push` 用の直結 PostgreSQL 接続文字列 |
 | `BASIC_AUTH_USER` | 推奨 | 管理画面の Basic 認証ユーザー名 |
 | `BASIC_AUTH_PASSWORD` | 推奨 | 管理画面の Basic 認証パスワード |
 | `APP_BASE_URL` | LINE画像送信時に必須 | 現在有効な HTTPS 公開URL |
-| `UPLOAD_STORAGE_DIR` | VPS運用時に推奨 | アップロード画像の保存先絶対パス |
+| `UPLOAD_STORAGE_DIR` | ローカル保存時のみ任意 | Blob を使わない環境での画像保存先絶対パス |
+| `BLOB_READ_WRITE_TOKEN` | Vercel本番で必須 | Vercel Blob への画像保存トークン |
 | `GEMINI_API_KEY` | 問題生成時に必須 | Gemini Developer API キー |
 | `GEMINI_MODEL` | 任意 | 既定は `gemini-2.5-flash` |
 | `LINE_CHANNEL_ACCESS_TOKEN` | LINE返信/送信時に必須 | Messaging API のチャネルアクセストークン |
@@ -118,7 +120,7 @@ https://<公開URL>/api/line/webhook
 ## ローカルでの Webhook 確認方法
 
 ローカルの `localhost` は LINE から直接叩けないため、公開トンネルを使います。
-この手順は開発確認用です。本番運用は後述の VPS 構成を推奨します。
+この手順は開発確認用です。Vercel 本番では公開URLがそのまま Webhook に使えます。
 
 例: Cloudflare Tunnel
 
@@ -159,34 +161,41 @@ curl -X POST \
   "http://localhost:3000/api/internal/send-due?force=1"
 ```
 
-本番では cron などから `npm run send:due` または内部 API を呼びます。
+本番では Vercel Cron などから内部 API を呼ぶ構成にすると扱いやすいです。
 
-## VPS 本番運用
+## Vercel 本番運用
 
-安定運用する場合は、`localhost + ngrok` ではなく 1 台の VPS に常駐させてください。
+Vercel で永続運用する場合は、アプリ本体以外を外部サービスへ切り出します。
 
-- Web アプリ: `systemd`
-- 毎日 12:00 JST の自動送信: `cron`
-- 公開HTTPS: `nginx`
-- DB: SQLite を永続ディスクへ配置
-- 画像: `UPLOAD_STORAGE_DIR` を永続ディスクへ配置
+- Web アプリ: Vercel
+- DB: Neon / Vercel Postgres / Supabase などの PostgreSQL
+- 画像: Vercel Blob
+- 定期送信: Vercel Cron または外部 cron から `/api/internal/send-due` を呼び出す
 
-このリポジトリには VPS 用のテンプレートを同梱しています。
+最低限必要な環境変数の例:
+
+```env
+DATABASE_URL="postgresql://<pooled-connection>"
+DIRECT_URL="postgresql://<direct-connection>"
+APP_BASE_URL="https://sedori-gakusyuu.vercel.app"
+BLOB_READ_WRITE_TOKEN="<vercel-blob-token>"
+```
+
+`DIRECT_URL` が設定されていれば、Prisma CLI はそちらを優先して使います。Neon のように pooled URL と direct URL が分かれるサービスでそのまま使えます。
+
+ローカルの既存 SQLite データを移す場合は、Postgres のスキーマ反映後に以下を実行します。
+
+```bash
+npm run db:push
+npm run migrate:sqlite-to-postgres
+```
+
+必要に応じて `SQLITE_DATABASE_PATH` で元DBの場所を指定してください。画像は移行時に Vercel Blob へアップロードされます。
+
+旧来の SQLite + 永続ディスク前提で動かしたい場合は、VPS 用テンプレートも残しています。
 
 - ひな形 env: [deploy/vps/env.production.example](/Users/kukkiiboy/Desktop/Codex/★260318★物販LINE学習/deploy/vps/env.production.example)
 - セットアップ手順: [deploy/vps/README.md](/Users/kukkiiboy/Desktop/Codex/★260318★物販LINE学習/deploy/vps/README.md)
-- `systemd` service: [deploy/vps/systemd/mercari-study-web.service](/Users/kukkiiboy/Desktop/Codex/★260318★物販LINE学習/deploy/vps/systemd/mercari-study-web.service)
-- 送信 service: [deploy/vps/systemd/mercari-study-send-due.service](/Users/kukkiiboy/Desktop/Codex/★260318★物販LINE学習/deploy/vps/systemd/mercari-study-send-due.service)
-- `cron` 設定例: [deploy/vps/cron/mercari-study-send-due.cron](/Users/kukkiiboy/Desktop/Codex/★260318★物販LINE学習/deploy/vps/cron/mercari-study-send-due.cron)
-- `nginx` 設定例: [deploy/vps/nginx/mercari-study.conf](/Users/kukkiiboy/Desktop/Codex/★260318★物販LINE学習/deploy/vps/nginx/mercari-study.conf)
-
-本番で使う代表的な環境変数例:
-
-```env
-DATABASE_URL="file:/var/lib/mercari-study/prisma/dev.db"
-UPLOAD_STORAGE_DIR="/var/lib/mercari-study/uploads"
-APP_BASE_URL="https://study.example.com"
-```
 
 ## 主な npm scripts
 
@@ -205,14 +214,9 @@ npm run send:due    # 本日送信対象をまとめてLINEへ送信
 
 ## データの保存先
 
-- SQLite: `prisma/dev.db`
-- アップロード画像: `storage/uploads`
+- DB: `DATABASE_URL` で指定した PostgreSQL
+- アップロード画像: `BLOB_READ_WRITE_TOKEN` があれば Vercel Blob、未設定なら `storage/uploads`
 - ローカル画像表示: `/api/uploads/[...path]`
-
-VPS 本番では以下を推奨します。
-
-- SQLite: `/var/lib/mercari-study/prisma/dev.db`
-- アップロード画像: `/var/lib/mercari-study/uploads`
 
 ## よくあるエラー
 
@@ -235,7 +239,7 @@ VPS 本番では以下を推奨します。
 - 新規登録時は画像が必須です
 - 編集時は画像未選択なら既存画像を保持します
 
-### `画像サイズは1枚あたり5MB以下にしてください`
+### `画像サイズは1枚あたり4MB以下にしてください`
 
 - `MAX_UPLOAD_SIZE_MB` を超えています
 - iPhone の HEIC 画像などはサイズが大きい場合があります
@@ -264,7 +268,7 @@ VPS 本番では以下を推奨します。
 
 - `APP_BASE_URL` の公開URLが失効していると、LINEは画像を取得できません
 - 開発時は `ngrok http 3000` を起動したままにしてください
-- 本番時は nginx 配下の実ドメインを `.env` の `APP_BASE_URL` に設定してください
+- 本番時は Vercel の公開ドメインを `.env` の `APP_BASE_URL` に設定してください
 - ブラウザで `APP_BASE_URL/api/uploads/...?...` を開いて画像が見える状態で送信してください
 
 ## テスト
@@ -284,20 +288,19 @@ npm run db:seed
 npm run dev
 ```
 
-その後、`http://localhost:3000` を開いて Basic 認証を通過してください。
+その後、`http://localhost:3000` を開いて Basic 認証を通過してください。ローカル開発では PostgreSQL が先に起動している必要があります。
 
 ## 既知の未実装 / MVPとして割り切っている点
 
 - 複数ユーザー用の管理UIは未実装
 - LINE からの画像登録は未対応
-- 画像ストレージはローカル保存のみ
 - AI 生成履歴の版管理は未実装
 - 問題の一括再生成や一括編集は未実装
 - LINE userId の取得を UI から行う導線は未実装
 
 ## 次に拡張するなら
 
-1. PostgreSQL + 本番向けストレージ(S3互換)へ切り替える
+1. 送信スケジュールを Vercel Cron 前提で UI から確認できるようにする
 2. 複数ユーザー管理と学習対象の割り当て UI を追加する
 3. AI 生成履歴と再生成差分比較を残す
 4. 出題頻度を単純な翌日/7日後ではなく SRS に寄せる

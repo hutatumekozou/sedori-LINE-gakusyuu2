@@ -460,6 +460,7 @@ export type ProductStudyImageCreateOrConnectWithoutItemInput = {
 
 export type ProductStudyImageCreateManyItemInputEnvelope = {
   data: Prisma.ProductStudyImageCreateManyItemInput | Prisma.ProductStudyImageCreateManyItemInput[]
+  skipDuplicates?: boolean
 }
 
 export type ProductStudyImageUpsertWithWhereUniqueWithoutItemInput = {
@@ -1249,6 +1250,7 @@ export type ProductStudyImageCreateManyArgs<ExtArgs extends runtime.Types.Extens
    * The data used to create many ProductStudyImages.
    */
   data: Prisma.ProductStudyImageCreateManyInput | Prisma.ProductStudyImageCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1267,6 +1269,7 @@ export type ProductStudyImageCreateManyAndReturnArgs<ExtArgs extends runtime.Typ
    * The data used to create many ProductStudyImages.
    */
   data: Prisma.ProductStudyImageCreateManyInput | Prisma.ProductStudyImageCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

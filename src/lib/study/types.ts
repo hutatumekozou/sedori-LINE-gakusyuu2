@@ -5,6 +5,7 @@ export type LastResult = "correct" | "incorrect" | "unanswered";
 export type StudyItemFormState = {
   success: boolean;
   message?: string;
+  redirectTo?: string;
   fieldErrors: Record<string, string[]>;
 };
 
@@ -16,6 +17,7 @@ export const emptyStudyItemFormState: StudyItemFormState = {
 export type StudyItemFormDefaults = {
   autoSendEnabled?: boolean;
   productName?: string | null;
+  brandName?: string | null;
   category?: string | null;
   note?: string | null;
   memo?: string | null;

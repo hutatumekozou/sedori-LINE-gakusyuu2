@@ -2,6 +2,12 @@ import type { LineMessage } from "@/lib/line/message-builder";
 
 const IMAGE_FETCH_TIMEOUT_MS = 5000;
 
+type ReplyMessageFallbackResult = {
+  messages: LineMessage[];
+  fellBackToTextOnly: boolean;
+  error?: unknown;
+};
+
 function buildImageAccessError() {
   return new Error(
     "LINE画像の取得確認に失敗しました。APP_BASE_URL に現在有効な HTTPS 公開URL を設定してください。",
@@ -35,4 +41,37 @@ export async function assertReachableImageMessages(messages: LineMessage[]) {
   );
 
   await Promise.all(urls.map((url) => assertReachableImageUrl(url)));
+}
+
+export async function getMessagesWithImageFallback(
+  messages: LineMessage[],
+): Promise<ReplyMessageFallbackResult> {
+  try {
+    await assertReachableImageMessages(messages);
+
+    return {
+      messages,
+      fellBackToTextOnly: false,
+    };
+  } catch (error) {
+    const textMessages = messages.filter(
+      (message): message is Extract<LineMessage, { type: "text" }> => message.type === "text",
+    );
+
+    if (textMessages.length === 0) {
+      throw error;
+    }
+
+    return {
+      messages: textMessages,
+      fellBackToTextOnly: true,
+      error,
+    };
+  }
+}
+
+export async function getReplyMessagesWithImageFallback(
+  messages: LineMessage[],
+): Promise<ReplyMessageFallbackResult> {
+  return getMessagesWithImageFallback(messages);
 }

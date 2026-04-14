@@ -958,6 +958,9 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
  */
 
 export const TransactionIsolationLevel = runtime.makeStrictEnum({
+  ReadUncommitted: 'ReadUncommitted',
+  ReadCommitted: 'ReadCommitted',
+  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 } as const)
 
@@ -1035,7 +1038,9 @@ export const ActiveConversationStateScalarFieldEnum = {
   itemId: 'itemId',
   state: 'state',
   questionLineMessageId: 'questionLineMessageId',
+  questionLineMessageIds: 'questionLineMessageIds',
   answerLineMessageId: 'answerLineMessageId',
+  answerLineMessageIds: 'answerLineMessageIds',
   updatedAt: 'updatedAt'
 } as const
 
@@ -1088,6 +1093,14 @@ export const JsonNullValueInput = {
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
+export const QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+} as const
+
+export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
 export const NullsOrder = {
   first: 'first',
   last: 'last'
@@ -1105,14 +1118,6 @@ export const JsonNullValueFilter = {
 export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
-export const QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
-} as const
-
-export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
-
-
 
 /**
  * Field references
@@ -1127,6 +1132,13 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
 
 
 /**
+ * Reference to a field of type 'Int[]'
+ */
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
  * Reference to a field of type 'String'
  */
 export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
@@ -1134,9 +1146,23 @@ export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
 
 
 /**
+ * Reference to a field of type 'String[]'
+ */
+export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
+    
+
+
+/**
  * Reference to a field of type 'DateTime'
  */
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+/**
+ * Reference to a field of type 'DateTime[]'
+ */
+export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
     
 
 
@@ -1151,6 +1177,13 @@ export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
  * Reference to a field of type 'ItemStatus'
  */
 export type EnumItemStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ItemStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'ItemStatus[]'
+ */
+export type ListEnumItemStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ItemStatus[]'>
     
 
 
@@ -1176,9 +1209,23 @@ export type EnumProductStudyImageKindFieldRefInput<$PrismaModel> = FieldRefInput
 
 
 /**
+ * Reference to a field of type 'ProductStudyImageKind[]'
+ */
+export type ListEnumProductStudyImageKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductStudyImageKind[]'>
+    
+
+
+/**
  * Reference to a field of type 'ReviewActionType'
  */
 export type EnumReviewActionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReviewActionType'>
+    
+
+
+/**
+ * Reference to a field of type 'ReviewActionType[]'
+ */
+export type ListEnumReviewActionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReviewActionType[]'>
     
 
 
@@ -1190,9 +1237,23 @@ export type EnumConversationStateTypeFieldRefInput<$PrismaModel> = FieldRefInput
 
 
 /**
+ * Reference to a field of type 'ConversationStateType[]'
+ */
+export type ListEnumConversationStateTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ConversationStateType[]'>
+    
+
+
+/**
  * Reference to a field of type 'GeminiApiCallStatus'
  */
 export type EnumGeminiApiCallStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GeminiApiCallStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'GeminiApiCallStatus[]'
+ */
+export type ListEnumGeminiApiCallStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GeminiApiCallStatus[]'>
     
 
 
@@ -1204,6 +1265,13 @@ export type EnumLineApiCallKindFieldRefInput<$PrismaModel> = FieldRefInputType<$
 
 
 /**
+ * Reference to a field of type 'LineApiCallKind[]'
+ */
+export type ListEnumLineApiCallKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LineApiCallKind[]'>
+    
+
+
+/**
  * Reference to a field of type 'LineApiCallStatus'
  */
 export type EnumLineApiCallStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LineApiCallStatus'>
@@ -1211,9 +1279,23 @@ export type EnumLineApiCallStatusFieldRefInput<$PrismaModel> = FieldRefInputType
 
 
 /**
+ * Reference to a field of type 'LineApiCallStatus[]'
+ */
+export type ListEnumLineApiCallStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LineApiCallStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**

@@ -5,7 +5,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
 }
 
 enum ItemStatus {
@@ -19,6 +19,7 @@ enum ItemStatus {
 enum ReviewActionType {
   SENT
   ANSWER_SHOWN
+  GREAT_CORRECT
   CORRECT
   INCORRECT
 }
@@ -130,7 +131,9 @@ model ActiveConversationState {
   itemId                Int
   state                 ConversationStateType
   questionLineMessageId String?               @unique
+  questionLineMessageIds String[]             @default([])
   answerLineMessageId   String?               @unique
+  answerLineMessageIds  String[]              @default([])
   updatedAt             DateTime              @updatedAt
   user                  User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
   item                  ProductStudyItem      @relation(fields: [itemId], references: [id], onDelete: Cascade)

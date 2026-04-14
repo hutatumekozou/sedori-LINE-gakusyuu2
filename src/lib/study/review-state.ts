@@ -7,7 +7,7 @@ import type {
 import { scheduleNextReview } from "@/lib/date";
 import type { LastResult } from "@/lib/study/types";
 
-export type LineCommand = "answer" | "correct" | "incorrect" | "manual" | "unknown";
+export type LineCommand = "answer" | "greatCorrect" | "correct" | "incorrect" | "manual" | "unknown";
 
 export function normalizeLineCommand(text: string): LineCommand {
   const normalized = text.trim();
@@ -18,6 +18,10 @@ export function normalizeLineCommand(text: string): LineCommand {
 
   if (normalized === "正解") {
     return "correct";
+  }
+
+  if (normalized === "大正解") {
+    return "greatCorrect";
   }
 
   if (normalized === "不正解") {
@@ -58,18 +62,23 @@ export function getConversationStateAfterReviewResult() {
 }
 
 export function calculateNextScheduledAtFromResult(
-  result: "correct" | "incorrect",
+  result: "greatCorrect" | "correct" | "incorrect",
   baseDate: Date = new Date(),
 ) {
-  return scheduleNextReview(result === "correct" ? 7 : 1, baseDate);
+  return scheduleNextReview(
+    result === "greatCorrect" ? 14 : result === "correct" ? 7 : 1,
+    baseDate,
+  );
 }
 
 export function getItemStatusAfterAnswerShown(): ItemStatus {
   return "ANSWER_SHOWN";
 }
 
-export function getItemStatusAfterReviewResult(result: "correct" | "incorrect"): ItemStatus {
-  return result === "correct" ? "CORRECT" : "INCORRECT";
+export function getItemStatusAfterReviewResult(
+  result: "greatCorrect" | "correct" | "incorrect",
+): ItemStatus {
+  return result === "incorrect" ? "INCORRECT" : "CORRECT";
 }
 
 export function getLastResultFromLogs(
@@ -78,12 +87,15 @@ export function getLastResultFromLogs(
   }>,
 ): LastResult {
   const latestResult = logs.find(
-    (log) => log.actionType === "CORRECT" || log.actionType === "INCORRECT",
+    (log) =>
+      log.actionType === "GREAT_CORRECT" ||
+      log.actionType === "CORRECT" ||
+      log.actionType === "INCORRECT",
   );
 
   if (!latestResult) {
     return "unanswered";
   }
 
-  return latestResult.actionType === "CORRECT" ? "correct" : "incorrect";
+  return latestResult.actionType === "INCORRECT" ? "incorrect" : "correct";
 }

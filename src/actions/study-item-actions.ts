@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { redirect, unstable_rethrow } from "next/navigation";
 
 import { parseDateInput } from "@/lib/date";
 import { dispatchStudyItems } from "@/lib/line/service";
@@ -44,10 +44,14 @@ export async function createStudyItemAction(
   try {
     const item = await createStudyItem(validated.data);
     revalidateAll(item.id);
-    redirect(
-      `/items/${item.id}?message=${encodeURIComponent("問題を登録しました。")}`,
-    );
+    return {
+      success: true,
+      message: "問題を登録しました。",
+      redirectTo: `/items/${item.id}?message=${encodeURIComponent("問題を登録しました。")}`,
+      fieldErrors: {},
+    };
   } catch (error) {
+    unstable_rethrow(error);
     return validationFailure(
       error instanceof Error ? error.message : "問題の登録に失敗しました。",
     );
@@ -69,8 +73,14 @@ export async function updateStudyItemAction(
   try {
     await updateStudyItem(itemId, validated.data);
     revalidateAll(itemId);
-    redirect(`/items/${itemId}?message=${encodeURIComponent("問題を更新しました。")}`);
+    return {
+      success: true,
+      message: "問題を更新しました。",
+      redirectTo: `/items/${itemId}?message=${encodeURIComponent("問題を更新しました。")}`,
+      fieldErrors: {},
+    };
   } catch (error) {
+    unstable_rethrow(error);
     return validationFailure(
       error instanceof Error ? error.message : "問題の更新に失敗しました。",
     );
@@ -93,6 +103,7 @@ export async function sendNowAction(formData: FormData) {
 
     redirect(buildRedirectUrl(redirectTo, "message", "LINEへ出題を送信しました。"));
   } catch (error) {
+    unstable_rethrow(error);
     redirect(
       buildRedirectUrl(
         redirectTo,
@@ -141,6 +152,7 @@ export async function sendSelectedNowAction(formData: FormData) {
 
     redirect(buildRedirectUrl(redirectTo, "message", message));
   } catch (error) {
+    unstable_rethrow(error);
     redirect(
       buildRedirectUrl(
         redirectTo,
@@ -160,6 +172,7 @@ export async function regenerateStudyItemAction(formData: FormData) {
     revalidateAll(itemId);
     redirect(buildRedirectUrl(redirectTo, "message", "AIで問題を再生成しました。"));
   } catch (error) {
+    unstable_rethrow(error);
     redirect(
       buildRedirectUrl(
         redirectTo,
@@ -184,6 +197,7 @@ export async function updateScheduleAction(formData: FormData) {
     revalidateAll(itemId);
     redirect(buildRedirectUrl(redirectTo, "message", "次回送信日を更新しました。"));
   } catch (error) {
+    unstable_rethrow(error);
     redirect(
       buildRedirectUrl(
         redirectTo,
@@ -203,6 +217,7 @@ export async function deleteStudyItemAction(formData: FormData) {
     revalidateAll(itemId);
     redirect(buildRedirectUrl(redirectTo, "message", "問題を削除しました。削除済み一覧から戻せます。"));
   } catch (error) {
+    unstable_rethrow(error);
     redirect(
       buildRedirectUrl(
         redirectTo,
@@ -222,6 +237,7 @@ export async function restoreStudyItemAction(formData: FormData) {
     revalidateAll(itemId);
     redirect(buildRedirectUrl(redirectTo, "message", "問題一覧に戻しました。"));
   } catch (error) {
+    unstable_rethrow(error);
     redirect(
       buildRedirectUrl(
         redirectTo,
@@ -248,6 +264,7 @@ export async function updateAutoSendEnabledAction(formData: FormData) {
       ),
     );
   } catch (error) {
+    unstable_rethrow(error);
     redirect(
       buildRedirectUrl(
         redirectTo,
@@ -294,6 +311,7 @@ export async function updateFavoriteInlineAction(itemId: number, isFavorite: boo
       isFavorite,
     } as const;
   } catch (error) {
+    unstable_rethrow(error);
     return {
       success: false,
       error: error instanceof Error ? error.message : "お気に入り設定の更新に失敗しました。",
@@ -311,6 +329,7 @@ export async function updateAutoSendEnabledInlineAction(itemId: number, autoSend
       autoSendEnabled,
     } as const;
   } catch (error) {
+    unstable_rethrow(error);
     return {
       success: false,
       error: error instanceof Error ? error.message : "自動送信設定の更新に失敗しました。",

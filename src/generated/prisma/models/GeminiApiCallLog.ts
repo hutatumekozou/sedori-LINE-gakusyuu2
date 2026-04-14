@@ -552,6 +552,7 @@ export type GeminiApiCallLogCreateOrConnectWithoutUserInput = {
 
 export type GeminiApiCallLogCreateManyUserInputEnvelope = {
   data: Prisma.GeminiApiCallLogCreateManyUserInput | Prisma.GeminiApiCallLogCreateManyUserInput[]
+  skipDuplicates?: boolean
 }
 
 export type GeminiApiCallLogUpsertWithWhereUniqueWithoutUserInput = {
@@ -1374,6 +1375,7 @@ export type GeminiApiCallLogCreateManyArgs<ExtArgs extends runtime.Types.Extensi
    * The data used to create many GeminiApiCallLogs.
    */
   data: Prisma.GeminiApiCallLogCreateManyInput | Prisma.GeminiApiCallLogCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1392,6 +1394,7 @@ export type GeminiApiCallLogCreateManyAndReturnArgs<ExtArgs extends runtime.Type
    * The data used to create many GeminiApiCallLogs.
    */
   data: Prisma.GeminiApiCallLogCreateManyInput | Prisma.GeminiApiCallLogCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

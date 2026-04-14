@@ -1,27 +1,23 @@
 import "dotenv/config";
 
 import { addDays, startOfDay, subDays } from "date-fns";
-import { mkdir, writeFile } from "node:fs/promises";
-import path from "node:path";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { File } from "node:buffer";
+import { PrismaPg } from "@prisma/adapter-pg";
 
-import { PrismaClient, ReviewActionType } from "../src/generated/prisma/client";
+import {
+  PrismaClient,
+  ProductStudyImageKind,
+  ReviewActionType,
+} from "../src/generated/prisma/client";
+import { saveUploadedImages } from "../src/lib/storage/local";
 
 const prisma = new PrismaClient({
-  adapter: new PrismaBetterSqlite3({
-    url: process.env.DATABASE_URL || "file:./prisma/dev.db",
+  adapter: new PrismaPg({
+    connectionString: process.env.DATABASE_URL || "",
   }),
 });
 
 async function ensureSeedImages() {
-  const storageDir = path.join(process.cwd(), "storage", "uploads", "seed");
-
-  await mkdir(storageDir, { recursive: true });
-
-  const imagePaths = ["seed-1.svg", "seed-2.svg"].map((fileName) =>
-    path.join(storageDir, fileName),
-  );
-
   const svgTemplates = [
     `<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480">
       <rect width="100%" height="100%" fill="#f8f4ea" />
@@ -35,17 +31,22 @@ async function ensureSeedImages() {
     </svg>`,
   ];
 
-  await Promise.all(
-    imagePaths.map((imagePath, index) => writeFile(imagePath, svgTemplates[index], "utf8")),
+  const files = svgTemplates.map(
+    (svgTemplate, index) =>
+      new File([svgTemplate], `seed-${index + 1}.svg`, {
+        type: "image/svg+xml",
+      }),
   );
 
-  return imagePaths.map((imagePath) =>
-    path.relative(path.join(process.cwd(), "storage", "uploads"), imagePath),
-  );
+  return {
+    walletImages: await saveUploadedImages([files[0]], ProductStudyImageKind.QUESTION),
+    ironImages: await saveUploadedImages([files[1]], ProductStudyImageKind.QUESTION),
+    vintageImages: await saveUploadedImages(files, ProductStudyImageKind.QUESTION),
+  };
 }
 
 async function main() {
-  const [seedImage1, seedImage2] = await ensureSeedImages();
+  const { walletImages, ironImages, vintageImages } = await ensureSeedImages();
   const today = startOfDay(new Date());
 
   await prisma.activeConversationState.deleteMany();
@@ -84,12 +85,11 @@ async function main() {
       tags: ["ブランド", "財布", "付属品"],
       keyPoints: ["角スレ確認", "付属品の価値", "ギフト需要"],
       images: {
-        create: [
-          {
-            imagePath: seedImage1,
-            sortOrder: 0,
-          },
-        ],
+        create: walletImages.map((image) => ({
+          kind: image.kind,
+          imagePath: image.imagePath,
+          sortOrder: image.sortOrder,
+        })),
       },
     },
   });
@@ -117,12 +117,11 @@ async function main() {
       tags: ["家電", "動作確認", "安心感"],
       keyPoints: ["通電確認", "付属品明記", "傷の説明"],
       images: {
-        create: [
-          {
-            imagePath: seedImage2,
-            sortOrder: 0,
-          },
-        ],
+        create: ironImages.map((image) => ({
+          kind: image.kind,
+          imagePath: image.imagePath,
+          sortOrder: image.sortOrder,
+        })),
       },
       reviewLogs: {
         create: [
@@ -171,16 +170,11 @@ async function main() {
       tags: ["ヴィンテージ", "時計", "相場確認"],
       keyPoints: ["型番一致", "純正パーツ", "販売履歴比較"],
       images: {
-        create: [
-          {
-            imagePath: seedImage1,
-            sortOrder: 0,
-          },
-          {
-            imagePath: seedImage2,
-            sortOrder: 1,
-          },
-        ],
+        create: vintageImages.map((image) => ({
+          kind: image.kind,
+          imagePath: image.imagePath,
+          sortOrder: image.sortOrder,
+        })),
       },
       reviewLogs: {
         create: [

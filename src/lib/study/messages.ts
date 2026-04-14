@@ -6,17 +6,32 @@ type StudyMessageItem = {
   questionNumber: number;
   question: string;
   answer: string;
+  productName?: string | null;
 };
 
 function formatQuestionSentAt(date: Date | string = new Date()) {
-  return formatInTimeZone(date, getAppSettings().appTimeZone, "M/d HH:mm");
+  return formatInTimeZone(date, getAppSettings().appTimeZone, "M/d");
+}
+
+export function buildQuestionLabel(
+  item: Pick<StudyMessageItem, "questionNumber" | "productName">,
+  options?: {
+    sentAt?: Date | string;
+    includeSentAt?: boolean;
+  },
+) {
+  const includeSentAt = options?.includeSentAt ?? true;
+  const productName = item.productName?.trim();
+  const prefix = includeSentAt ? `${formatQuestionSentAt(options?.sentAt)}問題番号:${item.questionNumber}` : `問題番号:${item.questionNumber}`;
+
+  return productName ? `${prefix} ${productName}` : prefix;
 }
 
 export function buildQuestionMessage(
-  item: Pick<StudyMessageItem, "questionNumber" | "question">,
+  item: Pick<StudyMessageItem, "questionNumber" | "question" | "productName">,
   sentAt: Date | string = new Date(),
 ) {
-  return `${formatQuestionSentAt(sentAt)} 問題番号: ${item.questionNumber}
+  return `${buildQuestionLabel(item, { sentAt })}
 【今日の復習問題】
 ${item.question}
 
@@ -33,9 +48,14 @@ export function buildAnswerMessage(item: Pick<StudyMessageItem, "questionNumber"
 ${item.answer}
 
 自己判定して返信してください。
+- 「大正解」
 - 「正解」
 - 「不正解」
 - 「手動」`;
+}
+
+export function buildGreatCorrectReplyMessage() {
+  return "大正解として記録しました。次回は14日後に送信します。";
 }
 
 export function buildCorrectReplyMessage() {
@@ -50,10 +70,18 @@ export function buildManualModeReplyMessage() {
   return "この問題を手動送信に切り替えました。今後の自動送信は停止します。必要なときは管理画面から手動送信してください。";
 }
 
-export function buildBatchDispatchSummaryMessage(questionNumbers: number[]) {
-  return `【本日の一斉送信】
+export function buildBatchDispatchSummaryMessage(
+  questionNumbers: number[],
+  sentAt: Date | string = new Date(),
+) {
+  const datedQuestionNumbers = questionNumbers.map(
+    (questionNumber) => `${formatQuestionSentAt(sentAt)}問題番号: ${questionNumber}`,
+  );
+
+  return `【今日送るべきだった問題一覧】
 送信件数: ${questionNumbers.length}件
-問題番号: ${questionNumbers.join("、")}`;
+問題番号:
+${datedQuestionNumbers.join("\n")}`;
 }
 
 export function buildNoActiveQuestionMessage() {
@@ -69,13 +97,25 @@ export function buildReplyToQuestionMessage() {
 }
 
 export function buildReplyToAnswerMessage() {
-  return "解答メッセージにリプで「正解」または「不正解」と送ってください。";
+  return "解答メッセージにリプで「大正解」「正解」または「不正解」と送ってください。";
+}
+
+export function buildAnswerImageFallbackMessage() {
+  return "解答画像を取得できなかったため、今回はテキストのみ表示します。";
 }
 
 export function buildReplyToManualTargetMessage() {
   return "切り替えたい問題または解答メッセージにリプで「手動」と送ってください。";
 }
 
+export function buildCategoryDispatchStartMessage(category: string, count: number) {
+  return `「${category}」の苦手問題を${count}問送ります。`;
+}
+
+export function buildEmptyCategoryDispatchMessage(category: string) {
+  return `「${category}」に該当する問題がまだありません。`;
+}
+
 export function buildLineHelpMessage() {
-  return "受付可能な返信は「解答」「正解」「不正解」「手動」です。";
+  return "受付可能な返信は「解答」「大正解」「正解」「不正解」「手動」です。カテゴリ名を送ると、そのカテゴリの苦手問題を最大5問出題します。";
 }
