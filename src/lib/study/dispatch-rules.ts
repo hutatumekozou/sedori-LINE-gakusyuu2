@@ -124,11 +124,18 @@ export function getDispatchSkipMessage(reason: DispatchSkipReason) {
   return "まだ本日の送信対象ではありません。";
 }
 
+export function resolveChatTargetUserId(
+  itemUserId: string | null | undefined,
+  defaultUserId: string | null | undefined,
+) {
+  return itemUserId || defaultUserId || null;
+}
+
 export function resolveLineTargetUserId(
   itemLineUserId: string | null | undefined,
   defaultLineUserId: string | null | undefined,
 ) {
-  return itemLineUserId || defaultLineUserId || null;
+  return resolveChatTargetUserId(itemLineUserId, defaultLineUserId);
 }
 
 export function sortDispatchCandidates<

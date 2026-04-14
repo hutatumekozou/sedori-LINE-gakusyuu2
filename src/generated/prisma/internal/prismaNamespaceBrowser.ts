@@ -57,7 +57,8 @@ export const ModelName = {
   ReviewLog: 'ReviewLog',
   ActiveConversationState: 'ActiveConversationState',
   GeminiApiCallLog: 'GeminiApiCallLog',
-  LineApiCallLog: 'LineApiCallLog'
+  LineApiCallLog: 'LineApiCallLog',
+  DiscordApiCallLog: 'DiscordApiCallLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -79,6 +80,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const UserScalarFieldEnum = {
   id: 'id',
   lineUserId: 'lineUserId',
+  discordUserId: 'discordUserId',
   displayName: 'displayName',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -150,6 +152,10 @@ export const ActiveConversationStateScalarFieldEnum = {
   questionLineMessageIds: 'questionLineMessageIds',
   answerLineMessageId: 'answerLineMessageId',
   answerLineMessageIds: 'answerLineMessageIds',
+  questionDiscordMessageId: 'questionDiscordMessageId',
+  questionDiscordMessageIds: 'questionDiscordMessageIds',
+  answerDiscordMessageId: 'answerDiscordMessageId',
+  answerDiscordMessageIds: 'answerDiscordMessageIds',
   updatedAt: 'updatedAt'
 } as const
 
@@ -185,6 +191,22 @@ export const LineApiCallLogScalarFieldEnum = {
 } as const
 
 export type LineApiCallLogScalarFieldEnum = (typeof LineApiCallLogScalarFieldEnum)[keyof typeof LineApiCallLogScalarFieldEnum]
+
+
+export const DiscordApiCallLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  itemId: 'itemId',
+  kind: 'kind',
+  status: 'status',
+  targetDiscordUserId: 'targetDiscordUserId',
+  channelId: 'channelId',
+  messageCount: 'messageCount',
+  errorMessage: 'errorMessage',
+  createdAt: 'createdAt'
+} as const
+
+export type DiscordApiCallLogScalarFieldEnum = (typeof DiscordApiCallLogScalarFieldEnum)[keyof typeof DiscordApiCallLogScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -54,10 +54,10 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       </section>
 
       <section className="grid gap-4 md:grid-cols-4">
-        <StatCard label="LINE API呼び出し回数" value={dashboard.lineApiCallCount} />
-        <StatCard label="LINE Push回数" value={dashboard.linePushCount} />
-        <StatCard label="LINE Reply回数" value={dashboard.lineReplyCount} />
-        <StatCard label="LINE課金対象推定通数" value={dashboard.lineEstimatedBillableCount} />
+        <StatCard label="Discord API呼び出し回数" value={dashboard.discordApiCallCount} />
+        <StatCard label="Discord Push回数" value={dashboard.discordPushCount} />
+        <StatCard label="Discord Reply回数" value={dashboard.discordReplyCount} />
+        <StatCard label="Discord送信メッセージ数" value={dashboard.discordSentMessageCount} />
       </section>
 
       <section className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
@@ -110,7 +110,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
         <div className="rounded-[28px] border border-slate-200/70 bg-white/90 p-6 shadow-[0_20px_60px_-40px_rgba(15,23,42,0.35)]">
           <div className="mb-4">
             <h2 className="text-lg font-semibold text-slate-950">直近の回答ログ</h2>
-            <p className="text-sm text-slate-500">LINEでの反応履歴を時系列で表示します。</p>
+            <p className="text-sm text-slate-500">Discord DMでの反応履歴を時系列で表示します。</p>
           </div>
 
           <div className="space-y-3">
@@ -189,17 +189,17 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
       <section className="rounded-[28px] border border-slate-200/70 bg-white/90 p-6 shadow-[0_20px_60px_-40px_rgba(15,23,42,0.35)]">
         <div className="mb-4">
-          <h2 className="text-lg font-semibold text-slate-950">LINE利用ログ</h2>
-          <p className="text-sm text-slate-500">このアプリからの LINE API 呼び出し履歴です。</p>
+          <h2 className="text-lg font-semibold text-slate-950">Discord利用ログ</h2>
+          <p className="text-sm text-slate-500">このアプリからの Discord API 呼び出し履歴です。</p>
         </div>
 
         <div className="space-y-3">
-          {dashboard.recentLineLogs.length === 0 ? (
+          {dashboard.recentDiscordLogs.length === 0 ? (
             <p className="rounded-2xl border border-dashed border-slate-200 px-4 py-6 text-sm text-slate-500">
-              LINE API の呼び出しログはまだありません。
+              Discord API の呼び出しログはまだありません。
             </p>
           ) : (
-            dashboard.recentLineLogs.map((log) => (
+            dashboard.recentDiscordLogs.map((log) => (
               <div key={log.id} className="rounded-2xl border border-slate-200 px-4 py-4">
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
@@ -217,12 +217,11 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                 </div>
                 <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-600">
                   <span>メッセージ数: {log.messageCount}</span>
-                  <span>課金対象推定: {log.estimatedBillableCount}</span>
                   <span>利用者: {log.user?.displayName || "未設定"}</span>
                   <span>問題番号: {log.item?.questionNumber ?? "-"}</span>
                 </div>
-                {log.targetLineUserId ? (
-                  <p className="mt-2 text-xs text-slate-500">送信先: {log.targetLineUserId}</p>
+                {log.targetDiscordUserId ? (
+                  <p className="mt-2 text-xs text-slate-500">送信先: {log.targetDiscordUserId}</p>
                 ) : null}
                 {log.errorMessage ? (
                   <p className="mt-2 text-xs text-rose-600">エラー: {log.errorMessage}</p>

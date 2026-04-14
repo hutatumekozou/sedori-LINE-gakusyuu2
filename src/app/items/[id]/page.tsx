@@ -266,7 +266,7 @@ export default async function ItemDetailPage({
                       <p className="text-xs text-slate-500">{formatDateTime(log.actionAt)}</p>
                     </div>
                     <p className="mt-2 text-sm text-slate-600">
-                      ユーザー: {log.user.displayName || log.user.lineUserId || `User ${log.userId}`}
+                      ユーザー: {log.user.displayName || log.user.discordUserId || log.user.lineUserId || `User ${log.userId}`}
                     </p>
                     {log.rawText ? (
                       <p className="mt-1 text-xs text-slate-500">受信テキスト: {log.rawText}</p>

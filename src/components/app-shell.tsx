@@ -35,7 +35,7 @@ export function AppShell({ children }: AppShellProps) {
                 学習問題化アプリ
               </h1>
               <p className="mt-2.5 text-[12px] leading-5 text-slate-600">
-                画像と補足情報をAIで問題化し、LINEで毎日復習するための自分専用MVPです。
+                画像と補足情報をAIで問題化し、Discord DMで毎日復習するための自分専用MVPです。
               </p>
             </div>
           </div>

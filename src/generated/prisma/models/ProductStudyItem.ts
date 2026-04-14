@@ -365,6 +365,7 @@ export type ProductStudyItemWhereInput = {
   reviewLogs?: Prisma.ReviewLogListRelationFilter
   activeConversations?: Prisma.ActiveConversationStateListRelationFilter
   lineApiCallLogs?: Prisma.LineApiCallLogListRelationFilter
+  discordApiCallLogs?: Prisma.DiscordApiCallLogListRelationFilter
 }
 
 export type ProductStudyItemOrderByWithRelationInput = {
@@ -396,6 +397,7 @@ export type ProductStudyItemOrderByWithRelationInput = {
   reviewLogs?: Prisma.ReviewLogOrderByRelationAggregateInput
   activeConversations?: Prisma.ActiveConversationStateOrderByRelationAggregateInput
   lineApiCallLogs?: Prisma.LineApiCallLogOrderByRelationAggregateInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogOrderByRelationAggregateInput
 }
 
 export type ProductStudyItemWhereUniqueInput = Prisma.AtLeast<{
@@ -430,6 +432,7 @@ export type ProductStudyItemWhereUniqueInput = Prisma.AtLeast<{
   reviewLogs?: Prisma.ReviewLogListRelationFilter
   activeConversations?: Prisma.ActiveConversationStateListRelationFilter
   lineApiCallLogs?: Prisma.LineApiCallLogListRelationFilter
+  discordApiCallLogs?: Prisma.DiscordApiCallLogListRelationFilter
 }, "id" | "questionNumber">
 
 export type ProductStudyItemOrderByWithAggregationInput = {
@@ -519,6 +522,7 @@ export type ProductStudyItemCreateInput = {
   reviewLogs?: Prisma.ReviewLogCreateNestedManyWithoutItemInput
   activeConversations?: Prisma.ActiveConversationStateCreateNestedManyWithoutItemInput
   lineApiCallLogs?: Prisma.LineApiCallLogCreateNestedManyWithoutItemInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogCreateNestedManyWithoutItemInput
 }
 
 export type ProductStudyItemUncheckedCreateInput = {
@@ -549,6 +553,7 @@ export type ProductStudyItemUncheckedCreateInput = {
   reviewLogs?: Prisma.ReviewLogUncheckedCreateNestedManyWithoutItemInput
   activeConversations?: Prisma.ActiveConversationStateUncheckedCreateNestedManyWithoutItemInput
   lineApiCallLogs?: Prisma.LineApiCallLogUncheckedCreateNestedManyWithoutItemInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUncheckedCreateNestedManyWithoutItemInput
 }
 
 export type ProductStudyItemUpdateInput = {
@@ -578,6 +583,7 @@ export type ProductStudyItemUpdateInput = {
   reviewLogs?: Prisma.ReviewLogUpdateManyWithoutItemNestedInput
   activeConversations?: Prisma.ActiveConversationStateUpdateManyWithoutItemNestedInput
   lineApiCallLogs?: Prisma.LineApiCallLogUpdateManyWithoutItemNestedInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUpdateManyWithoutItemNestedInput
 }
 
 export type ProductStudyItemUncheckedUpdateInput = {
@@ -608,6 +614,7 @@ export type ProductStudyItemUncheckedUpdateInput = {
   reviewLogs?: Prisma.ReviewLogUncheckedUpdateManyWithoutItemNestedInput
   activeConversations?: Prisma.ActiveConversationStateUncheckedUpdateManyWithoutItemNestedInput
   lineApiCallLogs?: Prisma.LineApiCallLogUncheckedUpdateManyWithoutItemNestedInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUncheckedUpdateManyWithoutItemNestedInput
 }
 
 export type ProductStudyItemCreateManyInput = {
@@ -908,6 +915,22 @@ export type ProductStudyItemUpdateOneWithoutLineApiCallLogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProductStudyItemUpdateToOneWithWhereWithoutLineApiCallLogsInput, Prisma.ProductStudyItemUpdateWithoutLineApiCallLogsInput>, Prisma.ProductStudyItemUncheckedUpdateWithoutLineApiCallLogsInput>
 }
 
+export type ProductStudyItemCreateNestedOneWithoutDiscordApiCallLogsInput = {
+  create?: Prisma.XOR<Prisma.ProductStudyItemCreateWithoutDiscordApiCallLogsInput, Prisma.ProductStudyItemUncheckedCreateWithoutDiscordApiCallLogsInput>
+  connectOrCreate?: Prisma.ProductStudyItemCreateOrConnectWithoutDiscordApiCallLogsInput
+  connect?: Prisma.ProductStudyItemWhereUniqueInput
+}
+
+export type ProductStudyItemUpdateOneWithoutDiscordApiCallLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProductStudyItemCreateWithoutDiscordApiCallLogsInput, Prisma.ProductStudyItemUncheckedCreateWithoutDiscordApiCallLogsInput>
+  connectOrCreate?: Prisma.ProductStudyItemCreateOrConnectWithoutDiscordApiCallLogsInput
+  upsert?: Prisma.ProductStudyItemUpsertWithoutDiscordApiCallLogsInput
+  disconnect?: Prisma.ProductStudyItemWhereInput | boolean
+  delete?: Prisma.ProductStudyItemWhereInput | boolean
+  connect?: Prisma.ProductStudyItemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProductStudyItemUpdateToOneWithWhereWithoutDiscordApiCallLogsInput, Prisma.ProductStudyItemUpdateWithoutDiscordApiCallLogsInput>, Prisma.ProductStudyItemUncheckedUpdateWithoutDiscordApiCallLogsInput>
+}
+
 export type ProductStudyItemCreateWithoutUserInput = {
   questionNumber: number
   autoSendEnabled?: boolean
@@ -934,6 +957,7 @@ export type ProductStudyItemCreateWithoutUserInput = {
   reviewLogs?: Prisma.ReviewLogCreateNestedManyWithoutItemInput
   activeConversations?: Prisma.ActiveConversationStateCreateNestedManyWithoutItemInput
   lineApiCallLogs?: Prisma.LineApiCallLogCreateNestedManyWithoutItemInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogCreateNestedManyWithoutItemInput
 }
 
 export type ProductStudyItemUncheckedCreateWithoutUserInput = {
@@ -963,6 +987,7 @@ export type ProductStudyItemUncheckedCreateWithoutUserInput = {
   reviewLogs?: Prisma.ReviewLogUncheckedCreateNestedManyWithoutItemInput
   activeConversations?: Prisma.ActiveConversationStateUncheckedCreateNestedManyWithoutItemInput
   lineApiCallLogs?: Prisma.LineApiCallLogUncheckedCreateNestedManyWithoutItemInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUncheckedCreateNestedManyWithoutItemInput
 }
 
 export type ProductStudyItemCreateOrConnectWithoutUserInput = {
@@ -1046,6 +1071,7 @@ export type ProductStudyItemCreateWithoutImagesInput = {
   reviewLogs?: Prisma.ReviewLogCreateNestedManyWithoutItemInput
   activeConversations?: Prisma.ActiveConversationStateCreateNestedManyWithoutItemInput
   lineApiCallLogs?: Prisma.LineApiCallLogCreateNestedManyWithoutItemInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogCreateNestedManyWithoutItemInput
 }
 
 export type ProductStudyItemUncheckedCreateWithoutImagesInput = {
@@ -1075,6 +1101,7 @@ export type ProductStudyItemUncheckedCreateWithoutImagesInput = {
   reviewLogs?: Prisma.ReviewLogUncheckedCreateNestedManyWithoutItemInput
   activeConversations?: Prisma.ActiveConversationStateUncheckedCreateNestedManyWithoutItemInput
   lineApiCallLogs?: Prisma.LineApiCallLogUncheckedCreateNestedManyWithoutItemInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUncheckedCreateNestedManyWithoutItemInput
 }
 
 export type ProductStudyItemCreateOrConnectWithoutImagesInput = {
@@ -1119,6 +1146,7 @@ export type ProductStudyItemUpdateWithoutImagesInput = {
   reviewLogs?: Prisma.ReviewLogUpdateManyWithoutItemNestedInput
   activeConversations?: Prisma.ActiveConversationStateUpdateManyWithoutItemNestedInput
   lineApiCallLogs?: Prisma.LineApiCallLogUpdateManyWithoutItemNestedInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUpdateManyWithoutItemNestedInput
 }
 
 export type ProductStudyItemUncheckedUpdateWithoutImagesInput = {
@@ -1148,6 +1176,7 @@ export type ProductStudyItemUncheckedUpdateWithoutImagesInput = {
   reviewLogs?: Prisma.ReviewLogUncheckedUpdateManyWithoutItemNestedInput
   activeConversations?: Prisma.ActiveConversationStateUncheckedUpdateManyWithoutItemNestedInput
   lineApiCallLogs?: Prisma.LineApiCallLogUncheckedUpdateManyWithoutItemNestedInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUncheckedUpdateManyWithoutItemNestedInput
 }
 
 export type ProductStudyItemCreateWithoutReviewLogsInput = {
@@ -1176,6 +1205,7 @@ export type ProductStudyItemCreateWithoutReviewLogsInput = {
   images?: Prisma.ProductStudyImageCreateNestedManyWithoutItemInput
   activeConversations?: Prisma.ActiveConversationStateCreateNestedManyWithoutItemInput
   lineApiCallLogs?: Prisma.LineApiCallLogCreateNestedManyWithoutItemInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogCreateNestedManyWithoutItemInput
 }
 
 export type ProductStudyItemUncheckedCreateWithoutReviewLogsInput = {
@@ -1205,6 +1235,7 @@ export type ProductStudyItemUncheckedCreateWithoutReviewLogsInput = {
   images?: Prisma.ProductStudyImageUncheckedCreateNestedManyWithoutItemInput
   activeConversations?: Prisma.ActiveConversationStateUncheckedCreateNestedManyWithoutItemInput
   lineApiCallLogs?: Prisma.LineApiCallLogUncheckedCreateNestedManyWithoutItemInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUncheckedCreateNestedManyWithoutItemInput
 }
 
 export type ProductStudyItemCreateOrConnectWithoutReviewLogsInput = {
@@ -1249,6 +1280,7 @@ export type ProductStudyItemUpdateWithoutReviewLogsInput = {
   images?: Prisma.ProductStudyImageUpdateManyWithoutItemNestedInput
   activeConversations?: Prisma.ActiveConversationStateUpdateManyWithoutItemNestedInput
   lineApiCallLogs?: Prisma.LineApiCallLogUpdateManyWithoutItemNestedInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUpdateManyWithoutItemNestedInput
 }
 
 export type ProductStudyItemUncheckedUpdateWithoutReviewLogsInput = {
@@ -1278,6 +1310,7 @@ export type ProductStudyItemUncheckedUpdateWithoutReviewLogsInput = {
   images?: Prisma.ProductStudyImageUncheckedUpdateManyWithoutItemNestedInput
   activeConversations?: Prisma.ActiveConversationStateUncheckedUpdateManyWithoutItemNestedInput
   lineApiCallLogs?: Prisma.LineApiCallLogUncheckedUpdateManyWithoutItemNestedInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUncheckedUpdateManyWithoutItemNestedInput
 }
 
 export type ProductStudyItemCreateWithoutActiveConversationsInput = {
@@ -1306,6 +1339,7 @@ export type ProductStudyItemCreateWithoutActiveConversationsInput = {
   images?: Prisma.ProductStudyImageCreateNestedManyWithoutItemInput
   reviewLogs?: Prisma.ReviewLogCreateNestedManyWithoutItemInput
   lineApiCallLogs?: Prisma.LineApiCallLogCreateNestedManyWithoutItemInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogCreateNestedManyWithoutItemInput
 }
 
 export type ProductStudyItemUncheckedCreateWithoutActiveConversationsInput = {
@@ -1335,6 +1369,7 @@ export type ProductStudyItemUncheckedCreateWithoutActiveConversationsInput = {
   images?: Prisma.ProductStudyImageUncheckedCreateNestedManyWithoutItemInput
   reviewLogs?: Prisma.ReviewLogUncheckedCreateNestedManyWithoutItemInput
   lineApiCallLogs?: Prisma.LineApiCallLogUncheckedCreateNestedManyWithoutItemInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUncheckedCreateNestedManyWithoutItemInput
 }
 
 export type ProductStudyItemCreateOrConnectWithoutActiveConversationsInput = {
@@ -1379,6 +1414,7 @@ export type ProductStudyItemUpdateWithoutActiveConversationsInput = {
   images?: Prisma.ProductStudyImageUpdateManyWithoutItemNestedInput
   reviewLogs?: Prisma.ReviewLogUpdateManyWithoutItemNestedInput
   lineApiCallLogs?: Prisma.LineApiCallLogUpdateManyWithoutItemNestedInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUpdateManyWithoutItemNestedInput
 }
 
 export type ProductStudyItemUncheckedUpdateWithoutActiveConversationsInput = {
@@ -1408,6 +1444,7 @@ export type ProductStudyItemUncheckedUpdateWithoutActiveConversationsInput = {
   images?: Prisma.ProductStudyImageUncheckedUpdateManyWithoutItemNestedInput
   reviewLogs?: Prisma.ReviewLogUncheckedUpdateManyWithoutItemNestedInput
   lineApiCallLogs?: Prisma.LineApiCallLogUncheckedUpdateManyWithoutItemNestedInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUncheckedUpdateManyWithoutItemNestedInput
 }
 
 export type ProductStudyItemCreateWithoutLineApiCallLogsInput = {
@@ -1436,6 +1473,7 @@ export type ProductStudyItemCreateWithoutLineApiCallLogsInput = {
   images?: Prisma.ProductStudyImageCreateNestedManyWithoutItemInput
   reviewLogs?: Prisma.ReviewLogCreateNestedManyWithoutItemInput
   activeConversations?: Prisma.ActiveConversationStateCreateNestedManyWithoutItemInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogCreateNestedManyWithoutItemInput
 }
 
 export type ProductStudyItemUncheckedCreateWithoutLineApiCallLogsInput = {
@@ -1465,6 +1503,7 @@ export type ProductStudyItemUncheckedCreateWithoutLineApiCallLogsInput = {
   images?: Prisma.ProductStudyImageUncheckedCreateNestedManyWithoutItemInput
   reviewLogs?: Prisma.ReviewLogUncheckedCreateNestedManyWithoutItemInput
   activeConversations?: Prisma.ActiveConversationStateUncheckedCreateNestedManyWithoutItemInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUncheckedCreateNestedManyWithoutItemInput
 }
 
 export type ProductStudyItemCreateOrConnectWithoutLineApiCallLogsInput = {
@@ -1509,6 +1548,7 @@ export type ProductStudyItemUpdateWithoutLineApiCallLogsInput = {
   images?: Prisma.ProductStudyImageUpdateManyWithoutItemNestedInput
   reviewLogs?: Prisma.ReviewLogUpdateManyWithoutItemNestedInput
   activeConversations?: Prisma.ActiveConversationStateUpdateManyWithoutItemNestedInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUpdateManyWithoutItemNestedInput
 }
 
 export type ProductStudyItemUncheckedUpdateWithoutLineApiCallLogsInput = {
@@ -1538,6 +1578,141 @@ export type ProductStudyItemUncheckedUpdateWithoutLineApiCallLogsInput = {
   images?: Prisma.ProductStudyImageUncheckedUpdateManyWithoutItemNestedInput
   reviewLogs?: Prisma.ReviewLogUncheckedUpdateManyWithoutItemNestedInput
   activeConversations?: Prisma.ActiveConversationStateUncheckedUpdateManyWithoutItemNestedInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUncheckedUpdateManyWithoutItemNestedInput
+}
+
+export type ProductStudyItemCreateWithoutDiscordApiCallLogsInput = {
+  questionNumber: number
+  autoSendEnabled?: boolean
+  isFavorite?: boolean
+  deletedAt?: Date | string | null
+  productName?: string | null
+  brandName?: string | null
+  category?: string | null
+  note?: string
+  memo?: string | null
+  firstScheduledAt: Date | string
+  nextScheduledAt: Date | string
+  status?: $Enums.ItemStatus
+  summary: string
+  question: string
+  answer: string
+  explanation: string
+  difficulty: string
+  tags: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  keyPoints: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutStudyItemsInput
+  images?: Prisma.ProductStudyImageCreateNestedManyWithoutItemInput
+  reviewLogs?: Prisma.ReviewLogCreateNestedManyWithoutItemInput
+  activeConversations?: Prisma.ActiveConversationStateCreateNestedManyWithoutItemInput
+  lineApiCallLogs?: Prisma.LineApiCallLogCreateNestedManyWithoutItemInput
+}
+
+export type ProductStudyItemUncheckedCreateWithoutDiscordApiCallLogsInput = {
+  id?: number
+  userId: number
+  questionNumber: number
+  autoSendEnabled?: boolean
+  isFavorite?: boolean
+  deletedAt?: Date | string | null
+  productName?: string | null
+  brandName?: string | null
+  category?: string | null
+  note?: string
+  memo?: string | null
+  firstScheduledAt: Date | string
+  nextScheduledAt: Date | string
+  status?: $Enums.ItemStatus
+  summary: string
+  question: string
+  answer: string
+  explanation: string
+  difficulty: string
+  tags: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  keyPoints: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  images?: Prisma.ProductStudyImageUncheckedCreateNestedManyWithoutItemInput
+  reviewLogs?: Prisma.ReviewLogUncheckedCreateNestedManyWithoutItemInput
+  activeConversations?: Prisma.ActiveConversationStateUncheckedCreateNestedManyWithoutItemInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUncheckedCreateNestedManyWithoutItemInput
+}
+
+export type ProductStudyItemCreateOrConnectWithoutDiscordApiCallLogsInput = {
+  where: Prisma.ProductStudyItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProductStudyItemCreateWithoutDiscordApiCallLogsInput, Prisma.ProductStudyItemUncheckedCreateWithoutDiscordApiCallLogsInput>
+}
+
+export type ProductStudyItemUpsertWithoutDiscordApiCallLogsInput = {
+  update: Prisma.XOR<Prisma.ProductStudyItemUpdateWithoutDiscordApiCallLogsInput, Prisma.ProductStudyItemUncheckedUpdateWithoutDiscordApiCallLogsInput>
+  create: Prisma.XOR<Prisma.ProductStudyItemCreateWithoutDiscordApiCallLogsInput, Prisma.ProductStudyItemUncheckedCreateWithoutDiscordApiCallLogsInput>
+  where?: Prisma.ProductStudyItemWhereInput
+}
+
+export type ProductStudyItemUpdateToOneWithWhereWithoutDiscordApiCallLogsInput = {
+  where?: Prisma.ProductStudyItemWhereInput
+  data: Prisma.XOR<Prisma.ProductStudyItemUpdateWithoutDiscordApiCallLogsInput, Prisma.ProductStudyItemUncheckedUpdateWithoutDiscordApiCallLogsInput>
+}
+
+export type ProductStudyItemUpdateWithoutDiscordApiCallLogsInput = {
+  questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  note?: Prisma.StringFieldUpdateOperationsInput | string
+  memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstScheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nextScheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumItemStatusFieldUpdateOperationsInput | $Enums.ItemStatus
+  summary?: Prisma.StringFieldUpdateOperationsInput | string
+  question?: Prisma.StringFieldUpdateOperationsInput | string
+  answer?: Prisma.StringFieldUpdateOperationsInput | string
+  explanation?: Prisma.StringFieldUpdateOperationsInput | string
+  difficulty?: Prisma.StringFieldUpdateOperationsInput | string
+  tags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  keyPoints?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutStudyItemsNestedInput
+  images?: Prisma.ProductStudyImageUpdateManyWithoutItemNestedInput
+  reviewLogs?: Prisma.ReviewLogUpdateManyWithoutItemNestedInput
+  activeConversations?: Prisma.ActiveConversationStateUpdateManyWithoutItemNestedInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUpdateManyWithoutItemNestedInput
+}
+
+export type ProductStudyItemUncheckedUpdateWithoutDiscordApiCallLogsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  questionNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  autoSendEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  productName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brandName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  note?: Prisma.StringFieldUpdateOperationsInput | string
+  memo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  firstScheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nextScheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumItemStatusFieldUpdateOperationsInput | $Enums.ItemStatus
+  summary?: Prisma.StringFieldUpdateOperationsInput | string
+  question?: Prisma.StringFieldUpdateOperationsInput | string
+  answer?: Prisma.StringFieldUpdateOperationsInput | string
+  explanation?: Prisma.StringFieldUpdateOperationsInput | string
+  difficulty?: Prisma.StringFieldUpdateOperationsInput | string
+  tags?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  keyPoints?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  images?: Prisma.ProductStudyImageUncheckedUpdateManyWithoutItemNestedInput
+  reviewLogs?: Prisma.ReviewLogUncheckedUpdateManyWithoutItemNestedInput
+  activeConversations?: Prisma.ActiveConversationStateUncheckedUpdateManyWithoutItemNestedInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUncheckedUpdateManyWithoutItemNestedInput
 }
 
 export type ProductStudyItemCreateManyUserInput = {
@@ -1591,6 +1766,7 @@ export type ProductStudyItemUpdateWithoutUserInput = {
   reviewLogs?: Prisma.ReviewLogUpdateManyWithoutItemNestedInput
   activeConversations?: Prisma.ActiveConversationStateUpdateManyWithoutItemNestedInput
   lineApiCallLogs?: Prisma.LineApiCallLogUpdateManyWithoutItemNestedInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUpdateManyWithoutItemNestedInput
 }
 
 export type ProductStudyItemUncheckedUpdateWithoutUserInput = {
@@ -1620,6 +1796,7 @@ export type ProductStudyItemUncheckedUpdateWithoutUserInput = {
   reviewLogs?: Prisma.ReviewLogUncheckedUpdateManyWithoutItemNestedInput
   activeConversations?: Prisma.ActiveConversationStateUncheckedUpdateManyWithoutItemNestedInput
   lineApiCallLogs?: Prisma.LineApiCallLogUncheckedUpdateManyWithoutItemNestedInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUncheckedUpdateManyWithoutItemNestedInput
 }
 
 export type ProductStudyItemUncheckedUpdateManyWithoutUserInput = {
@@ -1657,6 +1834,7 @@ export type ProductStudyItemCountOutputType = {
   reviewLogs: number
   activeConversations: number
   lineApiCallLogs: number
+  discordApiCallLogs: number
 }
 
 export type ProductStudyItemCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1664,6 +1842,7 @@ export type ProductStudyItemCountOutputTypeSelect<ExtArgs extends runtime.Types.
   reviewLogs?: boolean | ProductStudyItemCountOutputTypeCountReviewLogsArgs
   activeConversations?: boolean | ProductStudyItemCountOutputTypeCountActiveConversationsArgs
   lineApiCallLogs?: boolean | ProductStudyItemCountOutputTypeCountLineApiCallLogsArgs
+  discordApiCallLogs?: boolean | ProductStudyItemCountOutputTypeCountDiscordApiCallLogsArgs
 }
 
 /**
@@ -1704,6 +1883,13 @@ export type ProductStudyItemCountOutputTypeCountLineApiCallLogsArgs<ExtArgs exte
   where?: Prisma.LineApiCallLogWhereInput
 }
 
+/**
+ * ProductStudyItemCountOutputType without action
+ */
+export type ProductStudyItemCountOutputTypeCountDiscordApiCallLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DiscordApiCallLogWhereInput
+}
+
 
 export type ProductStudyItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1734,6 +1920,7 @@ export type ProductStudyItemSelect<ExtArgs extends runtime.Types.Extensions.Inte
   reviewLogs?: boolean | Prisma.ProductStudyItem$reviewLogsArgs<ExtArgs>
   activeConversations?: boolean | Prisma.ProductStudyItem$activeConversationsArgs<ExtArgs>
   lineApiCallLogs?: boolean | Prisma.ProductStudyItem$lineApiCallLogsArgs<ExtArgs>
+  discordApiCallLogs?: boolean | Prisma.ProductStudyItem$discordApiCallLogsArgs<ExtArgs>
   _count?: boolean | Prisma.ProductStudyItemCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["productStudyItem"]>
 
@@ -1824,6 +2011,7 @@ export type ProductStudyItemInclude<ExtArgs extends runtime.Types.Extensions.Int
   reviewLogs?: boolean | Prisma.ProductStudyItem$reviewLogsArgs<ExtArgs>
   activeConversations?: boolean | Prisma.ProductStudyItem$activeConversationsArgs<ExtArgs>
   lineApiCallLogs?: boolean | Prisma.ProductStudyItem$lineApiCallLogsArgs<ExtArgs>
+  discordApiCallLogs?: boolean | Prisma.ProductStudyItem$discordApiCallLogsArgs<ExtArgs>
   _count?: boolean | Prisma.ProductStudyItemCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProductStudyItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1841,6 +2029,7 @@ export type $ProductStudyItemPayload<ExtArgs extends runtime.Types.Extensions.In
     reviewLogs: Prisma.$ReviewLogPayload<ExtArgs>[]
     activeConversations: Prisma.$ActiveConversationStatePayload<ExtArgs>[]
     lineApiCallLogs: Prisma.$LineApiCallLogPayload<ExtArgs>[]
+    discordApiCallLogs: Prisma.$DiscordApiCallLogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -2265,6 +2454,7 @@ export interface Prisma__ProductStudyItemClient<T, Null = never, ExtArgs extends
   reviewLogs<T extends Prisma.ProductStudyItem$reviewLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProductStudyItem$reviewLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   activeConversations<T extends Prisma.ProductStudyItem$activeConversationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProductStudyItem$activeConversationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActiveConversationStatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   lineApiCallLogs<T extends Prisma.ProductStudyItem$lineApiCallLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProductStudyItem$lineApiCallLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LineApiCallLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  discordApiCallLogs<T extends Prisma.ProductStudyItem$discordApiCallLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProductStudyItem$discordApiCallLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DiscordApiCallLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2811,6 +3001,30 @@ export type ProductStudyItem$lineApiCallLogsArgs<ExtArgs extends runtime.Types.E
   take?: number
   skip?: number
   distinct?: Prisma.LineApiCallLogScalarFieldEnum | Prisma.LineApiCallLogScalarFieldEnum[]
+}
+
+/**
+ * ProductStudyItem.discordApiCallLogs
+ */
+export type ProductStudyItem$discordApiCallLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DiscordApiCallLog
+   */
+  select?: Prisma.DiscordApiCallLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DiscordApiCallLog
+   */
+  omit?: Prisma.DiscordApiCallLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DiscordApiCallLogInclude<ExtArgs> | null
+  where?: Prisma.DiscordApiCallLogWhereInput
+  orderBy?: Prisma.DiscordApiCallLogOrderByWithRelationInput | Prisma.DiscordApiCallLogOrderByWithRelationInput[]
+  cursor?: Prisma.DiscordApiCallLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DiscordApiCallLogScalarFieldEnum | Prisma.DiscordApiCallLogScalarFieldEnum[]
 }
 
 /**

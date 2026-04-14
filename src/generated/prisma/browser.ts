@@ -52,3 +52,8 @@ export type GeminiApiCallLog = Prisma.GeminiApiCallLogModel
  * 
  */
 export type LineApiCallLog = Prisma.LineApiCallLogModel
+/**
+ * Model DiscordApiCallLog
+ * 
+ */
+export type DiscordApiCallLog = Prisma.DiscordApiCallLogModel

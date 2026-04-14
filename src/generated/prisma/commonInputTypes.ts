@@ -372,6 +372,40 @@ export type EnumLineApiCallStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumLineApiCallStatusFilter<$PrismaModel>
 }
 
+export type EnumDiscordApiCallKindFilter<$PrismaModel = never> = {
+  equals?: $Enums.DiscordApiCallKind | Prisma.EnumDiscordApiCallKindFieldRefInput<$PrismaModel>
+  in?: $Enums.DiscordApiCallKind[] | Prisma.ListEnumDiscordApiCallKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DiscordApiCallKind[] | Prisma.ListEnumDiscordApiCallKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDiscordApiCallKindFilter<$PrismaModel> | $Enums.DiscordApiCallKind
+}
+
+export type EnumDiscordApiCallStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.DiscordApiCallStatus | Prisma.EnumDiscordApiCallStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DiscordApiCallStatus[] | Prisma.ListEnumDiscordApiCallStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DiscordApiCallStatus[] | Prisma.ListEnumDiscordApiCallStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDiscordApiCallStatusFilter<$PrismaModel> | $Enums.DiscordApiCallStatus
+}
+
+export type EnumDiscordApiCallKindWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DiscordApiCallKind | Prisma.EnumDiscordApiCallKindFieldRefInput<$PrismaModel>
+  in?: $Enums.DiscordApiCallKind[] | Prisma.ListEnumDiscordApiCallKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DiscordApiCallKind[] | Prisma.ListEnumDiscordApiCallKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDiscordApiCallKindWithAggregatesFilter<$PrismaModel> | $Enums.DiscordApiCallKind
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDiscordApiCallKindFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDiscordApiCallKindFilter<$PrismaModel>
+}
+
+export type EnumDiscordApiCallStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DiscordApiCallStatus | Prisma.EnumDiscordApiCallStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DiscordApiCallStatus[] | Prisma.ListEnumDiscordApiCallStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DiscordApiCallStatus[] | Prisma.ListEnumDiscordApiCallStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDiscordApiCallStatusWithAggregatesFilter<$PrismaModel> | $Enums.DiscordApiCallStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDiscordApiCallStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDiscordApiCallStatusFilter<$PrismaModel>
+}
+
 export type NestedIntFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel>
@@ -714,6 +748,40 @@ export type NestedEnumLineApiCallStatusWithAggregatesFilter<$PrismaModel = never
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumLineApiCallStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumLineApiCallStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumDiscordApiCallKindFilter<$PrismaModel = never> = {
+  equals?: $Enums.DiscordApiCallKind | Prisma.EnumDiscordApiCallKindFieldRefInput<$PrismaModel>
+  in?: $Enums.DiscordApiCallKind[] | Prisma.ListEnumDiscordApiCallKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DiscordApiCallKind[] | Prisma.ListEnumDiscordApiCallKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDiscordApiCallKindFilter<$PrismaModel> | $Enums.DiscordApiCallKind
+}
+
+export type NestedEnumDiscordApiCallStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.DiscordApiCallStatus | Prisma.EnumDiscordApiCallStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DiscordApiCallStatus[] | Prisma.ListEnumDiscordApiCallStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DiscordApiCallStatus[] | Prisma.ListEnumDiscordApiCallStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDiscordApiCallStatusFilter<$PrismaModel> | $Enums.DiscordApiCallStatus
+}
+
+export type NestedEnumDiscordApiCallKindWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DiscordApiCallKind | Prisma.EnumDiscordApiCallKindFieldRefInput<$PrismaModel>
+  in?: $Enums.DiscordApiCallKind[] | Prisma.ListEnumDiscordApiCallKindFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DiscordApiCallKind[] | Prisma.ListEnumDiscordApiCallKindFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDiscordApiCallKindWithAggregatesFilter<$PrismaModel> | $Enums.DiscordApiCallKind
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDiscordApiCallKindFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDiscordApiCallKindFilter<$PrismaModel>
+}
+
+export type NestedEnumDiscordApiCallStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.DiscordApiCallStatus | Prisma.EnumDiscordApiCallStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.DiscordApiCallStatus[] | Prisma.ListEnumDiscordApiCallStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.DiscordApiCallStatus[] | Prisma.ListEnumDiscordApiCallStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDiscordApiCallStatusWithAggregatesFilter<$PrismaModel> | $Enums.DiscordApiCallStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDiscordApiCallStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDiscordApiCallStatusFilter<$PrismaModel>
 }
 
 

@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-import { dispatchStudyItems } from "@/lib/line/service";
+import { dispatchStudyItems } from "@/lib/discord/service";
 
 async function main() {
   const result = await dispatchStudyItems();

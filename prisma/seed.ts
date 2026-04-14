@@ -57,6 +57,7 @@ async function main() {
 
   const user = await prisma.user.create({
     data: {
+      discordUserId: process.env.DISCORD_DEFAULT_USER_ID || null,
       lineUserId: process.env.LINE_DEFAULT_USER_ID || null,
       displayName: "ローカル利用者",
     },

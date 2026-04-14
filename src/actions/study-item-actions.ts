@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect, unstable_rethrow } from "next/navigation";
 
 import { parseDateInput } from "@/lib/date";
-import { dispatchStudyItems } from "@/lib/line/service";
+import { dispatchStudyItems } from "@/lib/discord/service";
 import {
   createStudyItem,
   deleteStudyItem,
@@ -101,7 +101,7 @@ export async function sendNowAction(formData: FormData) {
       redirect(buildRedirectUrl(redirectTo, "error", failure.reason || "送信に失敗しました。"));
     }
 
-    redirect(buildRedirectUrl(redirectTo, "message", "LINEへ出題を送信しました。"));
+    redirect(buildRedirectUrl(redirectTo, "message", "Discord DMへ出題を送信しました。"));
   } catch (error) {
     unstable_rethrow(error);
     redirect(
@@ -148,7 +148,7 @@ export async function sendSelectedNowAction(formData: FormData) {
     const message =
       skippedCount > 0
         ? `${sentCount}件を送信しました。${skippedCount}件は送信対象外でした。`
-        : `${sentCount}件をLINEへ送信しました。`;
+        : `${sentCount}件をDiscord DMへ送信しました。`;
 
     redirect(buildRedirectUrl(redirectTo, "message", message));
   } catch (error) {

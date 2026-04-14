@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { assertCronSecret, dispatchStudyItems } from "@/lib/line/service";
+import { assertCronSecret, dispatchStudyItems } from "@/lib/discord/service";
 
 function extractSecret(request: Request) {
   const authorization = request.headers.get("authorization");

@@ -1,0 +1,20 @@
+[Unit]
+Description=Mercari Study Discord bot
+After=network.target mercari-study-web.service
+
+[Service]
+Type=simple
+User=mercari-study
+Group=mercari-study
+Environment=APP_ROOT=/opt/mercari-study/current
+Environment=ENV_FILE=/etc/mercari-study/mercari-study.env
+Environment=PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+WorkingDirectory=/opt/mercari-study/current
+ExecStart=/opt/mercari-study/current/deploy/vps/scripts/run-discord-bot.sh
+Restart=always
+RestartSec=5
+StandardOutput=append:/var/log/mercari-study/discord-bot.log
+StandardError=append:/var/log/mercari-study/discord-bot.error.log
+
+[Install]
+WantedBy=multi-user.target

@@ -88,6 +88,26 @@ export function getGeminiConfig() {
   };
 }
 
+export function getDiscordBotConfig() {
+  const missingNames = getMissingEnvNames(["DISCORD_BOT_TOKEN"]);
+
+  if (missingNames.length > 0) {
+    throw new Error(buildMissingEnvMessage("Discord返信/送信", missingNames));
+  }
+
+  return {
+    botToken: process.env.DISCORD_BOT_TOKEN!.trim(),
+  };
+}
+
+export function getDefaultDiscordUserId() {
+  return process.env.DISCORD_DEFAULT_USER_ID?.trim() || null;
+}
+
+export function getDiscordStudyChannelId() {
+  return process.env.DISCORD_STUDY_CHANNEL_ID?.trim() || null;
+}
+
 export function getLineMessagingConfig() {
   const missingNames = getMissingEnvNames(["LINE_CHANNEL_ACCESS_TOKEN"]);
 

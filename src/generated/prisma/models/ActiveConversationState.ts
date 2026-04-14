@@ -45,6 +45,8 @@ export type ActiveConversationStateMinAggregateOutputType = {
   state: $Enums.ConversationStateType | null
   questionLineMessageId: string | null
   answerLineMessageId: string | null
+  questionDiscordMessageId: string | null
+  answerDiscordMessageId: string | null
   updatedAt: Date | null
 }
 
@@ -55,6 +57,8 @@ export type ActiveConversationStateMaxAggregateOutputType = {
   state: $Enums.ConversationStateType | null
   questionLineMessageId: string | null
   answerLineMessageId: string | null
+  questionDiscordMessageId: string | null
+  answerDiscordMessageId: string | null
   updatedAt: Date | null
 }
 
@@ -67,6 +71,10 @@ export type ActiveConversationStateCountAggregateOutputType = {
   questionLineMessageIds: number
   answerLineMessageId: number
   answerLineMessageIds: number
+  questionDiscordMessageId: number
+  questionDiscordMessageIds: number
+  answerDiscordMessageId: number
+  answerDiscordMessageIds: number
   updatedAt: number
   _all: number
 }
@@ -91,6 +99,8 @@ export type ActiveConversationStateMinAggregateInputType = {
   state?: true
   questionLineMessageId?: true
   answerLineMessageId?: true
+  questionDiscordMessageId?: true
+  answerDiscordMessageId?: true
   updatedAt?: true
 }
 
@@ -101,6 +111,8 @@ export type ActiveConversationStateMaxAggregateInputType = {
   state?: true
   questionLineMessageId?: true
   answerLineMessageId?: true
+  questionDiscordMessageId?: true
+  answerDiscordMessageId?: true
   updatedAt?: true
 }
 
@@ -113,6 +125,10 @@ export type ActiveConversationStateCountAggregateInputType = {
   questionLineMessageIds?: true
   answerLineMessageId?: true
   answerLineMessageIds?: true
+  questionDiscordMessageId?: true
+  questionDiscordMessageIds?: true
+  answerDiscordMessageId?: true
+  answerDiscordMessageIds?: true
   updatedAt?: true
   _all?: true
 }
@@ -212,6 +228,10 @@ export type ActiveConversationStateGroupByOutputType = {
   questionLineMessageIds: string[]
   answerLineMessageId: string | null
   answerLineMessageIds: string[]
+  questionDiscordMessageId: string | null
+  questionDiscordMessageIds: string[]
+  answerDiscordMessageId: string | null
+  answerDiscordMessageIds: string[]
   updatedAt: Date
   _count: ActiveConversationStateCountAggregateOutputType | null
   _avg: ActiveConversationStateAvgAggregateOutputType | null
@@ -247,6 +267,10 @@ export type ActiveConversationStateWhereInput = {
   questionLineMessageIds?: Prisma.StringNullableListFilter<"ActiveConversationState">
   answerLineMessageId?: Prisma.StringNullableFilter<"ActiveConversationState"> | string | null
   answerLineMessageIds?: Prisma.StringNullableListFilter<"ActiveConversationState">
+  questionDiscordMessageId?: Prisma.StringNullableFilter<"ActiveConversationState"> | string | null
+  questionDiscordMessageIds?: Prisma.StringNullableListFilter<"ActiveConversationState">
+  answerDiscordMessageId?: Prisma.StringNullableFilter<"ActiveConversationState"> | string | null
+  answerDiscordMessageIds?: Prisma.StringNullableListFilter<"ActiveConversationState">
   updatedAt?: Prisma.DateTimeFilter<"ActiveConversationState"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   item?: Prisma.XOR<Prisma.ProductStudyItemScalarRelationFilter, Prisma.ProductStudyItemWhereInput>
@@ -261,6 +285,10 @@ export type ActiveConversationStateOrderByWithRelationInput = {
   questionLineMessageIds?: Prisma.SortOrder
   answerLineMessageId?: Prisma.SortOrderInput | Prisma.SortOrder
   answerLineMessageIds?: Prisma.SortOrder
+  questionDiscordMessageId?: Prisma.SortOrderInput | Prisma.SortOrder
+  questionDiscordMessageIds?: Prisma.SortOrder
+  answerDiscordMessageId?: Prisma.SortOrderInput | Prisma.SortOrder
+  answerDiscordMessageIds?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   item?: Prisma.ProductStudyItemOrderByWithRelationInput
@@ -270,6 +298,8 @@ export type ActiveConversationStateWhereUniqueInput = Prisma.AtLeast<{
   id?: number
   questionLineMessageId?: string
   answerLineMessageId?: string
+  questionDiscordMessageId?: string
+  answerDiscordMessageId?: string
   userId_itemId?: Prisma.ActiveConversationStateUserIdItemIdCompoundUniqueInput
   AND?: Prisma.ActiveConversationStateWhereInput | Prisma.ActiveConversationStateWhereInput[]
   OR?: Prisma.ActiveConversationStateWhereInput[]
@@ -279,10 +309,12 @@ export type ActiveConversationStateWhereUniqueInput = Prisma.AtLeast<{
   state?: Prisma.EnumConversationStateTypeFilter<"ActiveConversationState"> | $Enums.ConversationStateType
   questionLineMessageIds?: Prisma.StringNullableListFilter<"ActiveConversationState">
   answerLineMessageIds?: Prisma.StringNullableListFilter<"ActiveConversationState">
+  questionDiscordMessageIds?: Prisma.StringNullableListFilter<"ActiveConversationState">
+  answerDiscordMessageIds?: Prisma.StringNullableListFilter<"ActiveConversationState">
   updatedAt?: Prisma.DateTimeFilter<"ActiveConversationState"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   item?: Prisma.XOR<Prisma.ProductStudyItemScalarRelationFilter, Prisma.ProductStudyItemWhereInput>
-}, "id" | "questionLineMessageId" | "answerLineMessageId" | "userId_itemId">
+}, "id" | "questionLineMessageId" | "answerLineMessageId" | "questionDiscordMessageId" | "answerDiscordMessageId" | "userId_itemId">
 
 export type ActiveConversationStateOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -293,6 +325,10 @@ export type ActiveConversationStateOrderByWithAggregationInput = {
   questionLineMessageIds?: Prisma.SortOrder
   answerLineMessageId?: Prisma.SortOrderInput | Prisma.SortOrder
   answerLineMessageIds?: Prisma.SortOrder
+  questionDiscordMessageId?: Prisma.SortOrderInput | Prisma.SortOrder
+  questionDiscordMessageIds?: Prisma.SortOrder
+  answerDiscordMessageId?: Prisma.SortOrderInput | Prisma.SortOrder
+  answerDiscordMessageIds?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ActiveConversationStateCountOrderByAggregateInput
   _avg?: Prisma.ActiveConversationStateAvgOrderByAggregateInput
@@ -313,6 +349,10 @@ export type ActiveConversationStateScalarWhereWithAggregatesInput = {
   questionLineMessageIds?: Prisma.StringNullableListFilter<"ActiveConversationState">
   answerLineMessageId?: Prisma.StringNullableWithAggregatesFilter<"ActiveConversationState"> | string | null
   answerLineMessageIds?: Prisma.StringNullableListFilter<"ActiveConversationState">
+  questionDiscordMessageId?: Prisma.StringNullableWithAggregatesFilter<"ActiveConversationState"> | string | null
+  questionDiscordMessageIds?: Prisma.StringNullableListFilter<"ActiveConversationState">
+  answerDiscordMessageId?: Prisma.StringNullableWithAggregatesFilter<"ActiveConversationState"> | string | null
+  answerDiscordMessageIds?: Prisma.StringNullableListFilter<"ActiveConversationState">
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"ActiveConversationState"> | Date | string
 }
 
@@ -322,6 +362,10 @@ export type ActiveConversationStateCreateInput = {
   questionLineMessageIds?: Prisma.ActiveConversationStateCreatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: string | null
   answerLineMessageIds?: Prisma.ActiveConversationStateCreateanswerLineMessageIdsInput | string[]
+  questionDiscordMessageId?: string | null
+  questionDiscordMessageIds?: Prisma.ActiveConversationStateCreatequestionDiscordMessageIdsInput | string[]
+  answerDiscordMessageId?: string | null
+  answerDiscordMessageIds?: Prisma.ActiveConversationStateCreateanswerDiscordMessageIdsInput | string[]
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutActiveConversationStatesInput
   item: Prisma.ProductStudyItemCreateNestedOneWithoutActiveConversationsInput
@@ -336,6 +380,10 @@ export type ActiveConversationStateUncheckedCreateInput = {
   questionLineMessageIds?: Prisma.ActiveConversationStateCreatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: string | null
   answerLineMessageIds?: Prisma.ActiveConversationStateCreateanswerLineMessageIdsInput | string[]
+  questionDiscordMessageId?: string | null
+  questionDiscordMessageIds?: Prisma.ActiveConversationStateCreatequestionDiscordMessageIdsInput | string[]
+  answerDiscordMessageId?: string | null
+  answerDiscordMessageIds?: Prisma.ActiveConversationStateCreateanswerDiscordMessageIdsInput | string[]
   updatedAt?: Date | string
 }
 
@@ -345,6 +393,10 @@ export type ActiveConversationStateUpdateInput = {
   questionLineMessageIds?: Prisma.ActiveConversationStateUpdatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   answerLineMessageIds?: Prisma.ActiveConversationStateUpdateanswerLineMessageIdsInput | string[]
+  questionDiscordMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  questionDiscordMessageIds?: Prisma.ActiveConversationStateUpdatequestionDiscordMessageIdsInput | string[]
+  answerDiscordMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  answerDiscordMessageIds?: Prisma.ActiveConversationStateUpdateanswerDiscordMessageIdsInput | string[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutActiveConversationStatesNestedInput
   item?: Prisma.ProductStudyItemUpdateOneRequiredWithoutActiveConversationsNestedInput
@@ -359,6 +411,10 @@ export type ActiveConversationStateUncheckedUpdateInput = {
   questionLineMessageIds?: Prisma.ActiveConversationStateUpdatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   answerLineMessageIds?: Prisma.ActiveConversationStateUpdateanswerLineMessageIdsInput | string[]
+  questionDiscordMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  questionDiscordMessageIds?: Prisma.ActiveConversationStateUpdatequestionDiscordMessageIdsInput | string[]
+  answerDiscordMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  answerDiscordMessageIds?: Prisma.ActiveConversationStateUpdateanswerDiscordMessageIdsInput | string[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -371,6 +427,10 @@ export type ActiveConversationStateCreateManyInput = {
   questionLineMessageIds?: Prisma.ActiveConversationStateCreatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: string | null
   answerLineMessageIds?: Prisma.ActiveConversationStateCreateanswerLineMessageIdsInput | string[]
+  questionDiscordMessageId?: string | null
+  questionDiscordMessageIds?: Prisma.ActiveConversationStateCreatequestionDiscordMessageIdsInput | string[]
+  answerDiscordMessageId?: string | null
+  answerDiscordMessageIds?: Prisma.ActiveConversationStateCreateanswerDiscordMessageIdsInput | string[]
   updatedAt?: Date | string
 }
 
@@ -380,6 +440,10 @@ export type ActiveConversationStateUpdateManyMutationInput = {
   questionLineMessageIds?: Prisma.ActiveConversationStateUpdatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   answerLineMessageIds?: Prisma.ActiveConversationStateUpdateanswerLineMessageIdsInput | string[]
+  questionDiscordMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  questionDiscordMessageIds?: Prisma.ActiveConversationStateUpdatequestionDiscordMessageIdsInput | string[]
+  answerDiscordMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  answerDiscordMessageIds?: Prisma.ActiveConversationStateUpdateanswerDiscordMessageIdsInput | string[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -392,6 +456,10 @@ export type ActiveConversationStateUncheckedUpdateManyInput = {
   questionLineMessageIds?: Prisma.ActiveConversationStateUpdatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   answerLineMessageIds?: Prisma.ActiveConversationStateUpdateanswerLineMessageIdsInput | string[]
+  questionDiscordMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  questionDiscordMessageIds?: Prisma.ActiveConversationStateUpdatequestionDiscordMessageIdsInput | string[]
+  answerDiscordMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  answerDiscordMessageIds?: Prisma.ActiveConversationStateUpdateanswerDiscordMessageIdsInput | string[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -427,6 +495,10 @@ export type ActiveConversationStateCountOrderByAggregateInput = {
   questionLineMessageIds?: Prisma.SortOrder
   answerLineMessageId?: Prisma.SortOrder
   answerLineMessageIds?: Prisma.SortOrder
+  questionDiscordMessageId?: Prisma.SortOrder
+  questionDiscordMessageIds?: Prisma.SortOrder
+  answerDiscordMessageId?: Prisma.SortOrder
+  answerDiscordMessageIds?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -443,6 +515,8 @@ export type ActiveConversationStateMaxOrderByAggregateInput = {
   state?: Prisma.SortOrder
   questionLineMessageId?: Prisma.SortOrder
   answerLineMessageId?: Prisma.SortOrder
+  questionDiscordMessageId?: Prisma.SortOrder
+  answerDiscordMessageId?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -453,6 +527,8 @@ export type ActiveConversationStateMinOrderByAggregateInput = {
   state?: Prisma.SortOrder
   questionLineMessageId?: Prisma.SortOrder
   answerLineMessageId?: Prisma.SortOrder
+  questionDiscordMessageId?: Prisma.SortOrder
+  answerDiscordMessageId?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -554,6 +630,14 @@ export type ActiveConversationStateCreateanswerLineMessageIdsInput = {
   set: string[]
 }
 
+export type ActiveConversationStateCreatequestionDiscordMessageIdsInput = {
+  set: string[]
+}
+
+export type ActiveConversationStateCreateanswerDiscordMessageIdsInput = {
+  set: string[]
+}
+
 export type EnumConversationStateTypeFieldUpdateOperationsInput = {
   set?: $Enums.ConversationStateType
 }
@@ -568,12 +652,26 @@ export type ActiveConversationStateUpdateanswerLineMessageIdsInput = {
   push?: string | string[]
 }
 
+export type ActiveConversationStateUpdatequestionDiscordMessageIdsInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type ActiveConversationStateUpdateanswerDiscordMessageIdsInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
 export type ActiveConversationStateCreateWithoutUserInput = {
   state: $Enums.ConversationStateType
   questionLineMessageId?: string | null
   questionLineMessageIds?: Prisma.ActiveConversationStateCreatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: string | null
   answerLineMessageIds?: Prisma.ActiveConversationStateCreateanswerLineMessageIdsInput | string[]
+  questionDiscordMessageId?: string | null
+  questionDiscordMessageIds?: Prisma.ActiveConversationStateCreatequestionDiscordMessageIdsInput | string[]
+  answerDiscordMessageId?: string | null
+  answerDiscordMessageIds?: Prisma.ActiveConversationStateCreateanswerDiscordMessageIdsInput | string[]
   updatedAt?: Date | string
   item: Prisma.ProductStudyItemCreateNestedOneWithoutActiveConversationsInput
 }
@@ -586,6 +684,10 @@ export type ActiveConversationStateUncheckedCreateWithoutUserInput = {
   questionLineMessageIds?: Prisma.ActiveConversationStateCreatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: string | null
   answerLineMessageIds?: Prisma.ActiveConversationStateCreateanswerLineMessageIdsInput | string[]
+  questionDiscordMessageId?: string | null
+  questionDiscordMessageIds?: Prisma.ActiveConversationStateCreatequestionDiscordMessageIdsInput | string[]
+  answerDiscordMessageId?: string | null
+  answerDiscordMessageIds?: Prisma.ActiveConversationStateCreateanswerDiscordMessageIdsInput | string[]
   updatedAt?: Date | string
 }
 
@@ -627,6 +729,10 @@ export type ActiveConversationStateScalarWhereInput = {
   questionLineMessageIds?: Prisma.StringNullableListFilter<"ActiveConversationState">
   answerLineMessageId?: Prisma.StringNullableFilter<"ActiveConversationState"> | string | null
   answerLineMessageIds?: Prisma.StringNullableListFilter<"ActiveConversationState">
+  questionDiscordMessageId?: Prisma.StringNullableFilter<"ActiveConversationState"> | string | null
+  questionDiscordMessageIds?: Prisma.StringNullableListFilter<"ActiveConversationState">
+  answerDiscordMessageId?: Prisma.StringNullableFilter<"ActiveConversationState"> | string | null
+  answerDiscordMessageIds?: Prisma.StringNullableListFilter<"ActiveConversationState">
   updatedAt?: Prisma.DateTimeFilter<"ActiveConversationState"> | Date | string
 }
 
@@ -636,6 +742,10 @@ export type ActiveConversationStateCreateWithoutItemInput = {
   questionLineMessageIds?: Prisma.ActiveConversationStateCreatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: string | null
   answerLineMessageIds?: Prisma.ActiveConversationStateCreateanswerLineMessageIdsInput | string[]
+  questionDiscordMessageId?: string | null
+  questionDiscordMessageIds?: Prisma.ActiveConversationStateCreatequestionDiscordMessageIdsInput | string[]
+  answerDiscordMessageId?: string | null
+  answerDiscordMessageIds?: Prisma.ActiveConversationStateCreateanswerDiscordMessageIdsInput | string[]
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutActiveConversationStatesInput
 }
@@ -648,6 +758,10 @@ export type ActiveConversationStateUncheckedCreateWithoutItemInput = {
   questionLineMessageIds?: Prisma.ActiveConversationStateCreatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: string | null
   answerLineMessageIds?: Prisma.ActiveConversationStateCreateanswerLineMessageIdsInput | string[]
+  questionDiscordMessageId?: string | null
+  questionDiscordMessageIds?: Prisma.ActiveConversationStateCreatequestionDiscordMessageIdsInput | string[]
+  answerDiscordMessageId?: string | null
+  answerDiscordMessageIds?: Prisma.ActiveConversationStateCreateanswerDiscordMessageIdsInput | string[]
   updatedAt?: Date | string
 }
 
@@ -685,6 +799,10 @@ export type ActiveConversationStateCreateManyUserInput = {
   questionLineMessageIds?: Prisma.ActiveConversationStateCreatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: string | null
   answerLineMessageIds?: Prisma.ActiveConversationStateCreateanswerLineMessageIdsInput | string[]
+  questionDiscordMessageId?: string | null
+  questionDiscordMessageIds?: Prisma.ActiveConversationStateCreatequestionDiscordMessageIdsInput | string[]
+  answerDiscordMessageId?: string | null
+  answerDiscordMessageIds?: Prisma.ActiveConversationStateCreateanswerDiscordMessageIdsInput | string[]
   updatedAt?: Date | string
 }
 
@@ -694,6 +812,10 @@ export type ActiveConversationStateUpdateWithoutUserInput = {
   questionLineMessageIds?: Prisma.ActiveConversationStateUpdatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   answerLineMessageIds?: Prisma.ActiveConversationStateUpdateanswerLineMessageIdsInput | string[]
+  questionDiscordMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  questionDiscordMessageIds?: Prisma.ActiveConversationStateUpdatequestionDiscordMessageIdsInput | string[]
+  answerDiscordMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  answerDiscordMessageIds?: Prisma.ActiveConversationStateUpdateanswerDiscordMessageIdsInput | string[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   item?: Prisma.ProductStudyItemUpdateOneRequiredWithoutActiveConversationsNestedInput
 }
@@ -706,6 +828,10 @@ export type ActiveConversationStateUncheckedUpdateWithoutUserInput = {
   questionLineMessageIds?: Prisma.ActiveConversationStateUpdatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   answerLineMessageIds?: Prisma.ActiveConversationStateUpdateanswerLineMessageIdsInput | string[]
+  questionDiscordMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  questionDiscordMessageIds?: Prisma.ActiveConversationStateUpdatequestionDiscordMessageIdsInput | string[]
+  answerDiscordMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  answerDiscordMessageIds?: Prisma.ActiveConversationStateUpdateanswerDiscordMessageIdsInput | string[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -717,6 +843,10 @@ export type ActiveConversationStateUncheckedUpdateManyWithoutUserInput = {
   questionLineMessageIds?: Prisma.ActiveConversationStateUpdatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   answerLineMessageIds?: Prisma.ActiveConversationStateUpdateanswerLineMessageIdsInput | string[]
+  questionDiscordMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  questionDiscordMessageIds?: Prisma.ActiveConversationStateUpdatequestionDiscordMessageIdsInput | string[]
+  answerDiscordMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  answerDiscordMessageIds?: Prisma.ActiveConversationStateUpdateanswerDiscordMessageIdsInput | string[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -728,6 +858,10 @@ export type ActiveConversationStateCreateManyItemInput = {
   questionLineMessageIds?: Prisma.ActiveConversationStateCreatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: string | null
   answerLineMessageIds?: Prisma.ActiveConversationStateCreateanswerLineMessageIdsInput | string[]
+  questionDiscordMessageId?: string | null
+  questionDiscordMessageIds?: Prisma.ActiveConversationStateCreatequestionDiscordMessageIdsInput | string[]
+  answerDiscordMessageId?: string | null
+  answerDiscordMessageIds?: Prisma.ActiveConversationStateCreateanswerDiscordMessageIdsInput | string[]
   updatedAt?: Date | string
 }
 
@@ -737,6 +871,10 @@ export type ActiveConversationStateUpdateWithoutItemInput = {
   questionLineMessageIds?: Prisma.ActiveConversationStateUpdatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   answerLineMessageIds?: Prisma.ActiveConversationStateUpdateanswerLineMessageIdsInput | string[]
+  questionDiscordMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  questionDiscordMessageIds?: Prisma.ActiveConversationStateUpdatequestionDiscordMessageIdsInput | string[]
+  answerDiscordMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  answerDiscordMessageIds?: Prisma.ActiveConversationStateUpdateanswerDiscordMessageIdsInput | string[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutActiveConversationStatesNestedInput
 }
@@ -749,6 +887,10 @@ export type ActiveConversationStateUncheckedUpdateWithoutItemInput = {
   questionLineMessageIds?: Prisma.ActiveConversationStateUpdatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   answerLineMessageIds?: Prisma.ActiveConversationStateUpdateanswerLineMessageIdsInput | string[]
+  questionDiscordMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  questionDiscordMessageIds?: Prisma.ActiveConversationStateUpdatequestionDiscordMessageIdsInput | string[]
+  answerDiscordMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  answerDiscordMessageIds?: Prisma.ActiveConversationStateUpdateanswerDiscordMessageIdsInput | string[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -760,6 +902,10 @@ export type ActiveConversationStateUncheckedUpdateManyWithoutItemInput = {
   questionLineMessageIds?: Prisma.ActiveConversationStateUpdatequestionLineMessageIdsInput | string[]
   answerLineMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   answerLineMessageIds?: Prisma.ActiveConversationStateUpdateanswerLineMessageIdsInput | string[]
+  questionDiscordMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  questionDiscordMessageIds?: Prisma.ActiveConversationStateUpdatequestionDiscordMessageIdsInput | string[]
+  answerDiscordMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  answerDiscordMessageIds?: Prisma.ActiveConversationStateUpdateanswerDiscordMessageIdsInput | string[]
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -774,6 +920,10 @@ export type ActiveConversationStateSelect<ExtArgs extends runtime.Types.Extensio
   questionLineMessageIds?: boolean
   answerLineMessageId?: boolean
   answerLineMessageIds?: boolean
+  questionDiscordMessageId?: boolean
+  questionDiscordMessageIds?: boolean
+  answerDiscordMessageId?: boolean
+  answerDiscordMessageIds?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   item?: boolean | Prisma.ProductStudyItemDefaultArgs<ExtArgs>
@@ -788,6 +938,10 @@ export type ActiveConversationStateSelectCreateManyAndReturn<ExtArgs extends run
   questionLineMessageIds?: boolean
   answerLineMessageId?: boolean
   answerLineMessageIds?: boolean
+  questionDiscordMessageId?: boolean
+  questionDiscordMessageIds?: boolean
+  answerDiscordMessageId?: boolean
+  answerDiscordMessageIds?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   item?: boolean | Prisma.ProductStudyItemDefaultArgs<ExtArgs>
@@ -802,6 +956,10 @@ export type ActiveConversationStateSelectUpdateManyAndReturn<ExtArgs extends run
   questionLineMessageIds?: boolean
   answerLineMessageId?: boolean
   answerLineMessageIds?: boolean
+  questionDiscordMessageId?: boolean
+  questionDiscordMessageIds?: boolean
+  answerDiscordMessageId?: boolean
+  answerDiscordMessageIds?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   item?: boolean | Prisma.ProductStudyItemDefaultArgs<ExtArgs>
@@ -816,10 +974,14 @@ export type ActiveConversationStateSelectScalar = {
   questionLineMessageIds?: boolean
   answerLineMessageId?: boolean
   answerLineMessageIds?: boolean
+  questionDiscordMessageId?: boolean
+  questionDiscordMessageIds?: boolean
+  answerDiscordMessageId?: boolean
+  answerDiscordMessageIds?: boolean
   updatedAt?: boolean
 }
 
-export type ActiveConversationStateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "itemId" | "state" | "questionLineMessageId" | "questionLineMessageIds" | "answerLineMessageId" | "answerLineMessageIds" | "updatedAt", ExtArgs["result"]["activeConversationState"]>
+export type ActiveConversationStateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "itemId" | "state" | "questionLineMessageId" | "questionLineMessageIds" | "answerLineMessageId" | "answerLineMessageIds" | "questionDiscordMessageId" | "questionDiscordMessageIds" | "answerDiscordMessageId" | "answerDiscordMessageIds" | "updatedAt", ExtArgs["result"]["activeConversationState"]>
 export type ActiveConversationStateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   item?: boolean | Prisma.ProductStudyItemDefaultArgs<ExtArgs>
@@ -848,6 +1010,10 @@ export type $ActiveConversationStatePayload<ExtArgs extends runtime.Types.Extens
     questionLineMessageIds: string[]
     answerLineMessageId: string | null
     answerLineMessageIds: string[]
+    questionDiscordMessageId: string | null
+    questionDiscordMessageIds: string[]
+    answerDiscordMessageId: string | null
+    answerDiscordMessageIds: string[]
     updatedAt: Date
   }, ExtArgs["result"]["activeConversationState"]>
   composites: {}
@@ -1282,6 +1448,10 @@ export interface ActiveConversationStateFieldRefs {
   readonly questionLineMessageIds: Prisma.FieldRef<"ActiveConversationState", 'String[]'>
   readonly answerLineMessageId: Prisma.FieldRef<"ActiveConversationState", 'String'>
   readonly answerLineMessageIds: Prisma.FieldRef<"ActiveConversationState", 'String[]'>
+  readonly questionDiscordMessageId: Prisma.FieldRef<"ActiveConversationState", 'String'>
+  readonly questionDiscordMessageIds: Prisma.FieldRef<"ActiveConversationState", 'String[]'>
+  readonly answerDiscordMessageId: Prisma.FieldRef<"ActiveConversationState", 'String'>
+  readonly answerDiscordMessageIds: Prisma.FieldRef<"ActiveConversationState", 'String[]'>
   readonly updatedAt: Prisma.FieldRef<"ActiveConversationState", 'DateTime'>
 }
     

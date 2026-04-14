@@ -390,7 +390,8 @@ export const ModelName = {
   ReviewLog: 'ReviewLog',
   ActiveConversationState: 'ActiveConversationState',
   GeminiApiCallLog: 'GeminiApiCallLog',
-  LineApiCallLog: 'LineApiCallLog'
+  LineApiCallLog: 'LineApiCallLog',
+  DiscordApiCallLog: 'DiscordApiCallLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -406,7 +407,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "productStudyItem" | "productStudyImage" | "reviewLog" | "activeConversationState" | "geminiApiCallLog" | "lineApiCallLog"
+    modelProps: "user" | "productStudyItem" | "productStudyImage" | "reviewLog" | "activeConversationState" | "geminiApiCallLog" | "lineApiCallLog" | "discordApiCallLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -928,6 +929,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DiscordApiCallLog: {
+      payload: Prisma.$DiscordApiCallLogPayload<ExtArgs>
+      fields: Prisma.DiscordApiCallLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DiscordApiCallLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiscordApiCallLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DiscordApiCallLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiscordApiCallLogPayload>
+        }
+        findFirst: {
+          args: Prisma.DiscordApiCallLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiscordApiCallLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DiscordApiCallLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiscordApiCallLogPayload>
+        }
+        findMany: {
+          args: Prisma.DiscordApiCallLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiscordApiCallLogPayload>[]
+        }
+        create: {
+          args: Prisma.DiscordApiCallLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiscordApiCallLogPayload>
+        }
+        createMany: {
+          args: Prisma.DiscordApiCallLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DiscordApiCallLogCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiscordApiCallLogPayload>[]
+        }
+        delete: {
+          args: Prisma.DiscordApiCallLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiscordApiCallLogPayload>
+        }
+        update: {
+          args: Prisma.DiscordApiCallLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiscordApiCallLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.DiscordApiCallLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DiscordApiCallLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DiscordApiCallLogUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiscordApiCallLogPayload>[]
+        }
+        upsert: {
+          args: Prisma.DiscordApiCallLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiscordApiCallLogPayload>
+        }
+        aggregate: {
+          args: Prisma.DiscordApiCallLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDiscordApiCallLog>
+        }
+        groupBy: {
+          args: Prisma.DiscordApiCallLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DiscordApiCallLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DiscordApiCallLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DiscordApiCallLogCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -970,6 +1045,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const UserScalarFieldEnum = {
   id: 'id',
   lineUserId: 'lineUserId',
+  discordUserId: 'discordUserId',
   displayName: 'displayName',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1041,6 +1117,10 @@ export const ActiveConversationStateScalarFieldEnum = {
   questionLineMessageIds: 'questionLineMessageIds',
   answerLineMessageId: 'answerLineMessageId',
   answerLineMessageIds: 'answerLineMessageIds',
+  questionDiscordMessageId: 'questionDiscordMessageId',
+  questionDiscordMessageIds: 'questionDiscordMessageIds',
+  answerDiscordMessageId: 'answerDiscordMessageId',
+  answerDiscordMessageIds: 'answerDiscordMessageIds',
   updatedAt: 'updatedAt'
 } as const
 
@@ -1076,6 +1156,22 @@ export const LineApiCallLogScalarFieldEnum = {
 } as const
 
 export type LineApiCallLogScalarFieldEnum = (typeof LineApiCallLogScalarFieldEnum)[keyof typeof LineApiCallLogScalarFieldEnum]
+
+
+export const DiscordApiCallLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  itemId: 'itemId',
+  kind: 'kind',
+  status: 'status',
+  targetDiscordUserId: 'targetDiscordUserId',
+  channelId: 'channelId',
+  messageCount: 'messageCount',
+  errorMessage: 'errorMessage',
+  createdAt: 'createdAt'
+} as const
+
+export type DiscordApiCallLogScalarFieldEnum = (typeof DiscordApiCallLogScalarFieldEnum)[keyof typeof DiscordApiCallLogScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1286,6 +1382,34 @@ export type ListEnumLineApiCallStatusFieldRefInput<$PrismaModel> = FieldRefInput
 
 
 /**
+ * Reference to a field of type 'DiscordApiCallKind'
+ */
+export type EnumDiscordApiCallKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DiscordApiCallKind'>
+    
+
+
+/**
+ * Reference to a field of type 'DiscordApiCallKind[]'
+ */
+export type ListEnumDiscordApiCallKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DiscordApiCallKind[]'>
+    
+
+
+/**
+ * Reference to a field of type 'DiscordApiCallStatus'
+ */
+export type EnumDiscordApiCallStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DiscordApiCallStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'DiscordApiCallStatus[]'
+ */
+export type ListEnumDiscordApiCallStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DiscordApiCallStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1400,6 +1524,7 @@ export type GlobalOmitConfig = {
   activeConversationState?: Prisma.ActiveConversationStateOmit
   geminiApiCallLog?: Prisma.GeminiApiCallLogOmit
   lineApiCallLog?: Prisma.LineApiCallLogOmit
+  discordApiCallLog?: Prisma.DiscordApiCallLogOmit
 }
 
 /* Types for Logging */

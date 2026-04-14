@@ -13,6 +13,7 @@
 ## 使うファイル
 
 - systemd: `deploy/vps/systemd/mercari-study-web.service`
+- systemd: `deploy/vps/systemd/mercari-study-discord-bot.service`
 - 手動送信 service: `deploy/vps/systemd/mercari-study-send-due.service`
 - cron: `deploy/vps/cron/mercari-study-send-due.cron`
 - nginx: `deploy/vps/nginx/mercari-study.conf`
@@ -24,20 +25,23 @@
 2. `sudo bash deploy/vps/scripts/bootstrap-host.sh`
 3. `/etc/mercari-study/mercari-study.env` を本番値へ編集
 4. `sudo cp deploy/vps/systemd/mercari-study-web.service /etc/systemd/system/`
-5. `sudo cp deploy/vps/systemd/mercari-study-send-due.service /etc/systemd/system/`
-6. `sudo systemctl daemon-reload`
-7. `bash deploy/vps/scripts/deploy-current.sh`
-8. `sudo systemctl enable --now mercari-study-web.service`
-9. `sudo cp deploy/vps/cron/mercari-study-send-due.cron /etc/cron.d/mercari-study-send-due`
-10. `sudo chmod 644 /etc/cron.d/mercari-study-send-due`
-11. `sudo cp deploy/vps/nginx/mercari-study.conf /etc/nginx/sites-available/mercari-study.conf`
-12. `server_name` を実ドメインへ変更し、nginx を reload
+5. `sudo cp deploy/vps/systemd/mercari-study-discord-bot.service /etc/systemd/system/`
+6. `sudo cp deploy/vps/systemd/mercari-study-send-due.service /etc/systemd/system/`
+7. `sudo systemctl daemon-reload`
+8. `bash deploy/vps/scripts/deploy-current.sh`
+9. `sudo systemctl enable --now mercari-study-web.service mercari-study-discord-bot.service`
+10. `sudo cp deploy/vps/cron/mercari-study-send-due.cron /etc/cron.d/mercari-study-send-due`
+11. `sudo chmod 644 /etc/cron.d/mercari-study-send-due`
+12. `sudo cp deploy/vps/nginx/mercari-study.conf /etc/nginx/sites-available/mercari-study.conf`
+13. `server_name` を実ドメインへ変更し、nginx を reload
 
 ## 動作確認
 
 - Web: `curl -I http://127.0.0.1:3000`
+- Discord Bot: `sudo systemctl status mercari-study-discord-bot.service`
 - 手動送信: `sudo systemctl start mercari-study-send-due.service`
 - Web ログ: `/var/log/mercari-study/web.log`
+- Bot ログ: `/var/log/mercari-study/discord-bot.log`
 - 送信ログ: `/var/log/mercari-study/send-due.log`
 
 ## 注意

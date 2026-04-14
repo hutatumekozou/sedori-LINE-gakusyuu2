@@ -42,6 +42,21 @@ ${item.question}
 - 「手動」→ この問題を手動送信に切り替え`;
 }
 
+export function buildDiscordQuestionMessage(
+  item: Pick<StudyMessageItem, "questionNumber" | "question" | "productName">,
+  sentAt: Date | string = new Date(),
+) {
+  return `${buildQuestionLabel(item, { sentAt })}
+【今日の復習問題】
+${item.question}
+
+返信方法:
+- 「解答${item.questionNumber}」→ 解答を表示
+- 「正解${item.questionNumber}」→ 正解として記録
+- 「不正解${item.questionNumber}」→ 明日もう一度出題
+- 「手動${item.questionNumber}」→ この問題を手動送信に切り替え`;
+}
+
 export function buildAnswerMessage(item: Pick<StudyMessageItem, "questionNumber" | "answer">) {
   return `問題番号: ${item.questionNumber}
 【解答】
@@ -52,6 +67,18 @@ ${item.answer}
 - 「正解」
 - 「不正解」
 - 「手動」`;
+}
+
+export function buildDiscordAnswerMessage(item: Pick<StudyMessageItem, "questionNumber" | "answer">) {
+  return `問題番号: ${item.questionNumber}
+【解答】
+${item.answer}
+
+自己判定して返信してください。
+- 「大正解${item.questionNumber}」
+- 「正解${item.questionNumber}」
+- 「不正解${item.questionNumber}」
+- 「手動${item.questionNumber}」`;
 }
 
 export function buildGreatCorrectReplyMessage() {
@@ -93,11 +120,11 @@ export function buildAnswerFirstMessage() {
 }
 
 export function buildReplyToQuestionMessage() {
-  return "問題メッセージにリプで「解答」と送ってください。";
+  return "問題メッセージに返信で「解答」と送ってください。";
 }
 
 export function buildReplyToAnswerMessage() {
-  return "解答メッセージにリプで「大正解」「正解」または「不正解」と送ってください。";
+  return "解答メッセージに返信で「大正解」「正解」または「不正解」と送ってください。";
 }
 
 export function buildAnswerImageFallbackMessage() {
@@ -105,7 +132,7 @@ export function buildAnswerImageFallbackMessage() {
 }
 
 export function buildReplyToManualTargetMessage() {
-  return "切り替えたい問題または解答メッセージにリプで「手動」と送ってください。";
+  return "切り替えたい問題または解答メッセージに返信で「手動」と送ってください。";
 }
 
 export function buildCategoryDispatchStartMessage(category: string, count: number) {
@@ -118,4 +145,8 @@ export function buildEmptyCategoryDispatchMessage(category: string) {
 
 export function buildLineHelpMessage() {
   return "受付可能な返信は「解答」「大正解」「正解」「不正解」「手動」です。カテゴリ名を送ると、そのカテゴリの苦手問題を最大5問出題します。";
+}
+
+export function buildDiscordHelpMessage() {
+  return "受付可能な返信は「解答87」「大正解87」「正解87」「不正解87」「手動87」のように問題番号付きです。カテゴリ名を送ると、そのカテゴリの苦手問題を最大5問このチャンネルへ送ります。";
 }

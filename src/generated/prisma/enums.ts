@@ -70,3 +70,20 @@ export const LineApiCallStatus = {
 } as const
 
 export type LineApiCallStatus = (typeof LineApiCallStatus)[keyof typeof LineApiCallStatus]
+
+
+export const DiscordApiCallKind = {
+  PUSH: 'PUSH',
+  REPLY: 'REPLY',
+  PROFILE: 'PROFILE'
+} as const
+
+export type DiscordApiCallKind = (typeof DiscordApiCallKind)[keyof typeof DiscordApiCallKind]
+
+
+export const DiscordApiCallStatus = {
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED'
+} as const
+
+export type DiscordApiCallStatus = (typeof DiscordApiCallStatus)[keyof typeof DiscordApiCallStatus]

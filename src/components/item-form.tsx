@@ -397,7 +397,7 @@ export function ItemForm({
           defaultValue={defaults.note || DEFAULT_QUESTION_TEXT}
           rows={6}
           className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-emerald-300"
-          placeholder="LINEでそのまま送る問題文を入力してください"
+          placeholder="Discordでそのまま送る問題文を入力してください"
         />
         <FieldError errors={state.fieldErrors.note} />
       </label>
@@ -409,7 +409,7 @@ export function ItemForm({
           defaultValue={defaults.memo || DEFAULT_ANSWER_TEXT}
           rows={4}
           className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-emerald-300"
-          placeholder="LINEでそのまま返す解答を入力してください"
+          placeholder="Discordでそのまま返す解答を入力してください"
         />
         <FieldError errors={state.fieldErrors.memo} />
       </label>

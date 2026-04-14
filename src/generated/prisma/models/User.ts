@@ -37,6 +37,7 @@ export type UserSumAggregateOutputType = {
 export type UserMinAggregateOutputType = {
   id: number | null
   lineUserId: string | null
+  discordUserId: string | null
   displayName: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -45,6 +46,7 @@ export type UserMinAggregateOutputType = {
 export type UserMaxAggregateOutputType = {
   id: number | null
   lineUserId: string | null
+  discordUserId: string | null
   displayName: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -53,6 +55,7 @@ export type UserMaxAggregateOutputType = {
 export type UserCountAggregateOutputType = {
   id: number
   lineUserId: number
+  discordUserId: number
   displayName: number
   createdAt: number
   updatedAt: number
@@ -71,6 +74,7 @@ export type UserSumAggregateInputType = {
 export type UserMinAggregateInputType = {
   id?: true
   lineUserId?: true
+  discordUserId?: true
   displayName?: true
   createdAt?: true
   updatedAt?: true
@@ -79,6 +83,7 @@ export type UserMinAggregateInputType = {
 export type UserMaxAggregateInputType = {
   id?: true
   lineUserId?: true
+  discordUserId?: true
   displayName?: true
   createdAt?: true
   updatedAt?: true
@@ -87,6 +92,7 @@ export type UserMaxAggregateInputType = {
 export type UserCountAggregateInputType = {
   id?: true
   lineUserId?: true
+  discordUserId?: true
   displayName?: true
   createdAt?: true
   updatedAt?: true
@@ -182,6 +188,7 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type UserGroupByOutputType = {
   id: number
   lineUserId: string | null
+  discordUserId: string | null
   displayName: string | null
   createdAt: Date
   updatedAt: Date
@@ -213,6 +220,7 @@ export type UserWhereInput = {
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   id?: Prisma.IntFilter<"User"> | number
   lineUserId?: Prisma.StringNullableFilter<"User"> | string | null
+  discordUserId?: Prisma.StringNullableFilter<"User"> | string | null
   displayName?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -221,11 +229,13 @@ export type UserWhereInput = {
   activeConversationStates?: Prisma.ActiveConversationStateListRelationFilter
   geminiApiCallLogs?: Prisma.GeminiApiCallLogListRelationFilter
   lineApiCallLogs?: Prisma.LineApiCallLogListRelationFilter
+  discordApiCallLogs?: Prisma.DiscordApiCallLogListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   lineUserId?: Prisma.SortOrderInput | Prisma.SortOrder
+  discordUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   displayName?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -234,11 +244,13 @@ export type UserOrderByWithRelationInput = {
   activeConversationStates?: Prisma.ActiveConversationStateOrderByRelationAggregateInput
   geminiApiCallLogs?: Prisma.GeminiApiCallLogOrderByRelationAggregateInput
   lineApiCallLogs?: Prisma.LineApiCallLogOrderByRelationAggregateInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: number
   lineUserId?: string
+  discordUserId?: string
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
@@ -250,11 +262,13 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   activeConversationStates?: Prisma.ActiveConversationStateListRelationFilter
   geminiApiCallLogs?: Prisma.GeminiApiCallLogListRelationFilter
   lineApiCallLogs?: Prisma.LineApiCallLogListRelationFilter
-}, "id" | "lineUserId">
+  discordApiCallLogs?: Prisma.DiscordApiCallLogListRelationFilter
+}, "id" | "lineUserId" | "discordUserId">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   lineUserId?: Prisma.SortOrderInput | Prisma.SortOrder
+  discordUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   displayName?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -271,6 +285,7 @@ export type UserScalarWhereWithAggregatesInput = {
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"User"> | number
   lineUserId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  discordUserId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   displayName?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -278,6 +293,7 @@ export type UserScalarWhereWithAggregatesInput = {
 
 export type UserCreateInput = {
   lineUserId?: string | null
+  discordUserId?: string | null
   displayName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -286,11 +302,13 @@ export type UserCreateInput = {
   activeConversationStates?: Prisma.ActiveConversationStateCreateNestedManyWithoutUserInput
   geminiApiCallLogs?: Prisma.GeminiApiCallLogCreateNestedManyWithoutUserInput
   lineApiCallLogs?: Prisma.LineApiCallLogCreateNestedManyWithoutUserInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
   id?: number
   lineUserId?: string | null
+  discordUserId?: string | null
   displayName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -299,10 +317,12 @@ export type UserUncheckedCreateInput = {
   activeConversationStates?: Prisma.ActiveConversationStateUncheckedCreateNestedManyWithoutUserInput
   geminiApiCallLogs?: Prisma.GeminiApiCallLogUncheckedCreateNestedManyWithoutUserInput
   lineApiCallLogs?: Prisma.LineApiCallLogUncheckedCreateNestedManyWithoutUserInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
   lineUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discordUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -311,11 +331,13 @@ export type UserUpdateInput = {
   activeConversationStates?: Prisma.ActiveConversationStateUpdateManyWithoutUserNestedInput
   geminiApiCallLogs?: Prisma.GeminiApiCallLogUpdateManyWithoutUserNestedInput
   lineApiCallLogs?: Prisma.LineApiCallLogUpdateManyWithoutUserNestedInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   lineUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discordUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -324,11 +346,13 @@ export type UserUncheckedUpdateInput = {
   activeConversationStates?: Prisma.ActiveConversationStateUncheckedUpdateManyWithoutUserNestedInput
   geminiApiCallLogs?: Prisma.GeminiApiCallLogUncheckedUpdateManyWithoutUserNestedInput
   lineApiCallLogs?: Prisma.LineApiCallLogUncheckedUpdateManyWithoutUserNestedInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
   id?: number
   lineUserId?: string | null
+  discordUserId?: string | null
   displayName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -336,6 +360,7 @@ export type UserCreateManyInput = {
 
 export type UserUpdateManyMutationInput = {
   lineUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discordUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -344,6 +369,7 @@ export type UserUpdateManyMutationInput = {
 export type UserUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   lineUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discordUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -352,6 +378,7 @@ export type UserUncheckedUpdateManyInput = {
 export type UserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   lineUserId?: Prisma.SortOrder
+  discordUserId?: Prisma.SortOrder
   displayName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -364,6 +391,7 @@ export type UserAvgOrderByAggregateInput = {
 export type UserMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   lineUserId?: Prisma.SortOrder
+  discordUserId?: Prisma.SortOrder
   displayName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -372,6 +400,7 @@ export type UserMaxOrderByAggregateInput = {
 export type UserMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   lineUserId?: Prisma.SortOrder
+  discordUserId?: Prisma.SortOrder
   displayName?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -481,8 +510,25 @@ export type UserUpdateOneWithoutLineApiCallLogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutLineApiCallLogsInput, Prisma.UserUpdateWithoutLineApiCallLogsInput>, Prisma.UserUncheckedUpdateWithoutLineApiCallLogsInput>
 }
 
+export type UserCreateNestedOneWithoutDiscordApiCallLogsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDiscordApiCallLogsInput, Prisma.UserUncheckedCreateWithoutDiscordApiCallLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDiscordApiCallLogsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutDiscordApiCallLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDiscordApiCallLogsInput, Prisma.UserUncheckedCreateWithoutDiscordApiCallLogsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDiscordApiCallLogsInput
+  upsert?: Prisma.UserUpsertWithoutDiscordApiCallLogsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDiscordApiCallLogsInput, Prisma.UserUpdateWithoutDiscordApiCallLogsInput>, Prisma.UserUncheckedUpdateWithoutDiscordApiCallLogsInput>
+}
+
 export type UserCreateWithoutStudyItemsInput = {
   lineUserId?: string | null
+  discordUserId?: string | null
   displayName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -490,11 +536,13 @@ export type UserCreateWithoutStudyItemsInput = {
   activeConversationStates?: Prisma.ActiveConversationStateCreateNestedManyWithoutUserInput
   geminiApiCallLogs?: Prisma.GeminiApiCallLogCreateNestedManyWithoutUserInput
   lineApiCallLogs?: Prisma.LineApiCallLogCreateNestedManyWithoutUserInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutStudyItemsInput = {
   id?: number
   lineUserId?: string | null
+  discordUserId?: string | null
   displayName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -502,6 +550,7 @@ export type UserUncheckedCreateWithoutStudyItemsInput = {
   activeConversationStates?: Prisma.ActiveConversationStateUncheckedCreateNestedManyWithoutUserInput
   geminiApiCallLogs?: Prisma.GeminiApiCallLogUncheckedCreateNestedManyWithoutUserInput
   lineApiCallLogs?: Prisma.LineApiCallLogUncheckedCreateNestedManyWithoutUserInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStudyItemsInput = {
@@ -522,6 +571,7 @@ export type UserUpdateToOneWithWhereWithoutStudyItemsInput = {
 
 export type UserUpdateWithoutStudyItemsInput = {
   lineUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discordUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -529,11 +579,13 @@ export type UserUpdateWithoutStudyItemsInput = {
   activeConversationStates?: Prisma.ActiveConversationStateUpdateManyWithoutUserNestedInput
   geminiApiCallLogs?: Prisma.GeminiApiCallLogUpdateManyWithoutUserNestedInput
   lineApiCallLogs?: Prisma.LineApiCallLogUpdateManyWithoutUserNestedInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStudyItemsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   lineUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discordUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -541,10 +593,12 @@ export type UserUncheckedUpdateWithoutStudyItemsInput = {
   activeConversationStates?: Prisma.ActiveConversationStateUncheckedUpdateManyWithoutUserNestedInput
   geminiApiCallLogs?: Prisma.GeminiApiCallLogUncheckedUpdateManyWithoutUserNestedInput
   lineApiCallLogs?: Prisma.LineApiCallLogUncheckedUpdateManyWithoutUserNestedInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutReviewLogsInput = {
   lineUserId?: string | null
+  discordUserId?: string | null
   displayName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -552,11 +606,13 @@ export type UserCreateWithoutReviewLogsInput = {
   activeConversationStates?: Prisma.ActiveConversationStateCreateNestedManyWithoutUserInput
   geminiApiCallLogs?: Prisma.GeminiApiCallLogCreateNestedManyWithoutUserInput
   lineApiCallLogs?: Prisma.LineApiCallLogCreateNestedManyWithoutUserInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutReviewLogsInput = {
   id?: number
   lineUserId?: string | null
+  discordUserId?: string | null
   displayName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -564,6 +620,7 @@ export type UserUncheckedCreateWithoutReviewLogsInput = {
   activeConversationStates?: Prisma.ActiveConversationStateUncheckedCreateNestedManyWithoutUserInput
   geminiApiCallLogs?: Prisma.GeminiApiCallLogUncheckedCreateNestedManyWithoutUserInput
   lineApiCallLogs?: Prisma.LineApiCallLogUncheckedCreateNestedManyWithoutUserInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutReviewLogsInput = {
@@ -584,6 +641,7 @@ export type UserUpdateToOneWithWhereWithoutReviewLogsInput = {
 
 export type UserUpdateWithoutReviewLogsInput = {
   lineUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discordUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -591,11 +649,13 @@ export type UserUpdateWithoutReviewLogsInput = {
   activeConversationStates?: Prisma.ActiveConversationStateUpdateManyWithoutUserNestedInput
   geminiApiCallLogs?: Prisma.GeminiApiCallLogUpdateManyWithoutUserNestedInput
   lineApiCallLogs?: Prisma.LineApiCallLogUpdateManyWithoutUserNestedInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReviewLogsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   lineUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discordUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -603,10 +663,12 @@ export type UserUncheckedUpdateWithoutReviewLogsInput = {
   activeConversationStates?: Prisma.ActiveConversationStateUncheckedUpdateManyWithoutUserNestedInput
   geminiApiCallLogs?: Prisma.GeminiApiCallLogUncheckedUpdateManyWithoutUserNestedInput
   lineApiCallLogs?: Prisma.LineApiCallLogUncheckedUpdateManyWithoutUserNestedInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutActiveConversationStatesInput = {
   lineUserId?: string | null
+  discordUserId?: string | null
   displayName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -614,11 +676,13 @@ export type UserCreateWithoutActiveConversationStatesInput = {
   reviewLogs?: Prisma.ReviewLogCreateNestedManyWithoutUserInput
   geminiApiCallLogs?: Prisma.GeminiApiCallLogCreateNestedManyWithoutUserInput
   lineApiCallLogs?: Prisma.LineApiCallLogCreateNestedManyWithoutUserInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutActiveConversationStatesInput = {
   id?: number
   lineUserId?: string | null
+  discordUserId?: string | null
   displayName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -626,6 +690,7 @@ export type UserUncheckedCreateWithoutActiveConversationStatesInput = {
   reviewLogs?: Prisma.ReviewLogUncheckedCreateNestedManyWithoutUserInput
   geminiApiCallLogs?: Prisma.GeminiApiCallLogUncheckedCreateNestedManyWithoutUserInput
   lineApiCallLogs?: Prisma.LineApiCallLogUncheckedCreateNestedManyWithoutUserInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutActiveConversationStatesInput = {
@@ -646,6 +711,7 @@ export type UserUpdateToOneWithWhereWithoutActiveConversationStatesInput = {
 
 export type UserUpdateWithoutActiveConversationStatesInput = {
   lineUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discordUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -653,11 +719,13 @@ export type UserUpdateWithoutActiveConversationStatesInput = {
   reviewLogs?: Prisma.ReviewLogUpdateManyWithoutUserNestedInput
   geminiApiCallLogs?: Prisma.GeminiApiCallLogUpdateManyWithoutUserNestedInput
   lineApiCallLogs?: Prisma.LineApiCallLogUpdateManyWithoutUserNestedInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutActiveConversationStatesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   lineUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discordUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -665,10 +733,12 @@ export type UserUncheckedUpdateWithoutActiveConversationStatesInput = {
   reviewLogs?: Prisma.ReviewLogUncheckedUpdateManyWithoutUserNestedInput
   geminiApiCallLogs?: Prisma.GeminiApiCallLogUncheckedUpdateManyWithoutUserNestedInput
   lineApiCallLogs?: Prisma.LineApiCallLogUncheckedUpdateManyWithoutUserNestedInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutGeminiApiCallLogsInput = {
   lineUserId?: string | null
+  discordUserId?: string | null
   displayName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -676,11 +746,13 @@ export type UserCreateWithoutGeminiApiCallLogsInput = {
   reviewLogs?: Prisma.ReviewLogCreateNestedManyWithoutUserInput
   activeConversationStates?: Prisma.ActiveConversationStateCreateNestedManyWithoutUserInput
   lineApiCallLogs?: Prisma.LineApiCallLogCreateNestedManyWithoutUserInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutGeminiApiCallLogsInput = {
   id?: number
   lineUserId?: string | null
+  discordUserId?: string | null
   displayName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -688,6 +760,7 @@ export type UserUncheckedCreateWithoutGeminiApiCallLogsInput = {
   reviewLogs?: Prisma.ReviewLogUncheckedCreateNestedManyWithoutUserInput
   activeConversationStates?: Prisma.ActiveConversationStateUncheckedCreateNestedManyWithoutUserInput
   lineApiCallLogs?: Prisma.LineApiCallLogUncheckedCreateNestedManyWithoutUserInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutGeminiApiCallLogsInput = {
@@ -708,6 +781,7 @@ export type UserUpdateToOneWithWhereWithoutGeminiApiCallLogsInput = {
 
 export type UserUpdateWithoutGeminiApiCallLogsInput = {
   lineUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discordUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -715,11 +789,13 @@ export type UserUpdateWithoutGeminiApiCallLogsInput = {
   reviewLogs?: Prisma.ReviewLogUpdateManyWithoutUserNestedInput
   activeConversationStates?: Prisma.ActiveConversationStateUpdateManyWithoutUserNestedInput
   lineApiCallLogs?: Prisma.LineApiCallLogUpdateManyWithoutUserNestedInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutGeminiApiCallLogsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   lineUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discordUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -727,10 +803,12 @@ export type UserUncheckedUpdateWithoutGeminiApiCallLogsInput = {
   reviewLogs?: Prisma.ReviewLogUncheckedUpdateManyWithoutUserNestedInput
   activeConversationStates?: Prisma.ActiveConversationStateUncheckedUpdateManyWithoutUserNestedInput
   lineApiCallLogs?: Prisma.LineApiCallLogUncheckedUpdateManyWithoutUserNestedInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutLineApiCallLogsInput = {
   lineUserId?: string | null
+  discordUserId?: string | null
   displayName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -738,11 +816,13 @@ export type UserCreateWithoutLineApiCallLogsInput = {
   reviewLogs?: Prisma.ReviewLogCreateNestedManyWithoutUserInput
   activeConversationStates?: Prisma.ActiveConversationStateCreateNestedManyWithoutUserInput
   geminiApiCallLogs?: Prisma.GeminiApiCallLogCreateNestedManyWithoutUserInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutLineApiCallLogsInput = {
   id?: number
   lineUserId?: string | null
+  discordUserId?: string | null
   displayName?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -750,6 +830,7 @@ export type UserUncheckedCreateWithoutLineApiCallLogsInput = {
   reviewLogs?: Prisma.ReviewLogUncheckedCreateNestedManyWithoutUserInput
   activeConversationStates?: Prisma.ActiveConversationStateUncheckedCreateNestedManyWithoutUserInput
   geminiApiCallLogs?: Prisma.GeminiApiCallLogUncheckedCreateNestedManyWithoutUserInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutLineApiCallLogsInput = {
@@ -770,6 +851,7 @@ export type UserUpdateToOneWithWhereWithoutLineApiCallLogsInput = {
 
 export type UserUpdateWithoutLineApiCallLogsInput = {
   lineUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discordUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -777,11 +859,13 @@ export type UserUpdateWithoutLineApiCallLogsInput = {
   reviewLogs?: Prisma.ReviewLogUpdateManyWithoutUserNestedInput
   activeConversationStates?: Prisma.ActiveConversationStateUpdateManyWithoutUserNestedInput
   geminiApiCallLogs?: Prisma.GeminiApiCallLogUpdateManyWithoutUserNestedInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLineApiCallLogsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   lineUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discordUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -789,6 +873,77 @@ export type UserUncheckedUpdateWithoutLineApiCallLogsInput = {
   reviewLogs?: Prisma.ReviewLogUncheckedUpdateManyWithoutUserNestedInput
   activeConversationStates?: Prisma.ActiveConversationStateUncheckedUpdateManyWithoutUserNestedInput
   geminiApiCallLogs?: Prisma.GeminiApiCallLogUncheckedUpdateManyWithoutUserNestedInput
+  discordApiCallLogs?: Prisma.DiscordApiCallLogUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutDiscordApiCallLogsInput = {
+  lineUserId?: string | null
+  discordUserId?: string | null
+  displayName?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  studyItems?: Prisma.ProductStudyItemCreateNestedManyWithoutUserInput
+  reviewLogs?: Prisma.ReviewLogCreateNestedManyWithoutUserInput
+  activeConversationStates?: Prisma.ActiveConversationStateCreateNestedManyWithoutUserInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogCreateNestedManyWithoutUserInput
+  lineApiCallLogs?: Prisma.LineApiCallLogCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutDiscordApiCallLogsInput = {
+  id?: number
+  lineUserId?: string | null
+  discordUserId?: string | null
+  displayName?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  studyItems?: Prisma.ProductStudyItemUncheckedCreateNestedManyWithoutUserInput
+  reviewLogs?: Prisma.ReviewLogUncheckedCreateNestedManyWithoutUserInput
+  activeConversationStates?: Prisma.ActiveConversationStateUncheckedCreateNestedManyWithoutUserInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogUncheckedCreateNestedManyWithoutUserInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutDiscordApiCallLogsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutDiscordApiCallLogsInput, Prisma.UserUncheckedCreateWithoutDiscordApiCallLogsInput>
+}
+
+export type UserUpsertWithoutDiscordApiCallLogsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutDiscordApiCallLogsInput, Prisma.UserUncheckedUpdateWithoutDiscordApiCallLogsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDiscordApiCallLogsInput, Prisma.UserUncheckedCreateWithoutDiscordApiCallLogsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutDiscordApiCallLogsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutDiscordApiCallLogsInput, Prisma.UserUncheckedUpdateWithoutDiscordApiCallLogsInput>
+}
+
+export type UserUpdateWithoutDiscordApiCallLogsInput = {
+  lineUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discordUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  studyItems?: Prisma.ProductStudyItemUpdateManyWithoutUserNestedInput
+  reviewLogs?: Prisma.ReviewLogUpdateManyWithoutUserNestedInput
+  activeConversationStates?: Prisma.ActiveConversationStateUpdateManyWithoutUserNestedInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogUpdateManyWithoutUserNestedInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutDiscordApiCallLogsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  lineUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discordUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  studyItems?: Prisma.ProductStudyItemUncheckedUpdateManyWithoutUserNestedInput
+  reviewLogs?: Prisma.ReviewLogUncheckedUpdateManyWithoutUserNestedInput
+  activeConversationStates?: Prisma.ActiveConversationStateUncheckedUpdateManyWithoutUserNestedInput
+  geminiApiCallLogs?: Prisma.GeminiApiCallLogUncheckedUpdateManyWithoutUserNestedInput
+  lineApiCallLogs?: Prisma.LineApiCallLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -802,6 +957,7 @@ export type UserCountOutputType = {
   activeConversationStates: number
   geminiApiCallLogs: number
   lineApiCallLogs: number
+  discordApiCallLogs: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -810,6 +966,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   activeConversationStates?: boolean | UserCountOutputTypeCountActiveConversationStatesArgs
   geminiApiCallLogs?: boolean | UserCountOutputTypeCountGeminiApiCallLogsArgs
   lineApiCallLogs?: boolean | UserCountOutputTypeCountLineApiCallLogsArgs
+  discordApiCallLogs?: boolean | UserCountOutputTypeCountDiscordApiCallLogsArgs
 }
 
 /**
@@ -857,10 +1014,18 @@ export type UserCountOutputTypeCountLineApiCallLogsArgs<ExtArgs extends runtime.
   where?: Prisma.LineApiCallLogWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountDiscordApiCallLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DiscordApiCallLogWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   lineUserId?: boolean
+  discordUserId?: boolean
   displayName?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -869,12 +1034,14 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   activeConversationStates?: boolean | Prisma.User$activeConversationStatesArgs<ExtArgs>
   geminiApiCallLogs?: boolean | Prisma.User$geminiApiCallLogsArgs<ExtArgs>
   lineApiCallLogs?: boolean | Prisma.User$lineApiCallLogsArgs<ExtArgs>
+  discordApiCallLogs?: boolean | Prisma.User$discordApiCallLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   lineUserId?: boolean
+  discordUserId?: boolean
   displayName?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -883,6 +1050,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   lineUserId?: boolean
+  discordUserId?: boolean
   displayName?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -891,18 +1059,20 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type UserSelectScalar = {
   id?: boolean
   lineUserId?: boolean
+  discordUserId?: boolean
   displayName?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "lineUserId" | "displayName" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "lineUserId" | "discordUserId" | "displayName" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   studyItems?: boolean | Prisma.User$studyItemsArgs<ExtArgs>
   reviewLogs?: boolean | Prisma.User$reviewLogsArgs<ExtArgs>
   activeConversationStates?: boolean | Prisma.User$activeConversationStatesArgs<ExtArgs>
   geminiApiCallLogs?: boolean | Prisma.User$geminiApiCallLogsArgs<ExtArgs>
   lineApiCallLogs?: boolean | Prisma.User$lineApiCallLogsArgs<ExtArgs>
+  discordApiCallLogs?: boolean | Prisma.User$discordApiCallLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -916,10 +1086,12 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     activeConversationStates: Prisma.$ActiveConversationStatePayload<ExtArgs>[]
     geminiApiCallLogs: Prisma.$GeminiApiCallLogPayload<ExtArgs>[]
     lineApiCallLogs: Prisma.$LineApiCallLogPayload<ExtArgs>[]
+    discordApiCallLogs: Prisma.$DiscordApiCallLogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     lineUserId: string | null
+    discordUserId: string | null
     displayName: string | null
     createdAt: Date
     updatedAt: Date
@@ -1322,6 +1494,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   activeConversationStates<T extends Prisma.User$activeConversationStatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$activeConversationStatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActiveConversationStatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   geminiApiCallLogs<T extends Prisma.User$geminiApiCallLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$geminiApiCallLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GeminiApiCallLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   lineApiCallLogs<T extends Prisma.User$lineApiCallLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$lineApiCallLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LineApiCallLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  discordApiCallLogs<T extends Prisma.User$discordApiCallLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$discordApiCallLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DiscordApiCallLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1353,6 +1526,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
 export interface UserFieldRefs {
   readonly id: Prisma.FieldRef<"User", 'Int'>
   readonly lineUserId: Prisma.FieldRef<"User", 'String'>
+  readonly discordUserId: Prisma.FieldRef<"User", 'String'>
   readonly displayName: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
@@ -1866,6 +2040,30 @@ export type User$lineApiCallLogsArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.LineApiCallLogScalarFieldEnum | Prisma.LineApiCallLogScalarFieldEnum[]
+}
+
+/**
+ * User.discordApiCallLogs
+ */
+export type User$discordApiCallLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DiscordApiCallLog
+   */
+  select?: Prisma.DiscordApiCallLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DiscordApiCallLog
+   */
+  omit?: Prisma.DiscordApiCallLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DiscordApiCallLogInclude<ExtArgs> | null
+  where?: Prisma.DiscordApiCallLogWhereInput
+  orderBy?: Prisma.DiscordApiCallLogOrderByWithRelationInput | Prisma.DiscordApiCallLogOrderByWithRelationInput[]
+  cursor?: Prisma.DiscordApiCallLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DiscordApiCallLogScalarFieldEnum | Prisma.DiscordApiCallLogScalarFieldEnum[]
 }
 
 /**

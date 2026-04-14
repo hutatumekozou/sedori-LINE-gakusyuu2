@@ -1,15 +1,15 @@
 import {
+  DiscordApiCallKind,
+  DiscordApiCallStatus,
   GeminiApiCallStatus,
   ItemStatus,
-  LineApiCallKind,
-  LineApiCallStatus,
   ProductStudyImageKind,
   ReviewActionType,
 } from "@/generated/prisma/client";
 import type { Prisma } from "@/generated/prisma/client";
 
 import { getDaysSince, getLatestDispatchCheckpoint, isDueToday, scheduleNextReview } from "@/lib/date";
-import { getDefaultLineUserId } from "@/lib/env";
+import { getDefaultDiscordUserId, getDefaultLineUserId } from "@/lib/env";
 import { prisma } from "@/lib/prisma";
 import {
   getUploadPublicUrl,
@@ -84,7 +84,49 @@ function parseJsonStringArray(value: JsonArray) {
 }
 
 export async function getOrCreateDefaultUser() {
+  const defaultDiscordUserId = getDefaultDiscordUserId();
   const defaultLineUserId = getDefaultLineUserId();
+
+  if (defaultDiscordUserId) {
+    const existingByDiscord = await prisma.user.findUnique({
+      where: {
+        discordUserId: defaultDiscordUserId,
+      },
+    });
+
+    if (existingByDiscord) {
+      return existingByDiscord;
+    }
+
+    const existingLocalUser = await prisma.user.findFirst({
+      where: {
+        discordUserId: null,
+        lineUserId: null,
+      },
+      orderBy: {
+        id: "asc",
+      },
+    });
+
+    if (existingLocalUser) {
+      return prisma.user.update({
+        where: {
+          id: existingLocalUser.id,
+        },
+        data: {
+          discordUserId: defaultDiscordUserId,
+          displayName: existingLocalUser.displayName || "Discord利用者",
+        },
+      });
+    }
+
+    return prisma.user.create({
+      data: {
+        discordUserId: defaultDiscordUserId,
+        displayName: "Discord利用者",
+      },
+    });
+  }
 
   if (defaultLineUserId) {
     const existingByLine = await prisma.user.findUnique({
@@ -128,6 +170,7 @@ export async function getOrCreateDefaultUser() {
 
   const existingLocalUser = await prisma.user.findFirst({
     where: {
+      discordUserId: null,
       lineUserId: null,
     },
     orderBy: {
@@ -156,11 +199,11 @@ export async function getDashboardData() {
     geminiSuccessCount,
     geminiFailureCount,
     recentGeminiLogs,
-    lineApiCallCount,
-    linePushCount,
-    lineReplyCount,
-    lineEstimatedBillableCount,
-    recentLineLogs,
+    discordApiCallCount,
+    discordPushCount,
+    discordReplyCount,
+    discordSentMessageCount,
+    recentDiscordLogs,
   ] = await Promise.all([
     prisma.productStudyItem.findMany({
       where: {
@@ -224,27 +267,27 @@ export async function getDashboardData() {
       },
       take: 10,
     }),
-    prisma.lineApiCallLog.count(),
-    prisma.lineApiCallLog.count({
+    prisma.discordApiCallLog.count(),
+    prisma.discordApiCallLog.count({
       where: {
-        kind: LineApiCallKind.PUSH,
+        kind: DiscordApiCallKind.PUSH,
       },
     }),
-    prisma.lineApiCallLog.count({
+    prisma.discordApiCallLog.count({
       where: {
-        kind: LineApiCallKind.REPLY,
+        kind: DiscordApiCallKind.REPLY,
       },
     }),
-    prisma.lineApiCallLog.aggregate({
+    prisma.discordApiCallLog.aggregate({
       _sum: {
-        estimatedBillableCount: true,
+        messageCount: true,
       },
       where: {
-        kind: LineApiCallKind.PUSH,
-        status: LineApiCallStatus.SUCCESS,
+        kind: DiscordApiCallKind.PUSH,
+        status: DiscordApiCallStatus.SUCCESS,
       },
     }),
-    prisma.lineApiCallLog.findMany({
+    prisma.discordApiCallLog.findMany({
       include: {
         user: true,
         item: true,
@@ -280,13 +323,13 @@ export async function getDashboardData() {
     geminiCallCount,
     geminiSuccessCount,
     geminiFailureCount,
-    lineApiCallCount,
-    linePushCount,
-    lineReplyCount,
-    lineEstimatedBillableCount: lineEstimatedBillableCount._sum.estimatedBillableCount || 0,
+    discordApiCallCount,
+    discordPushCount,
+    discordReplyCount,
+    discordSentMessageCount: discordSentMessageCount._sum.messageCount || 0,
     recentLogs,
     recentGeminiLogs,
-    recentLineLogs,
+    recentDiscordLogs,
     dueTodayItems,
   };
 }
