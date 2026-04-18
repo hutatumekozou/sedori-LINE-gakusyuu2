@@ -18,12 +18,11 @@ echo "[$LOG_TS] check-local-auto-send-ready start"
 echo "project_root=$PROJECT_ROOT"
 echo "env_file=$ENV_FILE"
 
-if ! curl -fsS http://127.0.0.1:3000 >/dev/null; then
-  echo "local_web=failed"
-  notify_failure "localhost:3000 に接続できません。npm run dev を確認してください。"
-  exit 1
+if curl -fsS http://127.0.0.1:3000 >/dev/null; then
+  echo "local_web=ok"
+else
+  echo "local_web=unavailable"
 fi
-echo "local_web=ok"
 
 ngrok_url="$(
   curl -fsS http://127.0.0.1:4040/api/tunnels 2>/dev/null | python3 -c '
@@ -41,31 +40,29 @@ for tunnel in data.get("tunnels", []):
 ' || true
 )"
 
-if [[ -z "${ngrok_url:-}" ]]; then
-  echo "ngrok=failed"
-  notify_failure "ngrok の HTTPS URL が取得できません。ngrok http 3000 を確認してください。"
-  exit 1
-fi
-echo "ngrok=ok"
-echo "ngrok_url=$ngrok_url"
+if [[ -n "${ngrok_url:-}" ]]; then
+  echo "ngrok=ok"
+  echo "ngrok_url=$ngrok_url"
 
-if "$PROJECT_ROOT/scripts/sync-ngrok-app-base-url.sh"; then
-  echo "sync_ngrok_status=ok"
+  if "$PROJECT_ROOT/scripts/sync-ngrok-app-base-url.sh"; then
+    echo "sync_ngrok_status=ok"
+  else
+    echo "sync_ngrok_status=failed"
+  fi
 else
-  echo "sync_ngrok_status=failed"
-  notify_failure "APP_BASE_URL の更新に失敗しました。"
-  exit 1
+  echo "ngrok=unavailable"
+  echo "sync_ngrok_status=skipped"
 fi
 
 set +e
-/usr/local/bin/node ./node_modules/tsx/dist/cli.mjs src/scripts/check-send-due-readiness.ts
+/usr/local/bin/node ./node_modules/tsx/dist/cli.mjs src/scripts/check-local-discord-send-readiness.ts
 exit_code=$?
 set -e
 
-echo "check:send-ready exit_code=$exit_code"
+echo "check:local-discord-send-ready exit_code=$exit_code"
 
 if [[ "$exit_code" -ne 0 ]]; then
-  notify_failure "12時送信の事前チェックに失敗しました。ログを確認してください。"
+  notify_failure "ローカル自動送信の事前チェックに失敗しました。ログを確認してください。"
 fi
 
 exit "$exit_code"

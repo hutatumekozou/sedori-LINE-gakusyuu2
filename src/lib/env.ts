@@ -51,12 +51,28 @@ export function getResolvedUploadStorageDir() {
   return path.join(process.cwd(), "storage", "uploads");
 }
 
+function getVercelPublicAppUrlCandidate() {
+  const productionDomain = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
+
+  if (productionDomain) {
+    return `https://${productionDomain}`;
+  }
+
+  const deploymentDomain = process.env.VERCEL_URL?.trim();
+
+  if (deploymentDomain) {
+    return `https://${deploymentDomain}`;
+  }
+
+  return null;
+}
+
 export function getPublicAppUrl() {
-  const appBaseUrl = getAppSettings().appBaseUrl;
+  const appBaseUrl = getAppSettings().appBaseUrl || getVercelPublicAppUrlCandidate();
 
   if (!appBaseUrl) {
     throw new Error(
-      "公開URLが未設定です。APP_BASE_URL に現在有効な HTTPS 公開URL を設定してください。",
+      "公開URLが未設定です。APP_BASE_URL を設定するか、Vercel の system environment variables を有効にしてください。",
     );
   }
 

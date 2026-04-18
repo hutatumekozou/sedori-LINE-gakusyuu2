@@ -38,7 +38,7 @@ if "$PROJECT_ROOT/scripts/sync-ngrok-app-base-url.sh"; then
 else
   sync_status=$?
   echo "sync_ngrok_status=failed($sync_status)"
-  exit "$sync_status"
+  echo "sync_ngrok_warning=continuing_without_public_url"
 fi
 
 cd "$PROJECT_ROOT"

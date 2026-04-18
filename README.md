@@ -63,8 +63,8 @@ npm run dev
 5. ブラウザで開く
 
 - URL: `http://localhost:3000`
-- Basic 認証: `.env` の `BASIC_AUTH_USER` / `BASIC_AUTH_PASSWORD`
-- 初期値: `admin / change-me`
+- ログインパスワード: `.env` の `APP_LOGIN_PASSWORD`
+- 初期値: `1618`
 
 ## 必要な環境変数
 
@@ -72,9 +72,8 @@ npm run dev
 | --- | --- | --- |
 | `DATABASE_URL` | 必須 | アプリ実行時に使う PostgreSQL 接続文字列 |
 | `DIRECT_URL` | Prisma CLI利用時に推奨 | `prisma migrate` / `prisma db push` 用の直結 PostgreSQL 接続文字列 |
-| `BASIC_AUTH_USER` | 推奨 | 管理画面の Basic 認証ユーザー名 |
-| `BASIC_AUTH_PASSWORD` | 推奨 | 管理画面の Basic 認証パスワード |
-| `APP_BASE_URL` | Discord画像送信時に必須 | 現在有効な HTTPS 公開URL |
+| `APP_LOGIN_PASSWORD` | 推奨 | 管理画面ログインに使うパスワード |
+| `APP_BASE_URL` | Discord画像送信時に推奨 | 現在有効な HTTPS 公開URL。Vercel では未設定でも system environment variables から自動解決可 |
 | `UPLOAD_STORAGE_DIR` | ローカル保存時のみ任意 | Blob を使わない環境での画像保存先絶対パス |
 | `BLOB_READ_WRITE_TOKEN` | Vercel本番で必須 | Vercel Blob への画像保存トークン |
 | `GEMINI_API_KEY` | 問題生成時に必須 | Gemini Developer API キー |
@@ -161,6 +160,7 @@ BLOB_READ_WRITE_TOKEN="<vercel-blob-token>"
 ```
 
 `DIRECT_URL` が設定されていれば、Prisma CLI はそちらを優先して使います。Neon のように pooled URL と direct URL が分かれるサービスでそのまま使えます。
+`APP_BASE_URL` を未設定にする場合は、Vercel Project Settings で system environment variables を使える状態にしておくと、`VERCEL_PROJECT_PRODUCTION_URL` を優先して公開URLを自動解決できます。
 
 ローカルの既存 SQLite データを移す場合は、Postgres のスキーマ反映後に以下を実行します。
 
@@ -221,7 +221,7 @@ npm run discord:bot # Discord DM受信Botを起動
 
 ### `認証が必要です`
 
-- Basic 認証のユーザー名/パスワードを `.env` で確認してください
+- `.env` の `APP_LOGIN_PASSWORD` を確認してください
 
 ### `送信先の Discord userId が未設定です`
 
@@ -231,6 +231,7 @@ npm run discord:bot # Discord DM受信Botを起動
 ### `公開URLが未設定です`
 
 - `.env` の `APP_BASE_URL` に現在有効な HTTPS URL を設定してください
+- Vercel 本番なら system environment variables が有効か確認してください
 - 例: `APP_BASE_URL="https://study.example.com"`
 
 ### Discordで画像プレビューが出ない
@@ -256,7 +257,7 @@ npm run db:seed
 npm run dev
 ```
 
-その後、`http://localhost:3000` を開いて Basic 認証を通過してください。ローカル開発では PostgreSQL が先に起動している必要があります。
+その後、`http://localhost:3000` を開いてログインしてください。ローカル開発では PostgreSQL が先に起動している必要があります。
 
 ## 既知の未実装 / MVPとして割り切っている点
 
