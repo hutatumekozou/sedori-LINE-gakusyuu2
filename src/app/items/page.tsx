@@ -5,6 +5,7 @@ import {
   deleteStudyItemAction,
   sendNowAction,
   sendSelectedNowAction,
+  updateScheduleAction,
 } from "@/actions/study-item-actions";
 import { AutoSendToggle } from "@/components/auto-send-toggle";
 import { Badge } from "@/components/badge";
@@ -12,7 +13,7 @@ import { FavoriteToggle } from "@/components/favorite-toggle";
 import { FlashMessage } from "@/components/flash-message";
 import { PageHeader } from "@/components/page-header";
 import { SubmitButton } from "@/components/submit-button";
-import { formatDate, getDaysSince } from "@/lib/date";
+import { formatDate, formatDateInputValue, getDaysSince } from "@/lib/date";
 import {
   STUDY_CATEGORIES,
   LAST_RESULT_LABELS,
@@ -264,7 +265,7 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
                 </tr>
               ) : (
                 items.map((item) => (
-                  <tr key={item.id} className="border-t border-slate-100 align-top">
+                  <tr id={`item-${item.id}`} key={item.id} className="border-t border-slate-100 align-top">
                     <td className="px-3 py-3.5">
                       <input
                         type="checkbox"
@@ -317,8 +318,27 @@ export default async function ItemsPage({ searchParams }: ItemsPageProps) {
                     <td className="min-w-[4.25rem] px-2.5 py-3.5 text-slate-700">
                       {renderLastStudiedDays(item.lastStudiedAt)}
                     </td>
-                    <td className="min-w-[4.5rem] px-2.5 py-3.5 text-slate-700">
-                      {renderTwoLineDate(item.nextScheduledAt)}
+                    <td className="min-w-[9.5rem] px-2.5 py-3.5 text-slate-700">
+                      <div className="space-y-2">
+                        {renderTwoLineDate(item.nextScheduledAt)}
+                        <form action={updateScheduleAction} className="space-y-1.5">
+                          <input type="hidden" name="itemId" value={item.id} />
+                          <input type="hidden" name="redirectTo" value={`${redirectTo}#item-${item.id}`} />
+                          <input
+                            type="date"
+                            name="nextScheduledAt"
+                            defaultValue={formatDateInputValue(item.nextScheduledAt)}
+                            className="w-full rounded-xl border border-slate-200 bg-white px-2.5 py-1.5 text-[11px] outline-none transition focus:border-emerald-300"
+                            aria-label={`問題番号${item.questionNumber}の次回送信日`}
+                          />
+                          <SubmitButton
+                            label="更新"
+                            pendingLabel="更新中..."
+                            variant="secondary"
+                            className="w-full px-2 py-1.5 text-[11px]"
+                          />
+                        </form>
+                      </div>
                     </td>
                     <td className="px-2.5 py-3.5 whitespace-nowrap">
                       <Badge label={STATUS_LABELS[item.status]} className={STATUS_STYLES[item.status]} />

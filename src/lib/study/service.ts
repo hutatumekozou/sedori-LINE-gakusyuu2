@@ -834,8 +834,8 @@ export async function regenerateStudyItem(itemId: number) {
 }
 
 export async function updateManualSchedule(itemId: number, nextScheduledAt: Date) {
-  await prisma.$transaction(async (tx) => {
-    await tx.productStudyItem.update({
+  await prisma.$transaction([
+    prisma.productStudyItem.update({
       where: {
         id: itemId,
       },
@@ -843,14 +843,13 @@ export async function updateManualSchedule(itemId: number, nextScheduledAt: Date
         nextScheduledAt,
         status: ItemStatus.PENDING,
       },
-    });
-
-    await tx.activeConversationState.deleteMany({
+    }),
+    prisma.activeConversationState.deleteMany({
       where: {
         itemId,
       },
-    });
-  });
+    }),
+  ]);
 }
 
 export async function updateAutoSendEnabled(itemId: number, autoSendEnabled: boolean) {

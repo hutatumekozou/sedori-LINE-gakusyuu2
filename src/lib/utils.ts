@@ -13,5 +13,5 @@ export function buildRedirectUrl(
 ) {
   const url = new URL(redirectTo, "http://localhost");
   url.searchParams.set(type, value);
-  return `${url.pathname}${url.search}`;
+  return `${url.pathname}${url.search}${url.hash}`;
 }
