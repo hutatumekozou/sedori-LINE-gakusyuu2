@@ -105,7 +105,7 @@ export function buildBatchDispatchSummaryMessage(
     (questionNumber) => `${formatQuestionSentAt(sentAt)}問題番号: ${questionNumber}`,
   );
 
-  return `【今日送るべきだった問題一覧】
+  return `【今 送信した問題一覧】
 送信件数: ${questionNumbers.length}件
 問題番号:
 ${datedQuestionNumbers.join("\n")}`;
@@ -144,9 +144,9 @@ export function buildEmptyCategoryDispatchMessage(category: string) {
 }
 
 export function buildLineHelpMessage() {
-  return "受付可能な返信は「解答」「大正解」「正解」「不正解」「手動」です。カテゴリ名を送ると、そのカテゴリの苦手問題を最大5問出題します。";
+  return "受付可能な返信は「解答」「大正解」「正解」「不正解」「手動」です。カテゴリ名を送るとそのカテゴリの苦手問題を最大5問、ブランド名を送るとそのブランドの苦手問題を最大10問出題します。";
 }
 
 export function buildDiscordHelpMessage() {
-  return "受付可能な返信は「解答87」「大正解87」「正解87」「不正解87」「手動87」のように問題番号付きです。カテゴリ名を送ると、そのカテゴリの苦手問題を最大5問このチャンネルへ送ります。";
+  return "受付可能な返信は「解答87」「大正解87」「正解87」「不正解87」「手動87」のように問題番号付きです。カテゴリ名を送るとそのカテゴリの苦手問題を最大5問、ブランド名を送るとそのブランドの苦手問題を最大10問このチャンネルへ送ります。";
 }

@@ -74,10 +74,18 @@ function getBlobAccessCandidates() {
 }
 
 function isBlobAccessMismatch(error: unknown) {
+  const message =
+    error instanceof Error
+      ? error.message
+      : typeof error === "string"
+        ? error
+        : null;
+
   return (
-    error instanceof BlobError &&
-    (error.message.includes("Cannot use private access on a public store") ||
-      error.message.includes("Cannot use public access on a private store"))
+    (error instanceof BlobError || Boolean(message)) &&
+    Boolean(message) &&
+    (message.includes("Cannot use private access on a public store") ||
+      message.includes("Cannot use public access on a private store"))
   );
 }
 

@@ -16,6 +16,7 @@ export const STUDY_CATEGORIES = [
   "手袋",
   "マフラー",
   "靴",
+  "キッズ",
   "家電",
   "家具",
   "リペア",

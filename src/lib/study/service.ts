@@ -976,69 +976,89 @@ export async function getLatestSentLog(itemId: number) {
 
 export async function getCategoryItemsForLineRequest(
   userId: number,
-  categoryText: string,
-  limit = 5,
+  text: string,
 ) {
-  const normalizedCategory = categoryText.trim();
+  const normalizedText = text.trim();
 
-  if (!normalizedCategory) {
+  if (!normalizedText) {
     return {
       matched: false as const,
-      category: normalizedCategory,
+      category: normalizedText,
       items: [],
     };
   }
 
-  const categoryFilter =
-    normalizedCategory === DEFAULT_STUDY_CATEGORY
-      ? [{ category: DEFAULT_STUDY_CATEGORY }, { category: null }]
-      : [{ category: normalizedCategory }];
-
-  const items = await prisma.productStudyItem.findMany({
-    where: {
-      userId,
-      deletedAt: null,
-      OR: categoryFilter,
-    },
-    include: {
-      images: {
-        orderBy: {
-          sortOrder: "asc",
-        },
-      },
-      reviewLogs: {
-        where: {
-          actionType: {
-            in: [...STUDIED_ACTION_TYPES],
+  const buildItems = async (where: Prisma.ProductStudyItemWhereInput) => {
+    const items = await prisma.productStudyItem.findMany({
+      where,
+      include: {
+        images: {
+          orderBy: {
+            sortOrder: "asc",
           },
         },
-        orderBy: {
-          actionAt: "desc",
-        },
-        select: {
-          actionType: true,
-          actionAt: true,
+        reviewLogs: {
+          where: {
+            actionType: {
+              in: [...STUDIED_ACTION_TYPES],
+            },
+          },
+          orderBy: {
+            actionAt: "desc",
+          },
+          select: {
+            actionType: true,
+            actionAt: true,
+          },
         },
       },
-    },
-    orderBy: {
-      questionNumber: "asc",
+      orderBy: {
+        questionNumber: "asc",
+      },
+    });
+
+    return items.map((item) => ({
+      ...item,
+      images: item.images.filter((image) => image.kind === ProductStudyImageKind.QUESTION),
+    }));
+  };
+
+  const categoryFilter =
+    normalizedText === DEFAULT_STUDY_CATEGORY
+      ? [{ category: DEFAULT_STUDY_CATEGORY }, { category: null }]
+      : [{ category: normalizedText }];
+
+  const categoryItems = await buildItems({
+    userId,
+    deletedAt: null,
+    OR: categoryFilter,
+  });
+
+  const matchedCategory =
+    categoryItems.length > 0 ||
+    STUDY_CATEGORIES.includes(normalizedText as (typeof STUDY_CATEGORIES)[number]);
+
+  if (matchedCategory) {
+    return {
+      matched: true as const,
+      category: normalizedText,
+      items: sortWeakCategoryCandidates(categoryItems).slice(0, 5),
+    };
+  }
+
+  const brandItems = await buildItems({
+    userId,
+    deletedAt: null,
+    brandName: {
+      equals: normalizedText,
+      mode: "insensitive",
     },
   });
 
-  const matched =
-    items.length > 0 ||
-    STUDY_CATEGORIES.includes(normalizedCategory as (typeof STUDY_CATEGORIES)[number]);
-
   return {
-    matched,
-    category: normalizedCategory,
-    items: sortWeakCategoryCandidates(
-      items.map((item) => ({
-        ...item,
-        images: item.images.filter((image) => image.kind === ProductStudyImageKind.QUESTION),
-      })),
-    ).slice(0, limit),
+    matched: brandItems.length > 0,
+    category: normalizedText,
+    items: sortWeakCategoryCandidates(brandItems).slice(0, 10),
   };
 }
 

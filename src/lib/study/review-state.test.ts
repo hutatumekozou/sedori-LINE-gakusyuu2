@@ -17,6 +17,7 @@ import {
   buildAnswerMessage,
   buildBatchDispatchSummaryMessage,
   buildCategoryDispatchStartMessage,
+  buildDiscordHelpMessage,
   buildEmptyCategoryDispatchMessage,
   buildLineHelpMessage,
   buildQuestionLabel,
@@ -126,12 +127,16 @@ describe("study messages", () => {
       "「メンズアパレル」に該当する問題がまだありません。",
     );
     expect(buildLineHelpMessage()).toContain("カテゴリ名");
+    expect(buildLineHelpMessage()).toContain("ブランド名");
+    expect(buildLineHelpMessage()).toContain("最大10問");
+    expect(buildDiscordHelpMessage()).toContain("ブランド名");
+    expect(buildDiscordHelpMessage()).toContain("最大10問");
   });
 
   it("builds batch dispatch summary messages with dates", () => {
     const message = buildBatchDispatchSummaryMessage([9, 23, 21], "2026-03-31T12:00:00+09:00");
 
-    expect(message).toContain("【今日送るべきだった問題一覧】");
+    expect(message).toContain("【今 送信した問題一覧】");
     expect(message).toContain("送信件数: 3件");
     expect(message).toContain("問題番号:\n3/31問題番号: 9\n3/31問題番号: 23\n3/31問題番号: 21");
   });
