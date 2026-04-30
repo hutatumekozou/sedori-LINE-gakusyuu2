@@ -123,43 +123,95 @@ function SelectableImagesPreview({
     return null;
   }
 
+  const visibleImages = images.filter((image) => !selectedImageIds.includes(image.id));
+  const removedImages = images.filter((image) => selectedImageIds.includes(image.id));
+
   return (
     <div className="space-y-3">
-      <p className="text-xs font-medium text-slate-500">現在の画像: {images.length}枚</p>
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
-        {images.map((image, index) => {
-          const isSelected = selectedImageIds.includes(image.id);
+      <p className="text-xs font-medium text-slate-500">現在の画像: {visibleImages.length}枚</p>
+      {visibleImages.length > 0 ? (
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
+          {visibleImages.map((image) => {
+            const originalIndex = images.findIndex((entry) => entry.id === image.id);
 
-          return (
-            <button
-              key={image.id}
-              type="button"
-              onClick={() => onToggleImage(image.id)}
-              className={`overflow-hidden rounded-2xl border text-left transition ${
-                isSelected
-                  ? "border-rose-300 bg-rose-50 ring-2 ring-rose-200"
-                  : "border-slate-200 bg-slate-50 hover:border-slate-300"
-              }`}
-            >
-              <div className="relative aspect-square">
-                <Image
-                  src={image.url}
-                  alt={`${alt} ${index + 1}`}
-                  fill
-                  sizes="(max-width: 768px) 50vw, (max-width: 1280px) 33vw, 25vw"
-                  className={`object-cover transition ${isSelected ? "opacity-50" : ""}`}
-                />
+            return (
+              <div
+                key={image.id}
+                className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 text-left transition hover:border-slate-300"
+              >
+                <div className="relative aspect-square">
+                  <Image
+                    src={image.url}
+                    alt={`${alt} ${originalIndex + 1}`}
+                    fill
+                    sizes="(max-width: 768px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                    className="object-cover transition"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => onToggleImage(image.id)}
+                    aria-label={`${originalIndex + 1}枚目を削除対象にする`}
+                    className="absolute top-2 right-2 inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white/95 text-lg font-semibold text-slate-600 shadow-sm transition hover:bg-slate-100"
+                  >
+                    ×
+                  </button>
+                </div>
+                <div className="flex items-center justify-between border-t border-slate-200 px-3 py-2 text-xs font-medium">
+                  <span className="text-slate-500">{originalIndex + 1}枚目</span>
+                  <span className="text-slate-400">残す</span>
+                </div>
               </div>
-              <div className="flex items-center justify-between border-t border-slate-200 px-3 py-2 text-xs font-medium">
-                <span className="text-slate-500">{index + 1}枚目</span>
-                <span className={isSelected ? "text-rose-700" : "text-slate-400"}>
-                  {isSelected ? "削除対象" : "残す"}
-                </span>
-              </div>
-            </button>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="rounded-2xl border border-dashed border-rose-200 bg-rose-50 px-4 py-6 text-sm font-medium text-rose-700">
+          すべて削除予定です。保存すると現在の画像はなくなります。
+        </div>
+      )}
+
+      {removedImages.length > 0 ? (
+        <div className="space-y-3">
+          <p className="text-xs font-semibold text-rose-600">削除予定の画像: {removedImages.length}枚</p>
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
+            {removedImages.map((image) => {
+              const originalIndex = images.findIndex((entry) => entry.id === image.id);
+
+              return (
+                <div
+                  key={image.id}
+                  className="overflow-hidden rounded-2xl border border-rose-300 bg-rose-50 text-left ring-2 ring-rose-200"
+                >
+                  <div className="relative aspect-square">
+                    <Image
+                      src={image.url}
+                      alt={`${alt} ${originalIndex + 1}`}
+                      fill
+                      sizes="(max-width: 768px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                      className="object-cover opacity-45"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => onToggleImage(image.id)}
+                      aria-label={`${originalIndex + 1}枚目の削除を取り消す`}
+                      className="absolute top-2 right-2 inline-flex min-w-14 items-center justify-center rounded-full border border-rose-300 bg-white px-3 py-1 text-xs font-semibold text-rose-700 shadow-sm transition hover:bg-rose-100"
+                    >
+                      戻す
+                    </button>
+                    <div className="absolute inset-x-0 bottom-0 bg-rose-600/90 px-3 py-2 text-xs font-semibold text-white">
+                      保存時に削除
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between border-t border-rose-200 px-3 py-2 text-xs font-medium">
+                    <span className="text-rose-700">{originalIndex + 1}枚目</span>
+                    <span className="text-rose-700">削除対象</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -352,7 +404,9 @@ export function ItemForm({
         </label>
 
         <label className="space-y-2">
-          <span className="text-sm font-semibold text-slate-700">ブランド</span>
+          <span className="text-[13px] font-semibold text-slate-700">
+            ブランド(英語大文字スペースなし)
+          </span>
           <input
             name="brandName"
             defaultValue={defaults.brandName || ""}
@@ -447,7 +501,7 @@ export function ItemForm({
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-3">
               <p className="text-xs text-slate-500">
-                削除したい画像を選択してください。保存時に選択した画像だけ削除します。
+                右上の×で削除対象を選んでください。保存時に選択した画像だけ削除します。
               </p>
               {selectedQuestionImageIds.length > 0 ? (
                 <button
@@ -505,7 +559,7 @@ export function ItemForm({
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-3">
               <p className="text-xs text-slate-500">
-                削除したい画像を選択してください。保存時に選択した画像だけ削除します。
+                右上の×で削除対象を選んでください。保存時に選択した画像だけ削除します。
               </p>
               {selectedAnswerImageIds.length > 0 ? (
                 <button

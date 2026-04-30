@@ -46,6 +46,7 @@ import {
   buildReplyToAnswerMessage,
   buildReplyToManualTargetMessage,
   buildReplyToQuestionMessage,
+  buildSuperCorrectReplyMessage,
 } from "@/lib/study/messages";
 import {
   calculateNextScheduledAtFromResult,
@@ -56,6 +57,7 @@ import {
   getItemStatusAfterAnswerShown,
   getItemStatusAfterReviewResult,
   normalizeLineCommand,
+  type ReviewResultCommand,
 } from "@/lib/study/review-state";
 import { getCategoryItemsForLineRequest, getDueItemsForDispatch } from "@/lib/study/service";
 
@@ -68,7 +70,7 @@ type DiscordParsedCommand = {
 
 function parseDiscordCommand(text: string): DiscordParsedCommand {
   const normalized = text.trim();
-  const match = normalized.match(/^(大正解|正解|不正解|解答|手動)\s*#?\s*(\d+)?$/);
+  const match = normalized.match(/^(超正解|大正解|正解|不正解|解答|手動)\s*#?\s*(\d+)?$/);
 
   if (!match) {
     return {
@@ -89,6 +91,8 @@ type QuestionSendItem = {
   questionNumber: number;
   productName?: string | null;
   question: string;
+  previousSentAt?: Date | null;
+  previousReviewResult?: string | null;
   images: Array<{
     imagePath: string;
     sortOrder: number;
@@ -188,6 +192,29 @@ async function sendDiscordMessages(input: {
   const messages: DiscordDmMessage[] = [];
 
   for (const message of input.messages) {
+    if (message.type === "attachment") {
+      if (!message.text) {
+        messages.push(message);
+        continue;
+      }
+
+      const [firstText, ...remainingTexts] = normalizeDiscordContents([message.text]);
+
+      messages.push({
+        ...message,
+        text: firstText,
+      });
+
+      for (const text of remainingTexts) {
+        messages.push({
+          type: "text",
+          text,
+        });
+      }
+
+      continue;
+    }
+
     if (message.type !== "text") {
       messages.push(message);
       continue;
@@ -235,6 +262,7 @@ async function sendDiscordMessages(input: {
               content: message.text,
             }
           : {
+              content: message.text,
               file,
             },
         {
@@ -727,7 +755,7 @@ async function handleResultRequest(
   userId: number,
   discordUserId: string,
   channelId: string,
-  result: "greatCorrect" | "correct" | "incorrect",
+  result: ReviewResultCommand,
   rawText: string,
   sourceMessageId: string,
   referencedMessageId?: string,
@@ -770,7 +798,7 @@ async function handleResultRequest(
 
   const nextScheduledAt = calculateNextScheduledAtFromResult(result);
   const actionType =
-    result === "greatCorrect"
+    result === "superCorrect" || result === "greatCorrect"
       ? ReviewActionType.GREAT_CORRECT
       : result === "correct"
         ? ReviewActionType.CORRECT
@@ -807,7 +835,9 @@ async function handleResultRequest(
   await replyText(
     channelId,
     discordUserId,
-    result === "greatCorrect"
+    result === "superCorrect"
+      ? buildSuperCorrectReplyMessage()
+      : result === "greatCorrect"
       ? buildGreatCorrectReplyMessage()
       : result === "correct"
         ? buildCorrectReplyMessage()
@@ -1079,6 +1109,20 @@ export async function handleDiscordDirectMessage(input: {
     return;
   }
 
+  if (command === "superCorrect") {
+    await handleResultRequest(
+      user.id,
+      input.discordUserId,
+      input.channelId,
+      "superCorrect",
+      rawText,
+      input.sourceMessageId,
+      input.referencedMessageId,
+      parsedCommand.questionNumber,
+    );
+    return;
+  }
+
   if (command === "incorrect") {
     await handleResultRequest(
       user.id,
@@ -1225,7 +1269,7 @@ export async function dispatchStudyItems(itemIds?: number[], force = false) {
 
   if (shouldSendBatchSummary) {
     for (const [discordUserId, target] of batchSummaryTargets) {
-      if (target.questionNumbers.length === 0) {
+      if (target.questionNumbers.length < 2) {
         continue;
       }
 

@@ -48,6 +48,7 @@ import {
   buildReplyToAnswerMessage,
   buildReplyToManualTargetMessage,
   buildReplyToQuestionMessage,
+  buildSuperCorrectReplyMessage,
 } from "@/lib/study/messages";
 import {
   calculateNextScheduledAtFromResult,
@@ -58,6 +59,7 @@ import {
   getItemStatusAfterAnswerShown,
   getItemStatusAfterReviewResult,
   normalizeLineCommand,
+  type ReviewResultCommand,
 } from "@/lib/study/review-state";
 import { getCategoryItemsForLineRequest, getDueItemsForDispatch } from "@/lib/study/service";
 
@@ -247,6 +249,8 @@ type QuestionSendItem = {
   questionNumber: number;
   productName?: string | null;
   question: string;
+  previousSentAt?: Date | null;
+  previousReviewResult?: string | null;
   images: Array<{
     imagePath: string;
     sortOrder: number;
@@ -570,7 +574,7 @@ async function handleResultRequest(
   userId: number,
   lineUserId: string,
   replyToken: string,
-  result: "greatCorrect" | "correct" | "incorrect",
+  result: ReviewResultCommand,
   rawText: string,
   quotedMessageId?: string,
 ) {
@@ -615,7 +619,7 @@ async function handleResultRequest(
 
   const nextScheduledAt = calculateNextScheduledAtFromResult(result);
   const actionType =
-    result === "greatCorrect"
+    result === "superCorrect" || result === "greatCorrect"
       ? ReviewActionType.GREAT_CORRECT
       : result === "correct"
         ? ReviewActionType.CORRECT
@@ -651,7 +655,9 @@ async function handleResultRequest(
 
   await replyText(
     replyToken,
-    result === "greatCorrect"
+    result === "superCorrect"
+      ? buildSuperCorrectReplyMessage()
+      : result === "greatCorrect"
       ? buildGreatCorrectReplyMessage()
       : result === "correct"
         ? buildCorrectReplyMessage()
@@ -890,6 +896,18 @@ async function handleTextEvent(event: z.infer<typeof lineWebhookSchema>["events"
       lineUserId,
       event.replyToken,
       "correct",
+      event.message.text || "",
+      quotedMessageId,
+    );
+    return;
+  }
+
+  if (command === "superCorrect") {
+    await handleResultRequest(
+      user.id,
+      lineUserId,
+      event.replyToken,
+      "superCorrect",
       event.message.text || "",
       quotedMessageId,
     );

@@ -27,6 +27,7 @@ import {
 describe("review-state", () => {
   it("normalizes LINE commands", () => {
     expect(normalizeLineCommand(" 解答 ")).toBe("answer");
+    expect(normalizeLineCommand("超正解")).toBe("superCorrect");
     expect(normalizeLineCommand("大正解")).toBe("greatCorrect");
     expect(normalizeLineCommand("正解")).toBe("correct");
     expect(normalizeLineCommand("不正解")).toBe("incorrect");
@@ -40,6 +41,9 @@ describe("review-state", () => {
     expect(formatDateInputValue(calculateNextScheduledAtFromResult("correct", baseDate))).toBe(
       "2026-03-25",
     );
+    expect(
+      formatDateInputValue(calculateNextScheduledAtFromResult("superCorrect", baseDate)),
+    ).toBe("2026-04-17");
     expect(
       formatDateInputValue(calculateNextScheduledAtFromResult("greatCorrect", baseDate)),
     ).toBe("2026-04-01");
@@ -62,6 +66,7 @@ describe("review-state", () => {
     expect(getConversationStateAfterReviewResult()).toBeNull();
 
     expect(getItemStatusAfterAnswerShown()).toBe("ANSWER_SHOWN");
+    expect(getItemStatusAfterReviewResult("superCorrect")).toBe("CORRECT");
     expect(getItemStatusAfterReviewResult("greatCorrect")).toBe("CORRECT");
     expect(getItemStatusAfterReviewResult("correct")).toBe("CORRECT");
     expect(getItemStatusAfterReviewResult("incorrect")).toBe("INCORRECT");
@@ -100,6 +105,8 @@ describe("study messages", () => {
     question: "売れた理由を説明してください。",
     answer: "付属品が揃っており、状態が良かったためです。",
     explanation: "安心材料が揃うと購入判断が早くなります。",
+    previousSentAt: "2026-03-20T12:00:00+09:00",
+    previousReviewResult: "超正解",
   };
 
   it("builds question and answer messages", () => {
@@ -112,11 +119,16 @@ describe("study messages", () => {
     expect(buildQuestionMessage(item, "2026-03-31T12:00:00+09:00")).toContain(
       "3/31問題番号:12 BIRDWELL ボードショーツ",
     );
+    expect(buildQuestionMessage(item, "2026-03-31T12:00:00+09:00")).toContain(
+      "前回送信日: 3/20 / 前回の正誤: 超正解",
+    );
     expect(buildQuestionMessage(item)).toContain("解答");
+    expect(buildQuestionMessage(item)).toContain("超正解");
     expect(buildQuestionMessage(item)).toContain("手動");
 
     expect(buildAnswerMessage(item)).toContain("【解答】");
     expect(buildAnswerMessage(item)).toContain(item.answer);
+    expect(buildAnswerMessage(item)).toContain("超正解");
     expect(buildAnswerMessage(item)).toContain("大正解");
     expect(buildAnswerMessage(item)).toContain("手動");
     expect(buildAnswerMessage(item)).not.toContain("【解説】");
@@ -129,8 +141,10 @@ describe("study messages", () => {
     expect(buildLineHelpMessage()).toContain("カテゴリ名");
     expect(buildLineHelpMessage()).toContain("ブランド名");
     expect(buildLineHelpMessage()).toContain("最大10問");
+    expect(buildLineHelpMessage()).toContain("超正解");
     expect(buildDiscordHelpMessage()).toContain("ブランド名");
     expect(buildDiscordHelpMessage()).toContain("最大10問");
+    expect(buildDiscordHelpMessage()).toContain("超正解");
   });
 
   it("builds batch dispatch summary messages with dates", () => {

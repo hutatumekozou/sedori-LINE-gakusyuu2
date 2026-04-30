@@ -2,6 +2,10 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "crons": [
     {
+      "path": "/api/internal/send-due-readiness",
+      "schedule": "0 2 * * *"
+    },
+    {
       "path": "/api/internal/send-due",
       "schedule": "0 3 * * *"
     }

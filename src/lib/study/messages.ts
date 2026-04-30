@@ -7,6 +7,8 @@ type StudyMessageItem = {
   question: string;
   answer: string;
   productName?: string | null;
+  previousSentAt?: Date | string | null;
+  previousReviewResult?: string | null;
 };
 
 function formatQuestionSentAt(date: Date | string = new Date()) {
@@ -28,29 +30,41 @@ export function buildQuestionLabel(
 }
 
 export function buildQuestionMessage(
-  item: Pick<StudyMessageItem, "questionNumber" | "question" | "productName">,
+  item: Pick<
+    StudyMessageItem,
+    "questionNumber" | "question" | "productName" | "previousSentAt" | "previousReviewResult"
+  >,
   sentAt: Date | string = new Date(),
 ) {
   return `${buildQuestionLabel(item, { sentAt })}
+前回送信日: ${item.previousSentAt ? formatQuestionSentAt(item.previousSentAt) : "-"} / 前回の正誤: ${item.previousReviewResult || "未回答"}
 【今日の復習問題】
 ${item.question}
 
 返信方法:
 - 「解答」→ 解答を表示
+- 「超正解」→ 30日後に再出題
+- 「大正解」→ 14日後に再出題
 - 「正解」→ 正解として記録
 - 「不正解」→ 明日もう一度出題
 - 「手動」→ この問題を手動送信に切り替え`;
 }
 
 export function buildDiscordQuestionMessage(
-  item: Pick<StudyMessageItem, "questionNumber" | "question" | "productName">,
+  item: Pick<
+    StudyMessageItem,
+    "questionNumber" | "question" | "productName" | "previousSentAt" | "previousReviewResult"
+  >,
   sentAt: Date | string = new Date(),
 ) {
   return `${buildQuestionLabel(item, { sentAt })}
+前回送信日: ${item.previousSentAt ? formatQuestionSentAt(item.previousSentAt) : "-"} / 前回の正誤: ${item.previousReviewResult || "未回答"}
 【今日の復習問題】
 ${item.question}
 
 返信方法:
+- 「超正解${item.questionNumber}」→ 30日後に再出題
+- 「大正解${item.questionNumber}」→ 14日後に再出題
 - 「解答${item.questionNumber}」→ 解答を表示
 - 「正解${item.questionNumber}」→ 正解として記録
 - 「不正解${item.questionNumber}」→ 明日もう一度出題
@@ -63,6 +77,7 @@ export function buildAnswerMessage(item: Pick<StudyMessageItem, "questionNumber"
 ${item.answer}
 
 自己判定して返信してください。
+- 「超正解」
 - 「大正解」
 - 「正解」
 - 「不正解」
@@ -75,10 +90,15 @@ export function buildDiscordAnswerMessage(item: Pick<StudyMessageItem, "question
 ${item.answer}
 
 自己判定して返信してください。
+- 「超正解${item.questionNumber}」
 - 「大正解${item.questionNumber}」
 - 「正解${item.questionNumber}」
 - 「不正解${item.questionNumber}」
 - 「手動${item.questionNumber}」`;
+}
+
+export function buildSuperCorrectReplyMessage() {
+  return "超正解として記録しました。次回は30日後に送信します。";
 }
 
 export function buildGreatCorrectReplyMessage() {
@@ -124,7 +144,7 @@ export function buildReplyToQuestionMessage() {
 }
 
 export function buildReplyToAnswerMessage() {
-  return "解答メッセージに返信で「大正解」「正解」または「不正解」と送ってください。";
+  return "解答メッセージに返信で「超正解」「大正解」「正解」または「不正解」と送ってください。";
 }
 
 export function buildAnswerImageFallbackMessage() {
@@ -144,9 +164,9 @@ export function buildEmptyCategoryDispatchMessage(category: string) {
 }
 
 export function buildLineHelpMessage() {
-  return "受付可能な返信は「解答」「大正解」「正解」「不正解」「手動」です。カテゴリ名を送るとそのカテゴリの苦手問題を最大5問、ブランド名を送るとそのブランドの苦手問題を最大10問出題します。";
+  return "受付可能な返信は「解答」「超正解」「大正解」「正解」「不正解」「手動」です。カテゴリ名を送るとそのカテゴリの苦手問題を最大5問、ブランド名を送るとそのブランドの苦手問題を最大10問出題します。";
 }
 
 export function buildDiscordHelpMessage() {
-  return "受付可能な返信は「解答87」「大正解87」「正解87」「不正解87」「手動87」のように問題番号付きです。カテゴリ名を送るとそのカテゴリの苦手問題を最大5問、ブランド名を送るとそのブランドの苦手問題を最大10問このチャンネルへ送ります。";
+  return "受付可能な返信は「解答87」「超正解87」「大正解87」「正解87」「不正解87」「手動87」のように問題番号付きです。カテゴリ名を送るとそのカテゴリの苦手問題を最大5問、ブランド名を送るとそのブランドの苦手問題を最大10問このチャンネルへ送ります。";
 }

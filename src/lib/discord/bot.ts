@@ -186,8 +186,10 @@ export async function startDiscordBot() {
   });
 
   await client.login(getDiscordBotConfig().botToken);
+  const keepAliveTimer = setInterval(() => undefined, 60_000);
 
   const shutdown = async () => {
+    clearInterval(keepAliveTimer);
     releaseBotLock();
     client.destroy();
     process.exit(0);

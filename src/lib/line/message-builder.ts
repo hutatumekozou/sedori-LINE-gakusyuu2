@@ -23,6 +23,8 @@ type QuestionDispatchItem = {
   questionNumber: number;
   productName?: string | null;
   question: string;
+  previousSentAt?: Date | string | null;
+  previousReviewResult?: string | null;
   images: DispatchImage[];
 };
 

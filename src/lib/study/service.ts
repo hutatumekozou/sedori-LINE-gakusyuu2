@@ -24,7 +24,7 @@ import {
   STUDIED_ACTION_TYPES,
 } from "@/lib/study/category-priority";
 import { sortDispatchCandidates } from "@/lib/study/dispatch-rules";
-import { getLastResultFromLogs } from "@/lib/study/review-state";
+import { getLastResultFromLogs, getReviewResultLabelFromLog } from "@/lib/study/review-state";
 import type { LastResult, StudyItemFilters } from "@/lib/study/types";
 
 type JsonArray = Prisma.JsonValue | null;
@@ -1096,28 +1096,49 @@ export async function getDueItemsForDispatch(itemIds?: number[]) {
   });
 
   if (itemIds) {
-    return items.map((item) => ({
-      ...item,
-      images: item.images.filter((image) => image.kind === ProductStudyImageKind.QUESTION),
-      answerImages: item.images.filter((image) => image.kind === ProductStudyImageKind.ANSWER),
-    }));
-  }
-
-  return sortDispatchCandidates(
-    items.map((item) => ({
-      ...item,
-      images: item.images.filter((image) => image.kind === ProductStudyImageKind.QUESTION),
-      answerImages: item.images.filter((image) => image.kind === ProductStudyImageKind.ANSWER),
-      latestSentAt:
-        item.reviewLogs.find((log) => log.actionType === ReviewActionType.SENT)?.actionAt || null,
-      latestSolvedAt:
+    return items.map((item) => {
+      const previousSentLog =
+        item.reviewLogs.find((log) => log.actionType === ReviewActionType.SENT) || null;
+      const previousReviewLog =
         item.reviewLogs.find(
           (log) =>
             log.actionType === ReviewActionType.GREAT_CORRECT ||
             log.actionType === ReviewActionType.CORRECT ||
             log.actionType === ReviewActionType.INCORRECT,
-        )?.actionAt || null,
-    })),
+        ) || null;
+
+      return {
+        ...item,
+        images: item.images.filter((image) => image.kind === ProductStudyImageKind.QUESTION),
+        answerImages: item.images.filter((image) => image.kind === ProductStudyImageKind.ANSWER),
+        previousSentAt: previousSentLog?.actionAt || null,
+        previousReviewResult: previousReviewLog ? getReviewResultLabelFromLog(previousReviewLog) : "未回答",
+      };
+    });
+  }
+
+  return sortDispatchCandidates(
+    items.map((item) => {
+      const previousSentLog =
+        item.reviewLogs.find((log) => log.actionType === ReviewActionType.SENT) || null;
+      const previousReviewLog =
+        item.reviewLogs.find(
+          (log) =>
+            log.actionType === ReviewActionType.GREAT_CORRECT ||
+            log.actionType === ReviewActionType.CORRECT ||
+            log.actionType === ReviewActionType.INCORRECT,
+        ) || null;
+
+      return {
+        ...item,
+        images: item.images.filter((image) => image.kind === ProductStudyImageKind.QUESTION),
+        answerImages: item.images.filter((image) => image.kind === ProductStudyImageKind.ANSWER),
+        latestSentAt: previousSentLog?.actionAt || null,
+        latestSolvedAt: previousReviewLog?.actionAt || null,
+        previousSentAt: previousSentLog?.actionAt || null,
+        previousReviewResult: previousReviewLog ? getReviewResultLabelFromLog(previousReviewLog) : "未回答",
+      };
+    }),
   ).slice(0, 10);
 }
 

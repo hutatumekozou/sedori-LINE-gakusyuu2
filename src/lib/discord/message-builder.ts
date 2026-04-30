@@ -13,6 +13,8 @@ type QuestionDispatchItem = {
   questionNumber: number;
   productName?: string | null;
   question: string;
+  previousSentAt?: Date | string | null;
+  previousReviewResult?: string | null;
   images: DispatchImage[];
 };
 
@@ -27,6 +29,7 @@ export type DiscordAttachmentMessage = {
   imagePath: string;
   fileName: string;
   contentType: string;
+  text?: string;
 };
 
 export type DiscordTextMessage = {
@@ -47,6 +50,30 @@ function buildAttachmentMessage(imagePath: string): DiscordAttachmentMessage {
   };
 }
 
+function combineFirstImageWithText(
+  imageMessages: DiscordAttachmentMessage[],
+  text: string,
+) {
+  if (imageMessages.length === 0) {
+    return [
+      {
+        type: "text" as const,
+        text,
+      },
+    ] satisfies DiscordDmMessage[];
+  }
+
+  const [firstImage, ...remainingImages] = imageMessages;
+
+  return [
+    {
+      ...firstImage,
+      text,
+    },
+    ...remainingImages,
+  ] satisfies DiscordDmMessage[];
+}
+
 export function buildQuestionDmMessages(item: QuestionDispatchItem) {
   const imageMessages = item.images
     .slice()
@@ -54,13 +81,7 @@ export function buildQuestionDmMessages(item: QuestionDispatchItem) {
     .slice(0, 4)
     .map((image) => buildAttachmentMessage(image.imagePath));
 
-  return [
-    ...imageMessages,
-    {
-      type: "text" as const,
-      text: buildDiscordQuestionMessage(item),
-    },
-  ] satisfies DiscordDmMessage[];
+  return combineFirstImageWithText(imageMessages, buildDiscordQuestionMessage(item));
 }
 
 export function buildAnswerDmMessages(item: AnswerDispatchItem) {
@@ -70,11 +91,5 @@ export function buildAnswerDmMessages(item: AnswerDispatchItem) {
     .slice(0, 4)
     .map((image) => buildAttachmentMessage(image.imagePath));
 
-  return [
-    ...imageMessages,
-    {
-      type: "text" as const,
-      text: buildDiscordAnswerMessage(item),
-    },
-  ] satisfies DiscordDmMessage[];
+  return combineFirstImageWithText(imageMessages, buildDiscordAnswerMessage(item));
 }

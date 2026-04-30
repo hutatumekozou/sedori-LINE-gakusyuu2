@@ -7,13 +7,18 @@ import type {
 import { scheduleNextReview } from "@/lib/date";
 import type { LastResult } from "@/lib/study/types";
 
-export type LineCommand = "answer" | "greatCorrect" | "correct" | "incorrect" | "manual" | "unknown";
+export type LineCommand = "answer" | "superCorrect" | "greatCorrect" | "correct" | "incorrect" | "manual" | "unknown";
+export type ReviewResultCommand = "superCorrect" | "greatCorrect" | "correct" | "incorrect";
 
 export function normalizeLineCommand(text: string): LineCommand {
   const normalized = text.trim();
 
   if (normalized === "解答") {
     return "answer";
+  }
+
+  if (normalized === "超正解") {
+    return "superCorrect";
   }
 
   if (normalized === "正解") {
@@ -62,11 +67,11 @@ export function getConversationStateAfterReviewResult() {
 }
 
 export function calculateNextScheduledAtFromResult(
-  result: "greatCorrect" | "correct" | "incorrect",
+  result: ReviewResultCommand,
   baseDate: Date = new Date(),
 ) {
   return scheduleNextReview(
-    result === "greatCorrect" ? 14 : result === "correct" ? 7 : 1,
+    result === "superCorrect" ? 30 : result === "greatCorrect" ? 14 : result === "correct" ? 7 : 1,
     baseDate,
   );
 }
@@ -76,9 +81,28 @@ export function getItemStatusAfterAnswerShown(): ItemStatus {
 }
 
 export function getItemStatusAfterReviewResult(
-  result: "greatCorrect" | "correct" | "incorrect",
+  result: ReviewResultCommand,
 ): ItemStatus {
   return result === "incorrect" ? "INCORRECT" : "CORRECT";
+}
+
+export function getReviewResultLabelFromLog(log: {
+  actionType: ReviewActionType;
+  rawText?: string | null;
+}) {
+  if (log.actionType === "INCORRECT") {
+    return "不正解";
+  }
+
+  if (log.actionType === "CORRECT") {
+    return "正解";
+  }
+
+  if (log.actionType === "GREAT_CORRECT") {
+    return log.rawText?.includes("超正解") ? "超正解" : "大正解";
+  }
+
+  return "未回答";
 }
 
 export function getLastResultFromLogs(
