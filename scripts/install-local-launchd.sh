@@ -5,7 +5,7 @@ set -euo pipefail
 HOUR="${1:-13}"
 MINUTE="${2:-0}"
 PREFLIGHT_HOUR="${PREFLIGHT_HOUR:-11}"
-PREFLIGHT_MINUTE="${PREFLIGHT_MINUTE:-55}"
+PREFLIGHT_MINUTE="${PREFLIGHT_MINUTE:-0}"
 SOURCE_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 RUNTIME_ROOT="${RUNTIME_ROOT:-$HOME/mercari-study-line-runtime}"
 RUNNER_PATH="${RUNNER_PATH:-/Users/kukkiiboy/bin/mercari-study-send-due.sh}"

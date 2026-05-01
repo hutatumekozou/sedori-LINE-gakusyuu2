@@ -14,7 +14,7 @@ notify_failure() {
   fi
 }
 
-echo "[$LOG_TS] check-local-auto-send-ready start"
+echo "[$LOG_TS] dispatch-healthcheck-questions start"
 echo "project_root=$PROJECT_ROOT"
 echo "env_file=$ENV_FILE"
 
@@ -55,14 +55,14 @@ else
 fi
 
 set +e
-/usr/local/bin/node ./node_modules/tsx/dist/cli.mjs src/scripts/check-local-discord-send-readiness.ts
+/usr/local/bin/node ./node_modules/tsx/dist/cli.mjs src/scripts/dispatch-healthcheck-questions.ts
 exit_code=$?
 set -e
 
-echo "check:local-discord-send-ready exit_code=$exit_code"
+echo "dispatch:healthcheck-questions exit_code=$exit_code"
 
 if [[ "$exit_code" -ne 0 ]]; then
-  notify_failure "ローカル自動送信の事前チェックに失敗しました。ログを確認してください。"
+  notify_failure "11時動作確認問題の送信に失敗しました。ログを確認してください。"
 fi
 
 exit "$exit_code"
